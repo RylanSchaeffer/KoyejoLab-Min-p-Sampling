@@ -46,6 +46,7 @@ runs_configs_df.rename(
         "temperature": "Temperature",
         "sampler_value": "Sampler Value",
         "exact_match_strict-match": "Exact Match (Strict)",
+        "exact_match_flexible-extract": "Exact Match (Flexible)",
     },
     inplace=True,
 )
@@ -69,6 +70,37 @@ g = sns.relplot(
     # s=50,
 )
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
-plt.show()
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="task=gsm8k_y=em_strict_x=sampler_value_hue=temperature_style=model_type_row=model_col=sampler",
+)
+# plt.show()
+
+plt.close()
+g = sns.relplot(
+    data=runs_configs_df[runs_configs_df["task"] == "gsm8k_cot_llama"],
+    kind="line",
+    x="Sampler Value",
+    y="Exact Match (Flexible)",
+    hue="Temperature",
+    style="Model Type",
+    style_order=src.globals.MODELS_TYPE_ORDER_LIST,
+    palette="coolwarm",
+    row="Model",
+    row_order=src.globals.MODELS_ORDER_LIST,
+    col="Sampler",
+    col_order=src.globals.SAMPLERS_ORDER_LIST,
+    facet_kws={"sharex": "col", "sharey": "row", "margin_titles": True},
+    # s=50,
+)
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="task=gsm8k_y=em_flexible_x=sampler_value_hue=temperature_style=model_type_row=model_col=sampler",
+)
+
+# plt.show()
 
 print("Finished notebooks/00_all_results")

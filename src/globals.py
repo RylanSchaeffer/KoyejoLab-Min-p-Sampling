@@ -11,23 +11,27 @@ EVAL_DEFAULT_CONFIG = {
 
 MODELS_NICE_NAMES_DICT = {
     "Qwen/Qwen2.5-0.5B": "Qwen2.5-0.5B",
-    "Qwen/Qwen2.5-0.5B-Instruct": "Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-0.5B-Instruct": "Qwen2.5-0.5B Instruct",
     "Qwen/Qwen2.5-1.5B": "Qwen2.5-1.5B",
-    "Qwen/Qwen2.5-1.5B-Instruct": "Qwen2.5-1.5B",
+    "Qwen/Qwen2.5-1.5B-Instruct": "Qwen2.5-1.5B Instruct",
     "Qwen/Qwen2.5-3B": "Qwen2.5-3B",
-    "Qwen/Qwen2.5-3B-Instruct": "Qwen2.5-3B",
+    "Qwen/Qwen2.5-3B-Instruct": "Qwen2.5-3B Instruct",
     "Qwen/Qwen2.5-7B": "Qwen2.5-7B",
-    "Qwen/Qwen2.5-7B-Instruct": "Qwen2.5-7B",
+    "Qwen/Qwen2.5-7B-Instruct": "Qwen2.5-7B Instruct",
     "mistralai/Mistral-7B-v0.1": "Mistral-7B",
-    "mistralai/Mistral-7B-Instruct-v0.1": "Mistral-7B",
+    "mistralai/Mistral-7B-Instruct-v0.1": "Mistral-7B Instruct",
 }
 
 MODELS_ORDER_LIST = [
     "Qwen2.5-0.5B",
+    "Qwen2.5-0.5B Instruct",
     "Qwen2.5-1.5B",
+    "Qwen2.5-1.5B Instruct",
     "Qwen2.5-3B",
+    "Qwen2.5-3B Instruct",
     "Qwen2.5-7B",
-    "Mistral-7B-v0.1",
+    "Qwen2.5-7B Instruct",
+    "Mistral-7B Instruct",
 ]
 
 MODELS_TYPE_DICT = {
