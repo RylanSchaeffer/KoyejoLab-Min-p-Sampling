@@ -51,6 +51,10 @@ def run_one_eval():
         command, shell=True, check=True, text=True, capture_output=True
     )
 
+    if process.stderr:
+        print("Command stderr:")
+        print(process.stderr)
+
     if config["task"] == "gsm8k_cot_llama":
         scores = extract_gsm8k_scores_from_output(process.stdout)
     else:

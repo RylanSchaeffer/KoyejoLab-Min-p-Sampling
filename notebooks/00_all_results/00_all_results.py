@@ -52,28 +52,14 @@ g = sns.relplot(
     style="Model Type",
     style_order=src.globals.MODELS_TYPE_ORDER_LIST,
     palette="coolwarm",
-    col="Model",
-    col_order=src.globals.MODELS_ORDER_LIST,
-    row="Sampler",
-    row_order=src.globals.SAMPLERS_ORDER_LIST,
-    facet_kws={"sharex": "row", "sharey": True, "margin_titles": True},
+    row="Model",
+    row_order=src.globals.MODELS_ORDER_LIST,
+    col="Sampler",
+    col_order=src.globals.SAMPLERS_ORDER_LIST,
+    facet_kws={"sharex": "row", "sharey": "col", "margin_titles": True},
 )
 g.set(xlabel="Sampler Value", ylabel="Exact Match (Strict)")
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
 plt.show()
 
-# plt.close()
-# g = sns.relplot(
-#     data=runs_configs_df,
-#     x="sampler_value",
-#     y="exact_match_flexible-extract",
-#     hue="temperature",
-#     col="model_hf_path",
-#     col_order=src.globals.MODELS_ORDER_LIST,
-#     row="task",
-#     row_order=src.globals.TASKS_ORDER_LIST,
-#     facet_kws={"sharey": "row"},
-# )
-# g.set(xlabel="Sampler Value", ylabel="Exact Match (Strict)")
-# g.set_titles("{col_name}", "{row_name}")
-# plt.show()
+print("Finished notebooks/00_all_results")
