@@ -40,12 +40,10 @@ def run_one_eval():
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
     command = (
-        "export CUDA_DEVICE_ORDER=PCI_BUS_ID && export CUDA_VISIBLE_DEVICES=0"
+        "export CUDA_DEVICE_ORDER=PCI_BUS_ID"
+        f" && export CUDA_VISIBLE_DEVICES={os.environ['CUDA_VISIBLE_DEVICES']}"
         ' && eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
     )
-
-    # Execute the command
-    os.system(command)
 
     # Execute the command and block until completion
     print(f"Executing command: {command}")
@@ -53,10 +51,15 @@ def run_one_eval():
         command, shell=True, check=True, text=True, capture_output=True
     )
 
-    scores = extract_gsm8k_scores_from_output(process.stdout)
+    if config["task"] == "gsm8k_cot_llama":
+        scores = extract_gsm8k_scores_from_output(process.stdout)
+    else:
+        raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
     # Log the results to wandb
     wandb.log(scores)
+
+    wandb.finish()
 
 
 def extract_gsm8k_scores_from_output(output_text: str) -> Dict[str, float]:
@@ -74,7 +77,7 @@ def extract_gsm8k_scores_from_output(output_text: str) -> Dict[str, float]:
                 value = float(parts[7].strip().split("±")[0])
 
                 # Create a meaningful key
-                key = f"{filter_type}_exact_match"
+                key = f"{metric}_{filter_type}"
                 results[key] = value
 
     return results

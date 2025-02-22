@@ -9,16 +9,27 @@ parameters:
     ]
   model_hf_path:
     values: [
-     "Qwen/Qwen2-1.5B",
+     "Qwen/Qwen2.5-0.5B",
+     "Qwen/Qwen2.5-0.5B-Instruct",
+     "Qwen/Qwen2.5-1.5B",
+     "Qwen/Qwen2.5-1.5B-Instruct",
+     "Qwen/Qwen2.5-3B",
+     "Qwen/Qwen2.5-3B-Instruct",
+     "Qwen/Qwen2.5-7B",
+     "Qwen/Qwen2.5-7B-Instruct",
+     "Qwen/Qwen2.5-14B",
+     "Qwen/Qwen2.5-14B-Instruct",
+     "mistralai/Mistral-7B-v0.1",
+     "mistralai/Mistral-7B-Instruct-v0.1",
     ]
   num_fewshot:
     values: [5, 8]
   sampler:
-    values: ["min_p"]
+    values: ["none"]
   sampler_value:
-    values: [0.01, 0.02, 0.05, 0.1, 0.2, 0.3]
+    values: [0.0]
   seed:
-    values: [0, 1, 2, 3, 4]
+    values: [0, 1, 2]
   task:
     values: ["gsm8k_cot_llama"]
   temperature:
