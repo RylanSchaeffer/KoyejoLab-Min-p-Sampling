@@ -56,6 +56,7 @@ SAMPLERS_NICE_NAMES_DICT = {
     "pure": "Pure",
     "min_p": "Min-P",
     "top_p": "Top-P",
+    "top_k": "Top-K",
 }
 
 SAMPLERS_ORDER_LIST = [
