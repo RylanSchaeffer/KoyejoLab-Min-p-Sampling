@@ -56,8 +56,9 @@ SAMPLERS_NICE_NAMES_DICT = {
 
 SAMPLERS_ORDER_LIST = [
     "None",
-    "Min-P",
     "Top-P",
+    "Top-K",
+    "Min-P",
 ]
 
 TASKS_ORDER_LIST = [

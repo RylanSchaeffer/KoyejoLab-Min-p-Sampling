@@ -57,6 +57,7 @@ g = sns.relplot(
     col="Sampler",
     col_order=src.globals.SAMPLERS_ORDER_LIST,
     facet_kws={"sharex": "row", "sharey": "col", "margin_titles": True},
+    s=100,
 )
 g.set(xlabel="Sampler Value", ylabel="Exact Match (Strict)")
 g.set_titles(col_template="{col_name}", row_template="{row_name}")

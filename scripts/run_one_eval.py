@@ -47,23 +47,39 @@ def run_one_eval():
 
     # Execute the command and block until completion
     print(f"Executing command: {command}")
-    process = subprocess.run(
-        command, shell=True, check=True, text=True, capture_output=True
-    )
+    try:
+        process = subprocess.run(
+            command,
+            shell=True,
+            check=True,  # This is what raises the CalledProcessError
+            text=True,
+            capture_output=True,
+        )
 
-    if process.stderr:
-        print("Command stderr:")
-        print(process.stderr)
+        if process.stderr:
+            print("Command stderr:")
+            print(process.stderr)
 
-    if config["task"] == "gsm8k_cot_llama":
-        scores = extract_gsm8k_scores_from_output(process.stdout)
-    else:
-        raise NotImplementedError(f"Task {config['task']} is not implemented.")
+        if config["task"] == "gsm8k_cot_llama":
+            scores = extract_gsm8k_scores_from_output(process.stdout)
+            # Log the results to wandb
+            wandb.log(scores)
+        else:
+            raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
-    # Log the results to wandb
-    wandb.log(scores)
+    except subprocess.CalledProcessError as e:
+        # Handle the error
+        print(f"Command failed with exit code {e.returncode}")
+        print(f"STDOUT: {e.stdout}")
+        print(f"STDERR: {e.stderr}")
 
-    wandb.finish()
+    except Exception as e:
+        # Handle any other exceptions
+        print(f"An unexpected error occurred: {str(e)}")
+        wandb.log({"error": True, "error_message": str(e), "command": command})
+    finally:
+        # Always finish the wandb run
+        wandb.finish()
 
 
 def extract_gsm8k_scores_from_output(output_text: str) -> Dict[str, float]:

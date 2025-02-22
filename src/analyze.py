@@ -81,10 +81,7 @@ def download_wandb_project_runs_configs(
             print(f"Error saving to feather: {str(e)}")
 
         try:
-            runs_configs_without_model_generations_kwargs_df = runs_configs_df.drop(
-                columns=["model_generation_kwargs"]
-            )
-            runs_configs_without_model_generations_kwargs_df.to_parquet(
+            runs_configs_df.to_parquet(
                 runs_configs_df_path.replace(filetype, "parquet"), index=False
             )
         except Exception as e:
