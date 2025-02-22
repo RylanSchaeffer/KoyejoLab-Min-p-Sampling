@@ -25,7 +25,7 @@ parameters:
   sampler:
     values: ["top_k"]
   sampler_value:
-    values: [10, 20, 30, 50, 100, 180]
+    values: [10, 30, 50, 100, 150, 200]
   seed:
     values: [0, 1, 2]
   task:

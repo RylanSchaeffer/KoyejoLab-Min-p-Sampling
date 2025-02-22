@@ -65,6 +65,10 @@ SAMPLERS_ORDER_LIST = [
     "Min-P",
 ]
 
+TASK_NICE_NAMES_DICT = {
+    "gsm8k_cot_llama": "GSM8K CoT",
+}
+
 TASKS_ORDER_LIST = [
     "gsm8k_cot_llama",
 ]
