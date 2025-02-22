@@ -49,13 +49,13 @@ MODELS_TYPE_ORDER_LIST = [
 ]
 
 SAMPLERS_NICE_NAMES_DICT = {
-    "none": "None",
+    "pure": "Pure",
     "min_p": "Min-P",
     "top_p": "Top-P",
 }
 
 SAMPLERS_ORDER_LIST = [
-    "None",
+    "Pure",
     "Top-P",
     "Top-K",
     "Min-P",

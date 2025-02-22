@@ -23,9 +23,9 @@ parameters:
      "mistralai/Mistral-7B-Instruct-v0.1",
     ]
   num_fewshot:
-    values: [5, 8]
+    values: [8]
   sampler:
-    values: ["none"]
+    values: ["pure"]
   sampler_value:
     values: [0.0]
   seed:

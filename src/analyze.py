@@ -22,7 +22,7 @@ def download_wandb_project_runs_configs(
     refresh: bool = False,
     wandb_username: Optional[str] = None,
     filetype: str = "csv",
-    max_workers: int = 10,  # New parameter to control the number of parallel workers
+    max_workers: int = 30,  # New parameter to control the number of parallel workers
 ) -> pd.DataFrame:
     assert filetype in {"csv", "feather", "parquet"}
 

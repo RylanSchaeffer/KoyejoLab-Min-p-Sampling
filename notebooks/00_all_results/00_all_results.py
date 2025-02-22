@@ -10,8 +10,8 @@ import src.globals
 import src.plot
 
 
-# refresh = False
-refresh = True
+refresh = False
+# refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -28,7 +28,8 @@ runs_configs_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     data_dir=data_dir,
     sweep_ids=wandb_sweep_ids,
     refresh=refresh,
-    wandb_username=wandb.api.default_entity,
+    wandb_username="rylan",
+    # wandb_username=wandb.api.default_entity,
     finished_only=True,
 )
 runs_configs_df["Model"] = runs_configs_df["model_hf_path"].map(
@@ -40,15 +41,23 @@ runs_configs_df["Model Type"] = runs_configs_df["model_hf_path"].map(
 runs_configs_df["Sampler"] = runs_configs_df["sampler"].map(
     src.globals.SAMPLERS_NICE_NAMES_DICT
 )
+runs_configs_df.rename(
+    columns={
+        "temperature": "Temperature",
+        "sampler_value": "Sampler Value",
+        "exact_match_strict-match": "Exact Match (Strict)",
+    },
+    inplace=True,
+)
 
 
 plt.close()
 g = sns.relplot(
     data=runs_configs_df[runs_configs_df["task"] == "gsm8k_cot_llama"],
-    kind="scatter",
-    x="sampler_value",
-    y="exact_match_strict-match",
-    hue="temperature",
+    kind="line",
+    x="Sampler Value",
+    y="Exact Match (Strict)",
+    hue="Temperature",
     style="Model Type",
     style_order=src.globals.MODELS_TYPE_ORDER_LIST,
     palette="coolwarm",
@@ -56,10 +65,9 @@ g = sns.relplot(
     row_order=src.globals.MODELS_ORDER_LIST,
     col="Sampler",
     col_order=src.globals.SAMPLERS_ORDER_LIST,
-    facet_kws={"sharex": "row", "sharey": "col", "margin_titles": True},
-    s=100,
+    facet_kws={"sharex": "col", "sharey": "row", "margin_titles": True},
+    # s=50,
 )
-g.set(xlabel="Sampler Value", ylabel="Exact Match (Strict)")
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
 plt.show()
 
