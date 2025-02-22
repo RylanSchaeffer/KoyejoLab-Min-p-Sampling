@@ -12,10 +12,8 @@
 
 3. Install the required packages:
 
-`pip install vllm lm_eval wandb pandas seaborn nvidia-htop `
+`pip install vllm lm_eval wandb pandas seaborn nvidia-htop`
 
-4. If generating the Many-Shot In-Context Learning data:
+4. Sign into `wandb`: 
 
-`conda install pytorch-gpu torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia -y`
-
-`pip install protobuf sentencepiece`
+`wandb login`
