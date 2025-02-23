@@ -19,7 +19,7 @@ def run_one_eval():
     pprint.pprint(config)
 
     do_sample = True if config["temperature"] > 0 else False
-    if config["task"] == "gsm8k_cot_llama":
+    if config["task"] == "gsm8k_cot_llama" or config["task"]=="gpqa_main_generative_n_shot":
         command = f"""
         lm_eval \
         --model {config['model']} \
