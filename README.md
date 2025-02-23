@@ -20,3 +20,8 @@
 
 ## Running
 
+To evaluate a single model (to sanity check that the code runs), run:
+
+`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=0 && python -u scripts/run_one_eval.py`
+
+To run the full evaluation, create a W&B sweep:
