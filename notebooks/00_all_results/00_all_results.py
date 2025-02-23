@@ -38,6 +38,56 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
 )
 
 plt.close()
+g = sns.displot(
+    data=runs_scores_df,
+    kind="kde",
+    x="Exact Match (Strict)",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Task",
+    row_order=src.globals.TASKS_ORDER_LIST,
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+    common_norm=False,  # Normalize each hue separately
+    clip=(0, 1),  # Clip the density to [0, 1] because exact match.
+)
+g.set(xlim=(0, 1))
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=kde_x=em_strict_hue=sampler_row=model_col=task",
+)
+# plt.show()
+
+plt.close()
+g = sns.displot(
+    data=runs_scores_df,
+    kind="kde",
+    x="Exact Match (Flexible)",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Task",
+    row_order=src.globals.TASKS_ORDER_LIST,
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+    common_norm=False,  # Normalize each hue separately
+    clip=(0, 1),  # Clip the density to [0, 1] because exact match.
+)
+g.set(xlim=(0, 1))
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=kde_x=em_flexible_hue=sampler_row=model_col=task",
+)
+# plt.show()
+
+plt.close()
 g = sns.relplot(
     data=runs_scores_df[runs_scores_df["Task"] == "GSM8K CoT"],
     kind="line",
@@ -107,18 +157,18 @@ g = sns.relplot(
     hue="Sampler",
     hue_order=src.globals.SAMPLERS_ORDER_LIST,
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    row="Model",
-    row_order=src.globals.MODELS_ORDER_LIST,
-    col="Task",
-    col_order=src.globals.TASKS_ORDER_LIST,
-    facet_kws={"margin_titles": True, "sharey": "row"},
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    row="Task",
+    row_order=src.globals.TASKS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": "col"},
 )
 g.set(
     xscale="log",
     xlabel="Number of Hyperparameters Swept",
     ylabel="Best Exact Match (Strict)",
 )
-g.set_titles(col_template="Task: {col_name}", row_template="{row_name}")
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
@@ -138,14 +188,14 @@ g = sns.displot(
     kind="kde",
     x="Difference of Exact Matches (Strict)",
     hue="Sampler1 - Sampler2",
-    col="Task",
-    col_order=src.globals.TASKS_ORDER_LIST,
-    row="Model",
-    row_order=src.globals.MODELS_ORDER_LIST,
+    row="Task",
+    row_order=src.globals.TASKS_ORDER_LIST,
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+    common_norm=False,  # Normalize each hue separately
 )
-for ax in g.axes.flat:
-    ax.axhline(0.5, color="black", linestyle="--")
+g.set(xlabel="Sampler 1's Exact Match - Sampler 2's Exact Match")
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
@@ -162,13 +212,16 @@ g = sns.displot(
     complementary=True,
     x="Difference of Exact Matches (Strict)",
     hue="Sampler1 - Sampler2",
-    col="Task",
-    col_order=src.globals.TASKS_ORDER_LIST,
-    row="Model",
-    row_order=src.globals.MODELS_ORDER_LIST,
+    row="Task",
+    row_order=src.globals.TASKS_ORDER_LIST,
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
 )
-g.set(ylabel="1 - Empirical CDF")
+g.set(
+    xlabel="Sampler 1's Exact Match - Sampler 2's Exact Match",
+    ylabel="1 - Empirical CDF",
+)
 for ax in g.axes.flat:
     ax.axhline(0.5, color="black", linestyle="--")
 g.set_titles(col_template="{col_name}", row_template="{row_name}")

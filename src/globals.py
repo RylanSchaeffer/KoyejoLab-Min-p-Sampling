@@ -31,6 +31,7 @@ MODELS_ORDER_LIST = [
     "Qwen2.5-3B Instruct",
     "Qwen2.5-7B",
     "Qwen2.5-7B Instruct",
+    "Mistral-7B",
     "Mistral-7B Instruct",
 ]
 
