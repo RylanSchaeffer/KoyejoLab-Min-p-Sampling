@@ -17,3 +17,6 @@
 4. Sign into `wandb`: 
 
 `wandb login`
+
+## Running
+

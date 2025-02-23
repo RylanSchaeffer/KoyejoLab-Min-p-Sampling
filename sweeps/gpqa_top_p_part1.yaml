@@ -1,0 +1,34 @@
+program: scripts/run_one_eval.py
+entity: rylan
+project: min-p-evals
+method: grid
+parameters:
+  model:
+    values: [
+      "vllm"
+    ]
+  model_hf_path:
+    values: [
+     "Qwen/Qwen2.5-0.5B",
+     "Qwen/Qwen2.5-0.5B-Instruct",
+     "Qwen/Qwen2.5-1.5B",
+     "Qwen/Qwen2.5-1.5B-Instruct",
+     "Qwen/Qwen2.5-3B",
+     "Qwen/Qwen2.5-3B-Instruct",
+     "Qwen/Qwen2.5-7B",
+     "Qwen/Qwen2.5-7B-Instruct",
+     "mistralai/Mistral-7B-v0.1",
+     "mistralai/Mistral-7B-Instruct-v0.1",
+    ]
+  num_fewshot:
+    values: [8]
+  sampler:
+    values: ["top_p"]
+  sampler_value:
+    values: [0.99, 0.98, 0.95, 0.9, 0.8, 0.7]
+  seed:
+    values: [0, 1, 2]
+  task:
+    values: ["gpqa_main_generative_n_shot"]
+  temperature:
+    values: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
