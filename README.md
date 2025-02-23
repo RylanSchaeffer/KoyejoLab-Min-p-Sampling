@@ -14,6 +14,10 @@
 
 `pip install vllm lm_eval wandb pandas seaborn nvidia-htop`
 
+or exactly install the versions we used:
+
+`conda env create -f environment.yml`
+
 4. Sign into `wandb`: 
 
 `wandb login`
