@@ -5,6 +5,7 @@ EVAL_DEFAULT_CONFIG = {
     "sampler": "min_p",
     "sampler_value": 0.1,
     "seed": 0,
+    # "task": "gpqa_main_generative_n_shot",
     "task": "gsm8k_cot_llama",
     "temperature": 1.0,
 }
