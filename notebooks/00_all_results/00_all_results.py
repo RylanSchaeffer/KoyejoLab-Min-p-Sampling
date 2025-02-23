@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-refresh = False
-# refresh = True
+# refresh = False
+refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -39,16 +39,17 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
 
 plt.close()
 g = sns.displot(
-    data=runs_scores_df,
+    data=runs_scores_df[runs_scores_df["Task"] == "GSM8K CoT"],
     kind="kde",
     x="Exact Match (Strict)",
     hue="Sampler",
     hue_order=src.globals.SAMPLERS_ORDER_LIST,
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    row="Task",
-    row_order=src.globals.TASKS_ORDER_LIST,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
     common_norm=False,  # Normalize each hue separately
     clip=(0, 1),  # Clip the density to [0, 1] because exact match.
@@ -64,16 +65,17 @@ src.plot.save_plot_with_multiple_extensions(
 
 plt.close()
 g = sns.displot(
-    data=runs_scores_df,
+    data=runs_scores_df[runs_scores_df["Task"] == "GSM8K CoT"],
     kind="kde",
     x="Exact Match (Flexible)",
     hue="Sampler",
     hue_order=src.globals.SAMPLERS_ORDER_LIST,
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    row="Task",
-    row_order=src.globals.TASKS_ORDER_LIST,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
     common_norm=False,  # Normalize each hue separately
     clip=(0, 1),  # Clip the density to [0, 1] because exact match.
@@ -137,36 +139,37 @@ src.plot.save_plot_with_multiple_extensions(
 # plt.show()
 
 
-best_of_n_avg_scores_df = src.analyze.compute_best_of_n_scores(
+best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
     runs_scores_df,
-    num_repeats=100,
     Ns_list=np.unique(
         np.logspace(0, np.log10(179), 40).astype(
             int
         )  # We have max 180 hyperparameters per sampler.
     ).tolist(),
+    num_repeats=100,
 )
 
 
 plt.close()
 g = sns.relplot(
-    data=best_of_n_avg_scores_df,
+    data=best_of_n_avg_scores_df[best_of_n_avg_scores_df["Task"] == "GSM8K CoT"],
     kind="line",
-    x="N",
+    x="Number of Hyperparameters Swept",
     y="Exact Match (Strict)",
     hue="Sampler",
     hue_order=src.globals.SAMPLERS_ORDER_LIST,
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
-    row="Task",
-    row_order=src.globals.TASKS_ORDER_LIST,
-    facet_kws={"margin_titles": True, "sharey": "col"},
+    col_wrap=6,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
 )
 g.set(
     xscale="log",
-    xlabel="Number of Hyperparameters Swept",
-    ylabel="Best Exact Match (Strict)",
+    # xlabel="Number of Hyperparameters Swept",
+    # ylabel="Best Exact Match (Strict)",
 )
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
@@ -184,14 +187,17 @@ samplers_pairwise_scores_differences_df: pd.DataFrame = (
 
 plt.close()
 g = sns.displot(
-    data=samplers_pairwise_scores_differences_df,
+    data=samplers_pairwise_scores_differences_df[
+        samplers_pairwise_scores_differences_df["Task"] == "GSM8K CoT"
+    ],
     kind="kde",
     x="Difference of Exact Matches (Strict)",
     hue="Sampler1 - Sampler2",
-    row="Task",
-    row_order=src.globals.TASKS_ORDER_LIST,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
     common_norm=False,  # Normalize each hue separately
 )
@@ -207,7 +213,9 @@ src.plot.save_plot_with_multiple_extensions(
 
 plt.close()
 g = sns.displot(
-    data=samplers_pairwise_scores_differences_df,
+    data=samplers_pairwise_scores_differences_df[
+        samplers_pairwise_scores_differences_df["Task"] == "GSM8K CoT"
+    ],
     kind="ecdf",
     complementary=True,
     x="Difference of Exact Matches (Strict)",

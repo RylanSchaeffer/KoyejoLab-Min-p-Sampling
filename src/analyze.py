@@ -14,7 +14,7 @@ from tqdm import tqdm
 import src.globals
 
 
-def compute_best_of_n_scores(
+def compute_best_of_n_avg_scores_df(
     runs_scores_df: pd.DataFrame,
     Ns_list: Optional[List[int]] = None,
     num_repeats: int = 31,
@@ -79,7 +79,7 @@ def compute_best_of_n_scores(
                         "Sampler": [sampler],
                         "Task": [task],
                         "repeat_idx": [repeat_idx],
-                        "N": [N],
+                        "Number of Hyperparameters Swept": [N],
                         "Exact Match (Strict)": [best_exact_match_strict],
                         "Exact Match (Flexible)": [best_exact_match_flexible],
                     }
