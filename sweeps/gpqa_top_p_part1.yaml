@@ -21,7 +21,7 @@ parameters:
      "mistralai/Mistral-7B-Instruct-v0.1",
     ]
   num_fewshot:
-    values: [8]
+    values: [5]
   sampler:
     values: ["top_p"]
   sampler_value:

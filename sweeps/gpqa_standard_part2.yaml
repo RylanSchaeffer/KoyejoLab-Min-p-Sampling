@@ -21,9 +21,9 @@ parameters:
   num_fewshot:
     values: [5]
   sampler:
-    values: ["top_p"]
+    values: ["standard"]
   sampler_value:
-    values: [0.99, 0.98, 0.95, 0.9, 0.8, 0.7]
+    values: [0.0]
   seed:
     values: [0, 1, 2]
   task:
