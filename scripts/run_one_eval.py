@@ -40,9 +40,7 @@ def run_one_eval():
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
     command = (
-        "export CUDA_DEVICE_ORDER=PCI_BUS_ID"
-        f" && export CUDA_VISIBLE_DEVICES={os.environ['CUDA_VISIBLE_DEVICES']}"
-        ' && eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
+        'eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
     )
 
     # Execute the command and block until completion
@@ -60,7 +58,7 @@ def run_one_eval():
             print("Command stderr:")
             print(process.stderr)
 
-        if config["task"] == "gsm8k_cot_llama":
+        if config["task"] == "gsm8k_cot_llama" or config["task"] == "gpqa_main_generative_n_shot":
             scores = extract_gsm8k_scores_from_output(process.stdout)
             # Log the results to wandb
             wandb.log(scores)
