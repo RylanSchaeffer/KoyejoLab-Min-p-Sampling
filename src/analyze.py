@@ -92,6 +92,55 @@ def compute_best_of_n_scores(
     return best_of_n_avg_scores_df
 
 
+def compute_samplers_pairwise_scores_differences_df(
+    runs_scores_df: pd.DataFrame,
+) -> pd.DataFrame:
+    samplers = runs_scores_df["Sampler"].unique()
+
+    sampler_pairwise_differences_dfs_list = []
+    for (
+        model,
+        model_hf_path,
+        num_fewshot,
+        task,
+    ), subset_df in runs_scores_df.groupby(
+        ["Model", "model_hf_path", "num_fewshot", "Task"]
+    ):
+        # for sampler1_idx, sampler1 in enumerate(samplers):
+        sampler1 = "Min-P"
+        for sampler2 in samplers:
+            if sampler2 == sampler1:
+                continue
+            sampler1_scores = subset_df[subset_df["Sampler"] == sampler1][
+                "Exact Match (Strict)"
+            ].values
+            sampler2_scores = subset_df[subset_df["Sampler"] == sampler2][
+                "Exact Match (Strict)"
+            ].values
+
+            # Compute the distribution of pairwise differences of scores.
+            # Shape: (sampler1 samples, sampler2 samples)
+            pairwise_differences = sampler1_scores[:, None] - sampler2_scores
+            pairwise_differences_df = pd.DataFrame(
+                pairwise_differences.flatten(),
+                columns=["Difference of Exact Matches (Strict)"],
+            )
+            pairwise_differences_df["Model"] = model
+            pairwise_differences_df["model_hf_path"] = model_hf_path
+            pairwise_differences_df["num_fewshot"] = num_fewshot
+            pairwise_differences_df["Task"] = task
+            pairwise_differences_df["Sampler1"] = sampler1
+            pairwise_differences_df["Sampler2"] = sampler2
+            pairwise_differences_df["Sampler1 - Sampler2"] = f"{sampler1} - {sampler2}"
+
+            sampler_pairwise_differences_dfs_list.append(pairwise_differences_df)
+
+    sampler_pairwise_differences_df = pd.concat(
+        sampler_pairwise_differences_dfs_list, ignore_index=True
+    ).reset_index(drop=True)
+    return sampler_pairwise_differences_df
+
+
 def download_wandb_project_runs_configs(
     wandb_project_path: str,
     data_dir: str,

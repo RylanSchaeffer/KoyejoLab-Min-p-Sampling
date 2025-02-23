@@ -71,5 +71,5 @@ TASK_NICE_NAMES_DICT = {
 }
 
 TASKS_ORDER_LIST = [
-    "gsm8k_cot_llama",
+    "GSM8K CoT",
 ]

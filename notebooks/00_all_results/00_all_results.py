@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-# refresh = False
-refresh = True
+refresh = False
+# refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -36,46 +36,6 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     finished_only=True,
     max_workers=60,
 )
-
-
-best_of_n_avg_scores_df = src.analyze.compute_best_of_n_scores(
-    runs_scores_df,
-    num_repeats=100,
-    Ns_list=np.unique(
-        np.logspace(0, np.log10(181), 40).astype(
-            int
-        )  # We have max 180 hyperparameters per sampler.
-    ).tolist(),
-)
-
-
-plt.close()
-g = sns.relplot(
-    data=best_of_n_avg_scores_df,
-    kind="line",
-    x="N",
-    y="Exact Match (Strict)",
-    hue="Sampler",
-    hue_order=src.globals.SAMPLERS_ORDER_LIST,
-    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    row="Model",
-    # row_order=src.globals.MODELS_ORDER_LIST,
-    col="Task",
-    # col_order=src.globals.TASKS_ORDER_LIST,
-    facet_kws={"margin_titles": True, "sharey": "row"},
-)
-g.set(
-    xscale="log",
-    xlabel="Number of Hyperparameters Swept",
-    ylabel="Best Exact Match (Strict)",
-)
-g.set_titles(col_template="Task: {col_name}", row_template="{row_name}")
-sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
-src.plot.save_plot_with_multiple_extensions(
-    plot_dir=results_dir,
-    plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
-)
-# plt.show()
 
 plt.close()
 g = sns.relplot(
@@ -124,6 +84,99 @@ src.plot.save_plot_with_multiple_extensions(
     plot_filename="task=gsm8k_y=em_flexible_x=sampler_value_hue=temperature_style=model_type_row=model_col=sampler",
 )
 
+# plt.show()
+
+
+best_of_n_avg_scores_df = src.analyze.compute_best_of_n_scores(
+    runs_scores_df,
+    num_repeats=100,
+    Ns_list=np.unique(
+        np.logspace(0, np.log10(179), 40).astype(
+            int
+        )  # We have max 180 hyperparameters per sampler.
+    ).tolist(),
+)
+
+
+plt.close()
+g = sns.relplot(
+    data=best_of_n_avg_scores_df,
+    kind="line",
+    x="N",
+    y="Exact Match (Strict)",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Model",
+    row_order=src.globals.MODELS_ORDER_LIST,
+    col="Task",
+    col_order=src.globals.TASKS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": "row"},
+)
+g.set(
+    xscale="log",
+    xlabel="Number of Hyperparameters Swept",
+    ylabel="Best Exact Match (Strict)",
+)
+g.set_titles(col_template="Task: {col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
+)
+# plt.show()
+
+samplers_pairwise_scores_differences_df: pd.DataFrame = (
+    src.analyze.compute_samplers_pairwise_scores_differences_df(
+        runs_scores_df=runs_scores_df,
+    )
+)
+
+plt.close()
+g = sns.displot(
+    data=samplers_pairwise_scores_differences_df,
+    kind="kde",
+    x="Difference of Exact Matches (Strict)",
+    hue="Sampler1 - Sampler2",
+    col="Task",
+    col_order=src.globals.TASKS_ORDER_LIST,
+    row="Model",
+    row_order=src.globals.MODELS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+)
+for ax in g.axes.flat:
+    ax.axhline(0.5, color="black", linestyle="--")
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=kde_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model_col=task",
+)
+# plt.show()
+
+
+plt.close()
+g = sns.displot(
+    data=samplers_pairwise_scores_differences_df,
+    kind="ecdf",
+    complementary=True,
+    x="Difference of Exact Matches (Strict)",
+    hue="Sampler1 - Sampler2",
+    col="Task",
+    col_order=src.globals.TASKS_ORDER_LIST,
+    row="Model",
+    row_order=src.globals.MODELS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+)
+g.set(ylabel="1 - Empirical CDF")
+for ax in g.axes.flat:
+    ax.axhline(0.5, color="black", linestyle="--")
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=survival_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model_col=task",
+)
 # plt.show()
 
 print("Finished notebooks/00_all_results")
