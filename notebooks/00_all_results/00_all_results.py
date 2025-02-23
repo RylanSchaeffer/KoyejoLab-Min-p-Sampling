@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-refresh = False
-# refresh = True
+# refresh = False
+refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -146,7 +146,7 @@ best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
             int
         )  # We have max 180 hyperparameters per sampler.
     ).tolist(),
-    num_repeats=100,
+    num_repeats=150,
 )
 
 
