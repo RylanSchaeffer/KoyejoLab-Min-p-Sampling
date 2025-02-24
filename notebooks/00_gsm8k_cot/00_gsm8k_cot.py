@@ -34,7 +34,7 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     wandb_username="rylan",
     # wandb_username=wandb.api.default_entity,
     finished_only=True,
-    max_workers=60,
+    max_workers=100,
 )
 
 plt.close()
