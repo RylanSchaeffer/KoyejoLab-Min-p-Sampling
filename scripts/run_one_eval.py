@@ -19,6 +19,12 @@ def run_one_eval():
     pprint.pprint(config)
 
     do_sample = True if config["temperature"] > 0 else False
+    
+    if config["sampler"] == "standard":
+        gen_kwargs = f"temperature={config['temperature']},do_sample={do_sample}"
+    else:
+        gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
+    
     if (
         config["task"] == "gsm8k_cot_llama"
         or config["task"] == "gpqa_main_generative_n_shot"
@@ -34,7 +40,7 @@ def run_one_eval():
         --fewshot_as_multiturn \
         --log_samples \
         --output_path ./lm-eval-output/ \
-        --gen_kwargs {config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample} \
+        --gen_kwargs {gen_kwargs} \
         --device cuda \
         --seed {config['seed']}
         """
