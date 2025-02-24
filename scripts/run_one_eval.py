@@ -19,7 +19,10 @@ def run_one_eval():
     pprint.pprint(config)
 
     do_sample = True if config["temperature"] > 0 else False
-    if config["task"] == "gsm8k_cot_llama" or config["task"]=="gpqa_main_generative_n_shot":
+    if (
+        config["task"] == "gsm8k_cot_llama"
+        or config["task"] == "gpqa_main_generative_n_shot"
+    ):
         command = f"""
         lm_eval \
         --model {config['model']} \
@@ -39,9 +42,7 @@ def run_one_eval():
     else:
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
-    command = (
-        'eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
-    )
+    command = 'eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
 
     # Execute the command and block until completion
     print(f"Executing command: {command}")
@@ -58,7 +59,10 @@ def run_one_eval():
             print("Command stderr:")
             print(process.stderr)
 
-        if config["task"] == "gsm8k_cot_llama" or config["task"] == "gpqa_main_generative_n_shot":
+        if (
+            config["task"] == "gsm8k_cot_llama"
+            or config["task"] == "gpqa_main_generative_n_shot"
+        ):
             scores = extract_gsm8k_scores_from_output(process.stdout)
             # Log the results to wandb
             wandb.log(scores)

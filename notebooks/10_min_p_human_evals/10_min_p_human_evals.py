@@ -107,7 +107,7 @@ for i, diversity_level in enumerate(["High", "Low"]):
         transform=axes[i, 1].transAxes,
         horizontalalignment="center",
         verticalalignment="center",
-        rotation=90,
+        rotation=-90,
         # bbox=dict(facecolor="white", alpha=0.8, edgecolor="gray")
     )
 # Remove individual legends (don't call legend() on subplots)

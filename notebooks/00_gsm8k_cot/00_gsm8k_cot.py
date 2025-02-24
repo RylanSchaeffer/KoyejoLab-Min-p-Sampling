@@ -240,4 +240,4 @@ src.plot.save_plot_with_multiple_extensions(
 )
 # plt.show()
 
-print("Finished notebooks/00_all_results")
+print("Finished notebooks/00_gsm8k_cot")

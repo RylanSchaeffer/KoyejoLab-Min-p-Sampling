@@ -26,6 +26,10 @@ or exactly install the versions we used:
 
 To evaluate a single model (to sanity check that the code runs), run:
 
-`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=0 && python -u scripts/run_one_eval.py`
+`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=0 && conda activate min_p_env && python -u scripts/run_one_eval.py`
 
 To run the full evaluation, create a W&B sweep:
+
+And then launch an agent per GPU:
+
+`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=YOUR GPU NUMBER && conda activate min_p_env && wandb agent ...`
