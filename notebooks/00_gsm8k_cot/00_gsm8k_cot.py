@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-refresh = False
-# refresh = True
+# refresh = False
+refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -36,6 +36,93 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     finished_only=True,
     max_workers=100,
 )
+
+best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
+    runs_scores_df,
+    Ns_list=np.unique(
+        np.logspace(0, np.log10(179), 40).astype(
+            int
+        )  # We have max 180 hyperparameters per sampler.
+    ).tolist(),
+    num_repeats=150,
+)
+
+
+plt.close()
+g = sns.relplot(
+    data=best_of_n_avg_scores_df,
+    kind="line",
+    x="Number of Hyperparameters Swept",
+    y="Exact Match (Strict)",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
+)
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
+)
+g.set(
+    xscale="log",
+    # xlabel="Number of Hyperparameters Swept",
+    # ylabel="Best Exact Match (Strict)",
+)
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=em_strict_x=log_N_hue=sampler_row=model_col=task",
+)
+# plt.show()
+
+# Average over repeat index for Best of N, then plot scaling behavior.
+best_of_n_avg_scores_over_repeats_df = (
+    best_of_n_avg_scores_df[
+        ["Sampler", "Model", "Number of Hyperparameters Swept", "Exact Match (Strict)"]
+    ]
+    .groupby(["Sampler", "Model", "Number of Hyperparameters Swept"])[
+        "Exact Match (Strict)"
+    ]
+    .mean()
+    .reset_index()
+)
+best_of_n_avg_scores_over_repeats_df["Neg Log Exact Match (Strict)"] = -np.log(
+    best_of_n_avg_scores_over_repeats_df["Exact Match (Strict)"]
+)
+
+plt.close()
+g = sns.relplot(
+    data=best_of_n_avg_scores_over_repeats_df,
+    kind="line",
+    x="Number of Hyperparameters Swept",
+    y="Neg Log Exact Match (Strict)",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
+    # row="Task",
+    # row_order=src.globals.TASKS_ORDER_LIST,
+    facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
+)
+g.set(
+    xscale="log",
+    yscale="log",
+)
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=neg_log_em_strict_x=N_hue=sampler_row=model_col=task",
+)
+# plt.show()
 
 plt.close()
 g = sns.displot(
@@ -136,90 +223,6 @@ src.plot.save_plot_with_multiple_extensions(
     plot_filename="y=em_flexible_x=sampler_value_hue=temperature_style=model_type_row=model_col=sampler",
 )
 
-# plt.show()
-
-
-best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
-    runs_scores_df,
-    Ns_list=np.unique(
-        np.logspace(0, np.log10(179), 40).astype(
-            int
-        )  # We have max 180 hyperparameters per sampler.
-    ).tolist(),
-    num_repeats=150,
-)
-
-
-plt.close()
-g = sns.relplot(
-    data=best_of_n_avg_scores_df,
-    kind="line",
-    x="Number of Hyperparameters Swept",
-    y="Exact Match (Strict)",
-    hue="Sampler",
-    hue_order=src.globals.SAMPLERS_ORDER_LIST,
-    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    col="Model",
-    col_order=src.globals.MODELS_ORDER_LIST,
-    col_wrap=6,
-    # row="Task",
-    # row_order=src.globals.TASKS_ORDER_LIST,
-    facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
-)
-g.set(
-    xscale="log",
-    # xlabel="Number of Hyperparameters Swept",
-    # ylabel="Best Exact Match (Strict)",
-)
-g.set_titles(col_template="{col_name}", row_template="{row_name}")
-sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
-src.plot.save_plot_with_multiple_extensions(
-    plot_dir=results_dir,
-    plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
-)
-# plt.show()
-
-# Average over repeat index for Best of N, then plot scaling behavior.
-best_of_n_avg_scores_over_repeats_df = (
-    best_of_n_avg_scores_df[
-        ["Sampler", "Model", "Number of Hyperparameters Swept", "Exact Match (Strict)"]
-    ]
-    .groupby(["Sampler", "Model", "Number of Hyperparameters Swept"])[
-        "Exact Match (Strict)"
-    ]
-    .mean()
-    .reset_index()
-)
-best_of_n_avg_scores_over_repeats_df["Neg Log Exact Match (Strict)"] = -np.log(
-    best_of_n_avg_scores_over_repeats_df["Exact Match (Strict)"]
-)
-
-plt.close()
-g = sns.relplot(
-    data=best_of_n_avg_scores_over_repeats_df,
-    kind="line",
-    x="Number of Hyperparameters Swept",
-    y="Neg Log Exact Match (Strict)",
-    hue="Sampler",
-    hue_order=src.globals.SAMPLERS_ORDER_LIST,
-    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-    col="Model",
-    col_order=src.globals.MODELS_ORDER_LIST,
-    col_wrap=6,
-    # row="Task",
-    # row_order=src.globals.TASKS_ORDER_LIST,
-    facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
-)
-g.set(
-    xscale="log",
-    yscale="log",
-)
-g.set_titles(col_template="{col_name}", row_template="{row_name}")
-sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
-src.plot.save_plot_with_multiple_extensions(
-    plot_dir=results_dir,
-    plot_filename="y=neg_log_em_strict_x=N_hue=sampler_row=model_col=task",
-)
 # plt.show()
 
 
