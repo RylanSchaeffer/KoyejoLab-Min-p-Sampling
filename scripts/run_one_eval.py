@@ -29,8 +29,7 @@ def run_one_eval():
         config["task"] == "gsm8k_cot_llama"
         or config["task"] == "gpqa_main_generative_n_shot"
     ):
-        command = f"""
-        lm_eval \
+        command = f"""lm_eval \
         --model {config['model']} \
         --model_args pretrained={config['model_hf_path']},dtype=auto \
         --batch_size auto \
@@ -48,9 +47,11 @@ def run_one_eval():
 
     if config["model_hf_path"] != "mistralai/Mistral-7B-v0.1":
         # Mistral 7B base does not have a chat template. All other models should.
-        command += "--fewshot_as_multiturn --apply_chat_template"
+        command = command.rstrip() + " --fewshot_as_multiturn --apply_chat_template"
 
-    command = 'eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
+    command = (
+        'eval "$(conda shell.bash hook)" && conda activate min_p_env && ' + command
+    )
 
     # Execute the command and block until completion
     print(f"Executing command: {command}")
