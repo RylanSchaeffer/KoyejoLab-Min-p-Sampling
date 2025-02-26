@@ -40,7 +40,7 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
 best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
     runs_scores_df,
     Ns_list=np.unique(
-        np.logspace(0, np.log10(179), 40).astype(
+        np.logspace(0, np.log10(179), 60).astype(
             int
         )  # We have max 180 hyperparameters per sampler.
     ).tolist(),

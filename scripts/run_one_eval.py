@@ -19,12 +19,12 @@ def run_one_eval():
     pprint.pprint(config)
 
     do_sample = True if config["temperature"] > 0 else False
-    
+
     if config["sampler"] == "standard":
         gen_kwargs = f"temperature={config['temperature']},do_sample={do_sample}"
     else:
         gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
-    
+
     if (
         config["task"] == "gsm8k_cot_llama"
         or config["task"] == "gpqa_main_generative_n_shot"
@@ -36,8 +36,6 @@ def run_one_eval():
         --batch_size auto \
         --tasks {config['task']} \
         --num_fewshot {config['num_fewshot']} \
-        --apply_chat_template \
-        --fewshot_as_multiturn \
         --log_samples \
         --output_path ./lm-eval-output/ \
         --gen_kwargs {gen_kwargs} \
@@ -47,6 +45,10 @@ def run_one_eval():
         # --wandb_args project=min-p-evals,name={config['task']}_{config['sampler']}_{config['sampler_value']}_temp_{config['temperature']}_{config['model']}_{config['model_args'].replace('/', '_')} \
     else:
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
+
+    if config["model_hf_path"] != "mistralai/Mistral-7B-v0.1":
+        # Mistral 7B base does not have a chat template. All other models should.
+        command += "--fewshot_as_multiturn --apply_chat_template"
 
     command = 'eval "$(conda shell.bash hook)" && conda activate min_p_env &&' + command
 
@@ -58,7 +60,7 @@ def run_one_eval():
             shell=True,
             check=True,  # This is what raises the CalledProcessError
             text=True,
-            capture_output=True,
+            capture_output=True,  # Capture stdout and stderr
         )
 
         if process.stderr:
@@ -69,7 +71,7 @@ def run_one_eval():
             config["task"] == "gsm8k_cot_llama"
             or config["task"] == "gpqa_main_generative_n_shot"
         ):
-            scores = extract_gsm8k_scores_from_output(process.stdout)
+            scores = extract_exact_match_scores_from_output(process.stdout)
             # Log the results to wandb
             wandb.log(scores)
         else:
@@ -90,7 +92,7 @@ def run_one_eval():
         wandb.finish()
 
 
-def extract_gsm8k_scores_from_output(output_text: str) -> Dict[str, float]:
+def extract_exact_match_scores_from_output(output_text: str) -> Dict[str, float]:
     """Extract exact_match scores from the lm-eval output text."""
     results = {}
 

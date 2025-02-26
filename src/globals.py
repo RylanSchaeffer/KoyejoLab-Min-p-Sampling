@@ -1,5 +1,6 @@
 EVAL_DEFAULT_CONFIG = {
     "model": "vllm",
+    # "model_hf_path": "mistralai/Mistral-7B-v0.1",
     "model_hf_path": "Qwen/Qwen2.5-0.5B",
     "num_fewshot": 8,
     "sampler": "min_p",
