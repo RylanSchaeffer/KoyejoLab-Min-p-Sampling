@@ -5,15 +5,12 @@ import os
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import wandb
+from typing import Tuple
 
 import src.analyze
 import src.globals
 import src.plot
 
-
-# refresh = False
-refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -50,11 +47,62 @@ human_evals_scores_df = pd.DataFrame(
         "Diversity",
         "Sampler",
         "Quality (Mean)",
-        "Quality (Std)",
+        "Quality (SD)",
         "Diversity (Mean)",
-        "Diversity (Std)",
+        "Diversity (SD)",
     ],
 )
+
+# Compute standard errors.
+# Allegedly, 54 annotators: https://github.com/menhguin/minp_paper/issues/4
+human_evals_scores_df["Quality (95CI)"] = (
+    1.96 * human_evals_scores_df["Quality (SD)"] / np.sqrt(54)
+)
+human_evals_scores_df["Diversity (95CI)"] = human_evals_scores_df[
+    "Diversity (SD)"
+] / np.sqrt(54)
+
+
+def compute_welch_t_test(df: pd.DataFrame) -> pd.DataFrame:
+    """Compute Welch's t-test for the given row of the DataFrame."""
+    assert len(df) == 2
+    top_p_row = df[df["Sampler"] == "Top-P"]
+    min_p_row = df[df["Sampler"] == "Min-P"]
+
+    # Compute the t-statistic for quality.
+    top_p_quality_mean = top_p_row["Quality (Mean)"].values[0]
+    min_p_quality_mean = min_p_row["Quality (Mean)"].values[0]
+    top_p_quality_se = top_p_row["Quality (95CI)"].values[0]
+    min_p_quality_se = min_p_row["Quality (95CI)"].values[0]
+    t_statistic_quality = (top_p_quality_mean - min_p_quality_mean) / np.sqrt(
+        top_p_quality_se**2 + min_p_quality_se**2
+    )
+
+    top_p_diversity_mean = top_p_row["Diversity (Mean)"].values[0]
+    min_p_diversity_mean = min_p_row["Diversity (Mean)"].values[0]
+    top_p_diversity_se = top_p_row["Diversity (95CI)"].values[0]
+    min_p_diversity_se = min_p_row["Diversity (95CI)"].values[0]
+    t_statistic_diversity = (top_p_diversity_mean - min_p_diversity_mean) / np.sqrt(
+        top_p_diversity_se**2 + min_p_diversity_se**2
+    )
+
+    t_statistics_df = pd.DataFrame(
+        {
+            "Temperature": [df["Temperature"].values[0]],
+            "Diversity": [df["Diversity"].values[0]],
+            "Quality t-statistic": [t_statistic_quality],
+            "Diversity t-statistic": [t_statistic_diversity],
+        },
+    )
+
+    return t_statistics_df
+
+
+# Compute Welch's t-test for Quality and Diversity.
+t_statistics = human_evals_scores_df.groupby(["Temperature", "Diversity"]).apply(
+    compute_welch_t_test
+)
+
 # Create a 2x2 figure:
 # Rows: High diversity (top), Low diversity (bottom)
 # Columns: Quality vs Temperature, Diversity vs Temperature
@@ -82,7 +130,7 @@ for i, diversity_level in enumerate(["High", "Low"]):
         axes[i, 0].errorbar(
             x=df_sub["Quality (Mean)"],
             y=y_vals,
-            xerr=df_sub["Quality (Std)"],
+            xerr=df_sub["Quality (95CI)"],
             fmt="o",
             capsize=5,
             label=f"{sampler}",
@@ -93,7 +141,7 @@ for i, diversity_level in enumerate(["High", "Low"]):
         axes[i, 1].errorbar(
             x=df_sub["Diversity (Mean)"],
             y=y_vals,
-            xerr=df_sub["Diversity (Std)"],
+            xerr=df_sub["Diversity (95CI)"],
             fmt="o",
             capsize=5,
             label=f"{sampler}",
@@ -126,6 +174,76 @@ src.plot.save_plot_with_multiple_extensions(
     plot_filename="min_p_human_evals_scores",
     use_tight_layout=False,
 )
-plt.show()
+# plt.show()
+
+# Create the same figure without the second row.
+# Create a 2x2 figure:
+# Rows: High diversity (top), Low diversity (bottom)
+# Columns: Quality vs Temperature, Diversity vs Temperature
+fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True, squeeze=False)
+# Set common labels for the y-axis (Temperature)
+for ax in axes[:, 0]:
+    ax.set_ylabel("Temperature")
+# Loop over the two diversity groups
+for i, diversity_level in enumerate(["High"]):
+    # Filter DataFrame for current diversity level
+    df_div = human_evals_scores_df[
+        human_evals_scores_df["Diversity"] == diversity_level
+    ]
+    # Plot for each sampler type
+    for sampler in ["Min-P", "Top-P"]:
+        df_sub = df_div[df_div["Sampler"] == sampler]
+        # Calculate vertical offsets
+        y_vals = df_sub["Temperature"] + offsets[sampler]
+        # Quality plot (left column)
+        axes[i, 0].errorbar(
+            x=df_sub["Quality (Mean)"],
+            y=y_vals,
+            xerr=df_sub["Quality (95CI)"],
+            fmt="o",
+            capsize=5,
+            label=f"{sampler}",
+            color=colors[sampler],
+        )
+        axes[i, 0].set_xlim(1, 10)
+        # Diversity plot (right column)
+        axes[i, 1].errorbar(
+            x=df_sub["Diversity (Mean)"],
+            y=y_vals,
+            xerr=df_sub["Diversity (95CI)"],
+            fmt="o",
+            capsize=5,
+            label=f"{sampler}",
+            color=colors[sampler],
+        )
+        axes[i, 1].set_xlim(1, 10)
+    axes[i, 1].text(
+        1.1,
+        0.5,
+        f"Diversity: {diversity_level}",
+        transform=axes[i, 1].transAxes,
+        horizontalalignment="center",
+        verticalalignment="center",
+        rotation=-90,
+        # bbox=dict(facecolor="white", alpha=0.8, edgecolor="gray")
+    )
+# Remove individual legends (don't call legend() on subplots)
+# Instead, create a single legend off to the right.
+# One way is to grab the handles and labels from the first subplot:
+handles, labels = axes[0, 0].get_legend_handles_labels()
+fig.legend(
+    handles, labels, title="Sampler", loc="upper right", bbox_to_anchor=(1.05, 0.95)
+)
+# Set x-axis labels for both columns
+axes[0, 0].set_xlabel("Quality Score")
+axes[0, 1].set_xlabel("Diversity Score")
+plt.tight_layout(rect=[0, 0, 0.87, 1])  # adjust the layout to make room for the legend
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="min_p_human_evals_scores_high_diversity",
+    use_tight_layout=False,
+)
+# plt.show()
+
 
 print("Finished notebooks/10_min_p_human_evals")

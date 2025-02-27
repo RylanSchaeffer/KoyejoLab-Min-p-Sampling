@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-# refresh = False
-refresh = True
+refresh = False
+# refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -21,6 +21,7 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 )
 
 wandb_sweep_ids = [
+    "fco8drwz",  # GSM8K CoT Standard
     "23dj4sc5",  # GSM8K CoT Top-P
     "k1k9o4o3",  # GSM8K CoT Top-K
     "bx2lxry7",  # GSM8K CoT Min-P

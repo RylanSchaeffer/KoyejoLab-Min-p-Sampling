@@ -30,6 +30,8 @@ To evaluate a single model (to sanity check that the code runs), run:
 
 To run the full evaluation, create a W&B sweep:
 
+`wandb sweep PATH TO SWEEP YAML CONFIG`
+
 And then launch an agent per GPU:
 
 `export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=YOUR GPU NUMBER && conda activate min_p_env && wandb agent ...`
