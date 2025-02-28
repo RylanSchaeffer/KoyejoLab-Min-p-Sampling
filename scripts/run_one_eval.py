@@ -51,6 +51,8 @@ def run_one_eval():
         "mistralai/Mistral-7B-v0.1",
         "meta-llama/Llama-3.2-3B",
         "meta-llama/Llama-3.1-8B",
+        "google/gemma-2-2b",
+        "google/gemma-2-9b",
     }:
         command = command.rstrip() + " --fewshot_as_multiturn --apply_chat_template"
 
