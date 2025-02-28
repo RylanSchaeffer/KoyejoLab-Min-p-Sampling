@@ -28,6 +28,7 @@ def compute_best_of_n_avg_scores_df(
             [
                 "Model",
                 "model_hf_path",
+                "Model Type",
                 "num_fewshot",
                 "Sampler",
                 "Sampler Value",
@@ -49,11 +50,12 @@ def compute_best_of_n_avg_scores_df(
     for (
         model,
         model_hf_path,
+        model_type,
         num_fewshot,
         sampler,
         task,
     ), subset_df in runs_avg_scores_df.groupby(
-        ["Model", "model_hf_path", "num_fewshot", "Sampler", "Task"]
+        ["Model", "model_hf_path", "Model Type", "num_fewshot", "Sampler", "Task"]
     ):
         # Step 2: Repeat many times.
         for repeat_idx in range(num_repeats):
@@ -76,6 +78,7 @@ def compute_best_of_n_avg_scores_df(
                     {
                         "Model": [model],
                         "model_hf_path": [model_hf_path],
+                        "Model Type": [model_type],
                         "num_fewshot": [num_fewshot],
                         "Sampler": [sampler],
                         "Task": [task],
