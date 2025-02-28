@@ -12,7 +12,7 @@
 
 3. Install the required packages:
 
-`pip install vllm lm_eval wandb pandas seaborn nvidia-htop`
+`pip install vllm lm_eval wandb pandas seaborn nvidia-htop statsmodels`
 
 or exactly install the versions we used:
 

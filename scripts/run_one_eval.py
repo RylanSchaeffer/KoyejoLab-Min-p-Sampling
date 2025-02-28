@@ -45,12 +45,13 @@ def run_one_eval():
     else:
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
+    # These models do not have a chat template. All other models should.
+    # Use the chat template for all other models.
     if config["model_hf_path"] not in {
         "mistralai/Mistral-7B-v0.1",
         "meta-llama/Llama-3.2-3B",
-        # "meta-llama/Llama-3.1-8B",
+        "meta-llama/Llama-3.1-8B",
     }:
-        # These models do not have a chat template. All other models should.
         command = command.rstrip() + " --fewshot_as_multiturn --apply_chat_template"
 
     command = (

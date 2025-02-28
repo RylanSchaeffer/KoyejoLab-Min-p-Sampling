@@ -3,6 +3,7 @@ import numpy as np
 import os
 import pandas as pd
 import seaborn as sns
+from statsmodels.stats.anova import AnovaRM
 
 import src.analyze
 import src.globals
@@ -224,6 +225,7 @@ print(
     ]["Annotator ID"].nunique(),
 )
 
+# Compute basic statistics.
 basic_statistics_df = (
     raw_human_evals_scores_tall_df[
         raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
@@ -233,6 +235,45 @@ basic_statistics_df = (
     .reset_index()
 )
 print(basic_statistics_df)
+
+
+from pingouin import rm_anova
+
+rm_anova_results = rm_anova(
+    data=raw_human_evals_scores_tall_df[
+        raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
+        & (raw_human_evals_scores_tall_df["Diversity"] == "High")
+        & (raw_human_evals_scores_tall_df["Metric"] == "Quality")
+    ],
+    dv="Score",
+    within=["Sampler", "Temperature"],
+    subject="Annotator ID",
+    detailed=True,
+)
+print(rm_anova_results)
+
+for _, grouped_df in raw_human_evals_scores_tall_df[
+    raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
+].groupby(["Sampler", "Temperature", "Metric"]):
+    print(grouped_df["Score"].describe())
+
+
+# Compute a repeated measures ANOVA.
+# We first have to create this mock "Annotator ID" column because statsmodels can't parse "Annotator ID" as a string.
+raw_human_evals_scores_tall_df["Annotator_ID"] = raw_human_evals_scores_tall_df[
+    "Annotator ID"
+]
+repeated_measures_anova_results = AnovaRM(
+    raw_human_evals_scores_tall_df[
+        raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
+        & (raw_human_evals_scores_tall_df["Diversity"] == "High")
+    ],
+    depvar="Score",
+    subject="Annotator_ID",
+    within=["Sampler", "Temperature", "Metric"],
+).fit()
+print("Repeated Measures ANOVA: ", repeated_measures_anova_results)
+
 
 plt.close()
 g = sns.displot(
@@ -273,6 +314,7 @@ g = sns.displot(
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Metric",
     row="Temperature",
+    row_order=["3.0", "2.0", "1.0"],
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
 )
 g.set(xlim=(1, 10), ylabel="Empirical CDF")
