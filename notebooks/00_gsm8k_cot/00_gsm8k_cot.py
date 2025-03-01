@@ -21,8 +21,10 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 )
 
 wandb_sweep_ids = [
-    "fco8drwz",  # GSM8K CoT Standard
-    "23dj4sc5",  # GSM8K CoT Top-P
+    "fco8drwz",  # GSM8K CoT Standard Part 1.
+    "fco8drwz",  # GSM8K CoT Standard Part 2.
+    "23dj4sc5",  # GSM8K CoT Top-P Part 1.
+    "wutvcxa6",  # GSM8K CoT Top-P Part 2.
     "k1k9o4o3",  # GSM8K CoT Top-K
     "bx2lxry7",  # GSM8K CoT Min-P
 ]

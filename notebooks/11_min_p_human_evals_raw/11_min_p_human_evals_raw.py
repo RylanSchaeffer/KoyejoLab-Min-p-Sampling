@@ -2,12 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
+import pingouin
+import scipy.stats
 import seaborn as sns
-from statsmodels.stats.anova import AnovaRM
 
 import src.analyze
 import src.globals
 import src.plot
+
+
+pd.set_option("display.max_rows", 500)
+pd.set_option("display.max_columns", 500)
+pd.set_option("display.width", 1000)
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -237,43 +243,176 @@ basic_statistics_df = (
 print(basic_statistics_df)
 
 
-from pingouin import rm_anova
-
-rm_anova_results = rm_anova(
-    data=raw_human_evals_scores_tall_df[
-        raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
-        & (raw_human_evals_scores_tall_df["Diversity"] == "High")
-        & (raw_human_evals_scores_tall_df["Metric"] == "Quality")
-    ],
-    dv="Score",
-    within=["Sampler", "Temperature"],
-    subject="Annotator ID",
-    detailed=True,
-)
-print(rm_anova_results)
-
-for _, grouped_df in raw_human_evals_scores_tall_df[
+raw_human_evals_subset_scores_tall_df = raw_human_evals_scores_tall_df[
     raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
-].groupby(["Sampler", "Temperature", "Metric"]):
-    print(grouped_df["Score"].describe())
-
-
-# Compute a repeated measures ANOVA.
-# We first have to create this mock "Annotator ID" column because statsmodels can't parse "Annotator ID" as a string.
-raw_human_evals_scores_tall_df["Annotator_ID"] = raw_human_evals_scores_tall_df[
-    "Annotator ID"
+    & (raw_human_evals_scores_tall_df["Diversity"] == "High")
 ]
-repeated_measures_anova_results = AnovaRM(
-    raw_human_evals_scores_tall_df[
-        raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
-        & (raw_human_evals_scores_tall_df["Diversity"] == "High")
-    ],
-    depvar="Score",
-    subject="Annotator_ID",
-    within=["Sampler", "Temperature", "Metric"],
-).fit()
-print("Repeated Measures ANOVA: ", repeated_measures_anova_results)
 
+# Note: The KS test assumes independence, which is violated in this data
+# because the same annotator rates multiple samplers' outputs.
+two_sample_ks_test_results_dfs_list = []
+paired_t_test_results_dfs_list = []
+wilcoxon_test_results_dfs_list = []
+for (metric, temperature), grouped_df in raw_human_evals_subset_scores_tall_df.groupby(
+    ["Metric", "Temperature"]
+):
+    # Shape: (num_annotators, num_samplers)
+    pivoted_grouped_df = grouped_df.pivot(
+        index="Annotator ID",
+        columns="Sampler",
+        values="Score",
+    )
+
+    # Test if Min-P is greater than Standard under a two-sample Kolmogorov-Smirnov test.
+    two_sample_ks_test_result = scipy.stats.ks_2samp(
+        pivoted_grouped_df["Min-P"],
+        pivoted_grouped_df["Standard"],
+        alternative="greater",
+    )
+    two_sample_ks_test_result_df = pd.DataFrame(
+        {
+            "Metric": metric,
+            "Temperature": temperature,
+            "Condition": "Min-P > Standard",
+            "KS Statistic": two_sample_ks_test_result.statistic,
+            "p-val": two_sample_ks_test_result.pvalue,
+        },
+        index=[0],
+    )
+    two_sample_ks_test_results_dfs_list.append(two_sample_ks_test_result_df)
+
+    # Test if Min-P is greater than Standard under a paired t-test.
+    min_p_gt_standard_paired_t_test_results_df = pingouin.ttest(
+        x=pivoted_grouped_df["Min-P"],
+        y=pivoted_grouped_df["Standard"],
+        paired=True,
+        alternative="greater",
+    )
+    min_p_gt_standard_paired_t_test_results_df["Metric"] = metric
+    min_p_gt_standard_paired_t_test_results_df["Temperature"] = temperature
+    min_p_gt_standard_paired_t_test_results_df["Condition"] = "Min-P > Standard"
+    paired_t_test_results_dfs_list.append(min_p_gt_standard_paired_t_test_results_df)
+
+    # Test if Min-P is greater than Standard under a Wilcoxon signed-rank test.
+    min_p_gt_standard_wilcoxon_test_results_df = pingouin.wilcoxon(
+        x=pivoted_grouped_df["Min-P"],
+        y=pivoted_grouped_df["Standard"],
+        alternative="greater",
+    )
+    min_p_gt_standard_wilcoxon_test_results_df["Metric"] = metric
+    min_p_gt_standard_wilcoxon_test_results_df["Temperature"] = temperature
+    min_p_gt_standard_wilcoxon_test_results_df["Condition"] = "Min-P > Standard"
+    wilcoxon_test_results_dfs_list.append(min_p_gt_standard_wilcoxon_test_results_df)
+
+    # Test if Min-P is greater than Top-P under a two-sample Kolmogorov-Smirnov test.
+    two_sample_ks_test_result = scipy.stats.ks_2samp(
+        pivoted_grouped_df["Min-P"],
+        pivoted_grouped_df["Top-P"],
+        alternative="greater",
+    )
+    two_sample_ks_test_result_df = pd.DataFrame(
+        {
+            "Metric": metric,
+            "Temperature": temperature,
+            "Condition": "Min-P > Top-P",
+            "KS Statistic": two_sample_ks_test_result.statistic,
+            "p-val": two_sample_ks_test_result.pvalue,
+        },
+        index=[0],
+    )
+    two_sample_ks_test_results_dfs_list.append(two_sample_ks_test_result_df)
+
+    # Test if Min-P is greater than Top-P under a paired t-test.
+    min_p_gt_top_p_ttest_results_df = pingouin.ttest(
+        x=pivoted_grouped_df["Min-P"],
+        y=pivoted_grouped_df["Top-P"],
+        paired=True,
+        alternative="greater",
+    )
+    min_p_gt_top_p_ttest_results_df["Metric"] = metric
+    min_p_gt_top_p_ttest_results_df["Temperature"] = temperature
+    min_p_gt_top_p_ttest_results_df["Condition"] = "Min-P > Top-P"
+    paired_t_test_results_dfs_list.append(min_p_gt_top_p_ttest_results_df)
+
+    # Test if Min-P is greater than Top-P under a Wilcoxon signed-rank test.
+    min_p_gt_top_p_wilcoxon_test_results_df = pingouin.wilcoxon(
+        x=pivoted_grouped_df["Min-P"],
+        y=pivoted_grouped_df["Top-P"],
+        alternative="greater",
+    )
+    min_p_gt_top_p_wilcoxon_test_results_df["Metric"] = metric
+    min_p_gt_top_p_wilcoxon_test_results_df["Temperature"] = temperature
+    min_p_gt_top_p_wilcoxon_test_results_df["Condition"] = "Min-P > Top-P"
+    wilcoxon_test_results_dfs_list.append(min_p_gt_top_p_wilcoxon_test_results_df)
+
+# Concatenate the results.
+two_sample_ks_test_results_df = pd.concat(
+    two_sample_ks_test_results_dfs_list
+).reset_index(
+    drop=True,
+)
+paired_t_test_results_df = pd.concat(paired_t_test_results_dfs_list).reset_index(
+    drop=True,
+)
+wilcoxon_test_results_df = pd.concat(wilcoxon_test_results_dfs_list).reset_index(
+    drop=True,
+)
+
+# Correct for multiple comparisons.
+two_sample_ks_test_results_df["p-val (Bonferroni Corrected)"] = pingouin.multicomp(
+    pvals=two_sample_ks_test_results_df["p-val"],
+    alpha=0.05,
+    method="bonf",
+)[1]
+paired_t_test_results_df["p-val (Bonferroni Corrected)"] = pingouin.multicomp(
+    pvals=paired_t_test_results_df["p-val"],
+    alpha=0.05,
+    method="bonf",
+)[1]
+wilcoxon_test_results_df["p-val (Bonferroni Corrected)"] = pingouin.multicomp(
+    pvals=wilcoxon_test_results_df["p-val"],
+    alpha=0.05,
+    method="bonf",
+)[1]
+
+# Reorder the columns to make reading them easier.
+paired_t_test_results_df = paired_t_test_results_df[
+    [
+        "Metric",
+        "Temperature",
+        "Condition",
+        "alternative",
+        "p-val",
+        "T",
+        "power",
+        "dof",
+        "CI95%",
+        "BF10",
+        "p-val (Bonferroni Corrected)",
+    ]
+]
+wilcoxon_test_results_df = wilcoxon_test_results_df[
+    [
+        "Metric",
+        "Temperature",
+        "Condition",
+        "alternative",
+        "p-val",
+        "p-val (Bonferroni Corrected)",
+        "W-val",
+        "RBC",
+        "CLES",
+    ]
+]
+print("Paired T-Test Results: \n", paired_t_test_results_df)
+print("Paired Wilcoxon Signed-Rank Test Results: \n", wilcoxon_test_results_df)
+
+# Save results to disk.
+two_sample_ks_test_results_df.to_csv(
+    os.path.join(results_dir, "two_sample_ks_test_results.csv")
+)
+paired_t_test_results_df.to_csv(os.path.join(results_dir, "paired_t_test_results.csv"))
+wilcoxon_test_results_df.to_csv(os.path.join(results_dir, "wilcoxon_test_results.csv"))
 
 plt.close()
 g = sns.displot(
@@ -299,7 +438,7 @@ src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="attentive_y=density_x=score_hue=sampler_row=temp_col=metric_kde",
 )
-plt.show()
+# plt.show()
 
 plt.close()
 g = sns.displot(
@@ -378,8 +517,5 @@ src.plot.save_plot_with_multiple_extensions(
     plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_violin",
 )
 # plt.show()
-
-
-print()
 
 print("Finished notebooks/11_min_p_human_evals_raw")

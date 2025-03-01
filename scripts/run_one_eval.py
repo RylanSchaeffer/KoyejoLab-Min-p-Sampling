@@ -47,6 +47,8 @@ def run_one_eval():
 
     # These models do not have a chat template. All other models should.
     # Use the chat template for all other models.
+    # If we don't do this, we'll receive the following error:
+    # ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed!
     if config["model_hf_path"] not in {
         "mistralai/Mistral-7B-v0.1",
         "meta-llama/Llama-3.2-3B",
