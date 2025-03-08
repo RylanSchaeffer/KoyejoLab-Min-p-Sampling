@@ -20,23 +20,23 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 # Create rows for all data points in the table
 rows = [
     # Temperature 1.0, Low Diversity
-    [1.0, "Low", "Min-P", 7.06, 1.48, 5.83, 2.03],
-    [1.0, "Low", "Top-P", 5.96, 2.24, 2.40, 2.01],
+    [1.0, "Low", "Min-p", 7.06, 1.48, 5.83, 2.03],
+    [1.0, "Low", "Top-p", 5.96, 2.24, 2.40, 2.01],
     # Temperature 1.0, High Diversity
-    [1.0, "High", "Min-P", 8.02, 1.35, 7.74, 1.63],
-    [1.0, "High", "Top-P", 7.67, 1.38, 7.04, 1.88],
+    [1.0, "High", "Min-p", 8.02, 1.35, 7.74, 1.63],
+    [1.0, "High", "Top-p", 7.67, 1.38, 7.04, 1.88],
     # Temperature 2.0, Low Diversity
-    [2.0, "Low", "Min-P", 7.62, 1.53, 6.91, 1.94],
-    [2.0, "Low", "Top-P", 5.43, 2.24, 1.83, 1.61],
+    [2.0, "Low", "Min-p", 7.62, 1.53, 6.91, 1.94],
+    [2.0, "Low", "Top-p", 5.43, 2.24, 1.83, 1.61],
     # Temperature 2.0, High Diversity
-    [2.0, "High", "Min-P", 7.98, 1.42, 7.96, 1.54],
-    [2.0, "High", "Top-P", 7.75, 1.37, 7.66, 1.50],
+    [2.0, "High", "Min-p", 7.98, 1.42, 7.96, 1.54],
+    [2.0, "High", "Top-p", 7.75, 1.37, 7.66, 1.50],
     # Temperature 3.0, Low Diversity
-    [3.0, "Low", "Min-P", 7.74, 1.76, 7.60, 1.86],
-    [3.0, "Low", "Top-P", 5.75, 2.33, 2.25, 2.44],
+    [3.0, "Low", "Min-p", 7.74, 1.76, 7.60, 1.86],
+    [3.0, "Low", "Top-p", 5.75, 2.33, 2.25, 2.44],
     # Temperature 3.0, High Diversity
-    [3.0, "High", "Min-P", 7.57, 1.68, 7.66, 1.45],
-    [3.0, "High", "Top-P", 7.11, 2.09, 7.49, 1.74],
+    [3.0, "High", "Min-p", 7.57, 1.68, 7.66, 1.45],
+    [3.0, "High", "Top-p", 7.11, 2.09, 7.49, 1.74],
 ]
 
 # Create DataFrame with appropriate column names
@@ -66,8 +66,8 @@ human_evals_scores_df["Diversity (95CI)"] = human_evals_scores_df[
 def compute_welch_t_test(df: pd.DataFrame) -> pd.DataFrame:
     """Compute Welch's t-test for the given row of the DataFrame."""
     assert len(df) == 2
-    top_p_row = df[df["Sampler"] == "Top-P"]
-    min_p_row = df[df["Sampler"] == "Min-P"]
+    top_p_row = df[df["Sampler"] == "Top-p"]
+    min_p_row = df[df["Sampler"] == "Min-p"]
 
     # Compute the t-statistic for quality.
     top_p_quality_mean = top_p_row["Quality (Mean)"].values[0]
@@ -111,8 +111,8 @@ fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharey=True)
 for ax in axes[:, 0]:
     ax.set_ylabel("Temperature")
 # Define vertical offset based on Sampler type
-offsets = {"Min-P": 0.05, "Top-P": -0.05}
-colors = {"Min-P": "C0", "Top-P": "C1"}
+offsets = {"Min-p": 0.05, "Top-p": -0.05}
+colors = {"Min-p": "C0", "Top-p": "C1"}
 axes[0, 0].set_title("Quality")
 axes[0, 1].set_title("Diversity")
 # Loop over the two diversity groups
@@ -122,7 +122,7 @@ for i, diversity_level in enumerate(["High", "Low"]):
         human_evals_scores_df["Diversity"] == diversity_level
     ]
     # Plot for each sampler type
-    for sampler in ["Min-P", "Top-P"]:
+    for sampler in ["Min-p", "Top-p"]:
         df_sub = df_div[df_div["Sampler"] == sampler]
         # Calculate vertical offsets
         y_vals = df_sub["Temperature"] + offsets[sampler]
@@ -191,7 +191,7 @@ for i, diversity_level in enumerate(["High"]):
         human_evals_scores_df["Diversity"] == diversity_level
     ]
     # Plot for each sampler type
-    for sampler in ["Min-P", "Top-P"]:
+    for sampler in ["Min-p", "Top-p"]:
         df_sub = df_div[df_div["Sampler"] == sampler]
         # Calculate vertical offsets
         y_vals = df_sub["Temperature"] + offsets[sampler]

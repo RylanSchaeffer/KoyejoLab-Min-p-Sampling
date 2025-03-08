@@ -46,7 +46,6 @@ def compute_best_of_n_avg_scores_df(
     )
 
     best_of_n_avg_scores_dfs_list = []
-    # runs_avg_scores_df[runs_avg_scores_df["Exact Match (Strict)"].isna()]
     for (
         model,
         model_hf_path,
@@ -96,6 +95,125 @@ def compute_best_of_n_avg_scores_df(
     return best_of_n_avg_scores_df
 
 
+def compute_diff_of_best_of_n_avg_scores_df(
+    runs_scores_df: pd.DataFrame,
+    Ns_list: Optional[List[int]] = None,
+    num_repeats: int = 31,
+) -> pd.DataFrame:
+    if Ns_list is None:
+        Ns_list = [1, 3, 6, 10, 31, 56, 100]
+
+    # Step 1: Average scores over seeds.
+    runs_avg_scores_df = (
+        runs_scores_df.groupby(
+            [
+                "Model",
+                "model_hf_path",
+                "Model Type",
+                "num_fewshot",
+                "Sampler",
+                "Sampler Value",
+                "Task",
+                "Temperature",
+            ]
+        )
+        .agg(
+            {
+                "Exact Match (Strict)": "mean",
+                "Exact Match (Flexible)": "mean",
+            }
+        )
+        .reset_index()
+    )
+
+    def subsample_df_at_most_N(
+        df: pd.DataFrame,
+        N: int,
+    ) -> pd.DataFrame:
+        return df.sample(n=min(N, len(df)), replace=False)
+
+    diff_of_best_of_n_avg_scores_dfs_list = []
+    for (
+        model,
+        model_hf_path,
+        model_type,
+        num_fewshot,
+        task,
+    ), subset_df in runs_avg_scores_df.groupby(
+        ["Model", "model_hf_path", "Model Type", "num_fewshot", "Task"]
+    ):
+        # Step 2: Repeat many times.
+        for repeat_idx in range(num_repeats):
+            # For each value of N.
+            for N in Ns_list:
+                # Choose a subset of size N for each sampler.
+                # Note: "Basic" sampling doesn't have more than 31 hyperparameters, so we take
+                # at most N per sampler.
+                subset_of_at_most_N_per_sampler_df = subset_df.groupby("Sampler").apply(
+                    subsample_df_at_most_N, N=N
+                )
+
+                assert len(subset_of_at_most_N_per_sampler_df)
+
+                # Identify which rows correspond to Min-p.
+                min_p_rows = subset_of_at_most_N_per_sampler_df["Sampler"] == "Min-p"
+
+                # Take the max exact match (strict) score of Min-p.
+                min_p_best_exact_match_strict = subset_of_at_most_N_per_sampler_df[
+                    min_p_rows
+                ]["Exact Match (Strict)"].max()
+
+                # Take the max exact match (flexible) score of Min-p.
+                min_p_best_exact_match_flexible = subset_of_at_most_N_per_sampler_df[
+                    min_p_rows
+                ]["Exact Match (Flexible)"].max()
+
+                # Take the max exact match (strict) score of non-Min-p samplers.
+                non_min_p_best_exact_match_strict = subset_of_at_most_N_per_sampler_df[
+                    ~min_p_rows
+                ]["Exact Match (Strict)"].max()
+
+                # Take the max exact match (flexible) score of non-Min-p samplers.
+                non_min_p_best_exact_match_flexible = (
+                    subset_of_at_most_N_per_sampler_df[~min_p_rows][
+                        "Exact Match (Flexible)"
+                    ].max()
+                )
+
+                if np.isnan(min_p_best_exact_match_strict) or np.isnan(
+                    non_min_p_best_exact_match_strict
+                ):
+                    raise ValueError("Something is not correct...")
+
+                diff_of_best_of_n_avg_score_df = pd.DataFrame(
+                    {
+                        "Model": [model],
+                        "model_hf_path": [model_hf_path],
+                        "Model Type": [model_type],
+                        "num_fewshot": [num_fewshot],
+                        "Task": [task],
+                        "repeat_idx": [repeat_idx],
+                        "Number of Hyperparameters Swept": [N],
+                        "Best Min-p Exact Match - Best Other Exact Match (Strict)": [
+                            min_p_best_exact_match_strict
+                            - non_min_p_best_exact_match_strict
+                        ],
+                        "Best Min-p Exact Match - Best Other Exact Match (Flexible)": [
+                            min_p_best_exact_match_flexible
+                            - non_min_p_best_exact_match_flexible
+                        ],
+                    }
+                )
+                diff_of_best_of_n_avg_scores_dfs_list.append(
+                    diff_of_best_of_n_avg_score_df
+                )
+
+    diff_of_best_of_n_avg_scores_df = pd.concat(
+        diff_of_best_of_n_avg_scores_dfs_list, ignore_index=True
+    ).reset_index(drop=True)
+    return diff_of_best_of_n_avg_scores_df
+
+
 def compute_samplers_pairwise_scores_differences_df(
     runs_scores_df: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -111,7 +229,7 @@ def compute_samplers_pairwise_scores_differences_df(
         ["Model", "model_hf_path", "num_fewshot", "Task"]
     ):
         # for sampler1_idx, sampler1 in enumerate(samplers):
-        sampler1 = "Min-P"
+        sampler1 = "Min-p"
         for sampler2 in samplers:
             if sampler2 == sampler1:
                 continue
@@ -200,6 +318,10 @@ def download_wandb_project_runs_configs(
         runs_configs_df = pd.DataFrame(sweep_results_list)
         runs_configs_df.reset_index(inplace=True, drop=True)
 
+        # For some unknown reason (maybe my error handling?), sometimes, the API returns multiple
+        # copies of the same run_id. Let's drop duplicates based on the run_id.
+        runs_configs_df.drop_duplicates(subset=["run_id"], inplace=True)
+
         # Tidy up variable names.
         runs_configs_df["Model"] = runs_configs_df["model_hf_path"].map(
             src.globals.MODELS_NICE_NAMES_DICT
@@ -273,22 +395,28 @@ def download_wandb_project_runs_configs(
     return runs_configs_df
 
 
-def download_wandb_project_runs_configs_helper(run):
-    try:
-        summary = run.summary._json_dict
-        summary.update({k: v for k, v in run.config.items() if not k.startswith("_")})
-        summary.update(
-            {
-                "State": run.state,
-                "Sweep": run.sweep.id if run.sweep is not None else None,
-                "run_id": run.id,
-                "run_name": run.name,
-            }
-        )
-        return summary
-    except Exception as e:
-        print(f"Error processing run {run.id}: {str(e)}")
-        return None
+def download_wandb_project_runs_configs_helper(run, num_attempts: int = 5):
+    for attempt_idx in range(num_attempts):
+        try:
+            summary = run.summary._json_dict
+            summary.update(
+                {k: v for k, v in run.config.items() if not k.startswith("_")}
+            )
+            summary.update(
+                {
+                    "State": run.state,
+                    "Sweep": run.sweep.id if run.sweep is not None else None,
+                    "run_id": run.id,
+                    "run_name": run.name,
+                }
+            )
+            return summary
+        except Exception as e:
+            print(f"Error processing run {run.id} on attempt {attempt_idx}: {str(e)}")
+            print(e)
+            time.sleep(30)
+    print(f"Unable to process run {run.id}")
+    return None
 
 
 def setup_notebook_dir(

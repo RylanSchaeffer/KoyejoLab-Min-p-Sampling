@@ -82,42 +82,42 @@ raw_human_evals_scores_df.drop(
 )
 
 new_col_names = [
-    "Sampler=Standard,Diversity=Low,Temp=1.0,Metric=Quality",
-    "Sampler=Standard,Diversity=Low,Temp=1.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=Low,Temp=1.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=Low,Temp=1.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=Low,Temp=1.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=Low Temp=1.0,Metric=Diversity",
-    "Sampler=Standard,Diversity=Low,Temp=2.0,Metric=Quality",
-    "Sampler=Standard,Diversity=Low,Temp=2.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=Low,Temp=2.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=Low,Temp=2.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=Low,Temp=2.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=Low Temp=2.0,Metric=Diversity",
-    "Sampler=Standard,Diversity=Low,Temp=3.0,Metric=Quality",
-    "Sampler=Standard,Diversity=Low,Temp=3.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=Low,Temp=3.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=Low,Temp=3.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=Low,Temp=3.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=Low Temp=3.0,Metric=Diversity",
-    "Sampler=Standard,Diversity=High,Temp=1.0,Metric=Quality",
-    "Sampler=Standard,Diversity=High,Temp=1.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=High,Temp=1.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=High,Temp=1.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=High,Temp=1.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=High Temp=1.0,Metric=Diversity",
-    "Sampler=Standard,Diversity=High,Temp=2.0,Metric=Quality",
-    "Sampler=Standard,Diversity=High,Temp=2.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=High,Temp=2.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=High,Temp=2.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=High,Temp=2.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=High Temp=2.0,Metric=Diversity",
-    "Sampler=Standard,Diversity=High,Temp=3.0,Metric=Quality",
-    "Sampler=Standard,Diversity=High,Temp=3.0,Metric=Diversity",
-    "Sampler=Top-P,Diversity=High,Temp=3.0,Metric=Quality",
-    "Sampler=Top-P,Diversity=High,Temp=3.0,Metric=Diversity",
-    "Sampler=Min-P,Diversity=High,Temp=3.0,Metric=Quality",
-    "Sampler=Min-P,Diversity=High Temp=3.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=Low,Temp=1.0,Metric=Quality",
+    "Sampler=Basic,Diversity=Low,Temp=1.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=Low,Temp=1.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=Low,Temp=1.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=Low,Temp=1.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=Low Temp=1.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=Low,Temp=2.0,Metric=Quality",
+    "Sampler=Basic,Diversity=Low,Temp=2.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=Low,Temp=2.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=Low,Temp=2.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=Low,Temp=2.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=Low Temp=2.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=Low,Temp=3.0,Metric=Quality",
+    "Sampler=Basic,Diversity=Low,Temp=3.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=Low,Temp=3.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=Low,Temp=3.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=Low,Temp=3.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=Low Temp=3.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=High,Temp=1.0,Metric=Quality",
+    "Sampler=Basic,Diversity=High,Temp=1.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=High,Temp=1.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=High,Temp=1.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=High,Temp=1.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=High Temp=1.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=High,Temp=2.0,Metric=Quality",
+    "Sampler=Basic,Diversity=High,Temp=2.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=High,Temp=2.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=High,Temp=2.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=High,Temp=2.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=High Temp=2.0,Metric=Diversity",
+    "Sampler=Basic,Diversity=High,Temp=3.0,Metric=Quality",
+    "Sampler=Basic,Diversity=High,Temp=3.0,Metric=Diversity",
+    "Sampler=Top-p,Diversity=High,Temp=3.0,Metric=Quality",
+    "Sampler=Top-p,Diversity=High,Temp=3.0,Metric=Diversity",
+    "Sampler=Min-p,Diversity=High,Temp=3.0,Metric=Quality",
+    "Sampler=Min-p,Diversity=High Temp=3.0,Metric=Diversity",
     "Rylan's Annotations of Which Model(s) Were Most Preferred",
     "Annotator Passed Attention Check",
 ]
@@ -144,24 +144,18 @@ def compute_preferred_sampler(rylans_annotation: str) -> str:
     if not isinstance(rylans_annotation, str):
         return "None Specified"
 
-    standard_mentioned = "Sampler=Standard" in rylans_annotation
-    top_p_mentioned = "Sampler=Top-P" in rylans_annotation
-    min_p_mentioned = "Sampler=Min-P" in rylans_annotation
+    samplers_list = []
+    if "Sampler=Basic" in rylans_annotation:
+        samplers_list.append("Basic")
+    if "Sampler=Top-p" in rylans_annotation:
+        samplers_list.append("Top-p")
+    if "Sampler=Min-p" in rylans_annotation:
+        samplers_list.append("Min-p")
 
-    if standard_mentioned and not top_p_mentioned and not min_p_mentioned:
-        return "Standard"
-    elif top_p_mentioned and not standard_mentioned and not min_p_mentioned:
-        return "Top-P"
-    elif min_p_mentioned and not standard_mentioned and not top_p_mentioned:
-        return "Min-P"
-    elif standard_mentioned and top_p_mentioned and not min_p_mentioned:
-        return "Standard = Top-P"
-    elif standard_mentioned and min_p_mentioned and not top_p_mentioned:
-        return "Standard = Min-P"
-    elif not standard_mentioned and not top_p_mentioned and not min_p_mentioned:
+    if len(samplers_list) == 0:
         return "None Specified"
     else:
-        raise ValueError("Debug me")
+        return " = ".join(samplers_list)
 
 
 rylans_annotations_df["Preferred Sampler"] = rylans_annotations_df[
@@ -182,13 +176,6 @@ g = sns.barplot(
     data=human_annotators_preferred_samplers_df,
     x="Num. Human Evaluators",
     y="Preferred Sampler",
-    order=[
-        "Standard",
-        "Top-P",
-        "Min-P",
-        "Standard = Min-P",
-        "None Specified",
-    ],
     hue="Preferred Sampler",
 )
 src.plot.save_plot_with_multiple_extensions(
@@ -263,17 +250,17 @@ for (metric, temperature), grouped_df in raw_human_evals_subset_scores_tall_df.g
         values="Score",
     )
 
-    # Test if Min-P is greater than Standard under a two-sample Kolmogorov-Smirnov test.
+    # Test if Min-p is greater than Basic under a two-sample Kolmogorov-Smirnov test.
     two_sample_ks_test_result = scipy.stats.ks_2samp(
-        pivoted_grouped_df["Min-P"],
-        pivoted_grouped_df["Standard"],
+        pivoted_grouped_df["Min-p"],
+        pivoted_grouped_df["Basic"],
         alternative="greater",
     )
     two_sample_ks_test_result_df = pd.DataFrame(
         {
             "Metric": metric,
             "Temperature": temperature,
-            "Condition": "Min-P > Standard",
+            "Comparison": "Min-p > Basic",
             "KS Statistic": two_sample_ks_test_result.statistic,
             "p-val": two_sample_ks_test_result.pvalue,
         },
@@ -281,40 +268,40 @@ for (metric, temperature), grouped_df in raw_human_evals_subset_scores_tall_df.g
     )
     two_sample_ks_test_results_dfs_list.append(two_sample_ks_test_result_df)
 
-    # Test if Min-P is greater than Standard under a paired t-test.
+    # Test if Min-p is greater than Basic under a paired t-test.
     min_p_gt_standard_paired_t_test_results_df = pingouin.ttest(
-        x=pivoted_grouped_df["Min-P"],
-        y=pivoted_grouped_df["Standard"],
+        x=pivoted_grouped_df["Min-p"],
+        y=pivoted_grouped_df["Basic"],
         paired=True,
         alternative="greater",
     )
     min_p_gt_standard_paired_t_test_results_df["Metric"] = metric
     min_p_gt_standard_paired_t_test_results_df["Temperature"] = temperature
-    min_p_gt_standard_paired_t_test_results_df["Condition"] = "Min-P > Standard"
+    min_p_gt_standard_paired_t_test_results_df["Comparison"] = "Min-p > Basic"
     paired_t_test_results_dfs_list.append(min_p_gt_standard_paired_t_test_results_df)
 
-    # Test if Min-P is greater than Standard under a Wilcoxon signed-rank test.
+    # Test if Min-p is greater than Basic under a Wilcoxon signed-rank test.
     min_p_gt_standard_wilcoxon_test_results_df = pingouin.wilcoxon(
-        x=pivoted_grouped_df["Min-P"],
-        y=pivoted_grouped_df["Standard"],
+        x=pivoted_grouped_df["Min-p"],
+        y=pivoted_grouped_df["Basic"],
         alternative="greater",
     )
     min_p_gt_standard_wilcoxon_test_results_df["Metric"] = metric
     min_p_gt_standard_wilcoxon_test_results_df["Temperature"] = temperature
-    min_p_gt_standard_wilcoxon_test_results_df["Condition"] = "Min-P > Standard"
+    min_p_gt_standard_wilcoxon_test_results_df["Comparison"] = "Min-p > Basic"
     wilcoxon_test_results_dfs_list.append(min_p_gt_standard_wilcoxon_test_results_df)
 
-    # Test if Min-P is greater than Top-P under a two-sample Kolmogorov-Smirnov test.
+    # Test if Min-p is greater than Top-p under a two-sample Kolmogorov-Smirnov test.
     two_sample_ks_test_result = scipy.stats.ks_2samp(
-        pivoted_grouped_df["Min-P"],
-        pivoted_grouped_df["Top-P"],
+        pivoted_grouped_df["Min-p"],
+        pivoted_grouped_df["Top-p"],
         alternative="greater",
     )
     two_sample_ks_test_result_df = pd.DataFrame(
         {
             "Metric": metric,
             "Temperature": temperature,
-            "Condition": "Min-P > Top-P",
+            "Comparison": "Min-p > Top-p",
             "KS Statistic": two_sample_ks_test_result.statistic,
             "p-val": two_sample_ks_test_result.pvalue,
         },
@@ -322,27 +309,27 @@ for (metric, temperature), grouped_df in raw_human_evals_subset_scores_tall_df.g
     )
     two_sample_ks_test_results_dfs_list.append(two_sample_ks_test_result_df)
 
-    # Test if Min-P is greater than Top-P under a paired t-test.
+    # Test if Min-p is greater than Top-p under a paired t-test.
     min_p_gt_top_p_ttest_results_df = pingouin.ttest(
-        x=pivoted_grouped_df["Min-P"],
-        y=pivoted_grouped_df["Top-P"],
+        x=pivoted_grouped_df["Min-p"],
+        y=pivoted_grouped_df["Top-p"],
         paired=True,
         alternative="greater",
     )
     min_p_gt_top_p_ttest_results_df["Metric"] = metric
     min_p_gt_top_p_ttest_results_df["Temperature"] = temperature
-    min_p_gt_top_p_ttest_results_df["Condition"] = "Min-P > Top-P"
+    min_p_gt_top_p_ttest_results_df["Comparison"] = "Min-p > Top-p"
     paired_t_test_results_dfs_list.append(min_p_gt_top_p_ttest_results_df)
 
-    # Test if Min-P is greater than Top-P under a Wilcoxon signed-rank test.
+    # Test if Min-p is greater than Top-p under a Wilcoxon signed-rank test.
     min_p_gt_top_p_wilcoxon_test_results_df = pingouin.wilcoxon(
-        x=pivoted_grouped_df["Min-P"],
-        y=pivoted_grouped_df["Top-P"],
+        x=pivoted_grouped_df["Min-p"],
+        y=pivoted_grouped_df["Top-p"],
         alternative="greater",
     )
     min_p_gt_top_p_wilcoxon_test_results_df["Metric"] = metric
     min_p_gt_top_p_wilcoxon_test_results_df["Temperature"] = temperature
-    min_p_gt_top_p_wilcoxon_test_results_df["Condition"] = "Min-P > Top-P"
+    min_p_gt_top_p_wilcoxon_test_results_df["Comparison"] = "Min-p > Top-p"
     wilcoxon_test_results_dfs_list.append(min_p_gt_top_p_wilcoxon_test_results_df)
 
 # Concatenate the results.
@@ -380,7 +367,7 @@ paired_t_test_results_df = paired_t_test_results_df[
     [
         "Metric",
         "Temperature",
-        "Condition",
+        "Comparison",
         "alternative",
         "p-val",
         "T",
@@ -395,7 +382,7 @@ wilcoxon_test_results_df = wilcoxon_test_results_df[
     [
         "Metric",
         "Temperature",
-        "Condition",
+        "Comparison",
         "alternative",
         "p-val",
         "p-val (Bonferroni Corrected)",
@@ -423,7 +410,7 @@ g = sns.displot(
     kind="kde",
     x="Score",
     hue="Sampler",
-    hue_order=["Standard", "Top-P", "Min-P"],
+    hue_order=["Basic", "Top-p", "Min-p"],
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Metric",
     row="Temperature",
@@ -449,7 +436,7 @@ g = sns.displot(
     kind="ecdf",
     x="Score",
     hue="Sampler",
-    hue_order=["Standard", "Top-P", "Min-P"],
+    hue_order=["Basic", "Top-p", "Min-p"],
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Metric",
     row="Temperature",
@@ -474,7 +461,7 @@ g = sns.catplot(
     y="Temperature",
     x="Score",
     hue="Sampler",
-    hue_order=["Standard", "Top-P", "Min-P"],
+    hue_order=["Basic", "Top-p", "Min-p"],
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Metric",
     row="Diversity",
@@ -503,7 +490,7 @@ g = sns.catplot(
     y="Temperature",
     x="Score",
     hue="Sampler",
-    hue_order=["Standard", "Top-P", "Min-P"],
+    hue_order=["Basic", "Top-p", "Min-p"],
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Metric",
     row="Diversity",

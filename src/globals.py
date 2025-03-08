@@ -28,8 +28,8 @@ MODELS_NICE_NAMES_DICT = {
     "mistralai/Mistral-7B-Instruct-v0.1": "Mistral 7Bv0.1 Instruct",
     "meta-llama/Llama-3.2-3B": "Llama 3.2 3B",
     "meta-llama/Llama-3.2-3B-Instruct": "Llama 3.2 3B Instruct",
-    "meta-llama/Meta-Llama-3.1-8B": "Llama 3.8B",
-    "meta-llama/Meta-Llama-3.1-8B-Instruct": "Llama 3.8B Instruct",
+    "meta-llama/Llama-3.1-8B": "Llama 3.1 8B",
+    "meta-llama/Llama-3.1-8B-Instruct": "Llama 3.1 8B Instruct",
     "google/gemma-2-2b": "Gemma 2 2B",
     "google/gemma-2-2b-it": "Gemma 2 2B Instruct",
     "google/gemma-2-9b": "Gemma 2 9B",
@@ -49,8 +49,8 @@ MODELS_ORDER_LIST = [
     "Mistral 7Bv0.1 Instruct",
     "Llama 3.2 3B",
     "Llama 3.2 3B Instruct",
-    "Llama 3 8B",
-    "Llama 3 8B Instruct",
+    "Llama 3.1 8B",
+    "Llama 3.1 8B Instruct",
     "Gemma 2 2B",
     "Gemma 2 2B Instruct",
     "Gemma 2 9B",
@@ -70,8 +70,8 @@ MODELS_TYPE_DICT = {
     "mistralai/Mistral-7B-Instruct-v0.1": "Instruct",
     "meta-llama/Llama-3.2-3B": "Base",
     "meta-llama/Llama-3.2-3B-Instruct": "Instruct",
-    "meta-llama/Meta-Llama-3.1-8B": "Base",
-    "meta-llama/Meta-Llama-3.1-8B-Instruct": "Instruct",
+    "meta-llama/Llama-3.1-8B": "Base",
+    "meta-llama/Llama-3.1-8B-Instruct": "Instruct",
     "google/gemma-2-2b": "Base",
     "google/gemma-2-2b-it": "Instruct",
     "google/gemma-2-9b": "Base",
@@ -84,17 +84,17 @@ MODELS_TYPE_ORDER_LIST = [
 ]
 
 SAMPLERS_NICE_NAMES_DICT = {
-    "standard": "Standard",
-    "min_p": "Min-P",
-    "top_p": "Top-P",
-    "top_k": "Top-K",
+    "standard": "Basic",
+    "min_p": "Min-p",
+    "top_p": "Top-p",
+    "top_k": "Top-k",
 }
 
 SAMPLERS_ORDER_LIST = [
-    "Standard",
-    "Top-P",
-    "Top-K",
-    "Min-P",
+    "Basic",
+    "Top-p",
+    "Top-k",
+    "Min-p",
 ]
 
 TASK_NICE_NAMES_DICT = {

@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-refresh = False
-# refresh = True
+# refresh = False
+refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -21,12 +21,14 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 )
 
 wandb_sweep_ids = [
-    "fco8drwz",  # GSM8K CoT Standard Part 1.
-    "fco8drwz",  # GSM8K CoT Standard Part 2.
-    "23dj4sc5",  # GSM8K CoT Top-P Part 1.
-    "wutvcxa6",  # GSM8K CoT Top-P Part 2.
-    "k1k9o4o3",  # GSM8K CoT Top-K
-    "bx2lxry7",  # GSM8K CoT Min-P
+    "fco8drwz",  # GSM8K CoT Basic Part 1.
+    "8mzf5s01",  # GSM8K CoT Basic Part 2.
+    "23dj4sc5",  # GSM8K CoT Top-p Part 1.
+    "wutvcxa6",  # GSM8K CoT Top-p Part 2.
+    "k1k9o4o3",  # GSM8K CoT Top-k Part 1.
+    "wav3hizz",  # GSM8K CoT Top-k Part 2.
+    "bx2lxry7",  # GSM8K CoT Min-p Part 1.
+    "qdrjunpa",  # GSM8K CoT Min-p Part 2.
 ]
 
 runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
@@ -37,16 +39,79 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     wandb_username="rylan",
     # wandb_username=wandb.api.default_entity,
     finished_only=True,
-    max_workers=100,
+    max_workers=30,
 )
+
+# TODO: Debug why W&B API does not grab 100% of runs; seems to grab >99% but not 100%.
+# See GitHub issue: https://github.com/wandb/wandb/issues/8594
+# for cols, subset_df in runs_scores_df.groupby(
+#     [
+#         "Model",
+#         "model_hf_path",
+#         "Model Type",
+#         "num_fewshot",
+#         "Sampler",
+#         "Sampler Value",
+#         "Task",
+#         "Temperature",
+#     ]
+# ):
+#     if len(subset_df) < 3:
+#         print(cols)
+#         print(len(subset_df))
+
+Ns_list = np.unique(
+    np.logspace(0, np.log10(100), 60).astype(
+        int
+    )  # We have max 180 hyperparameters per sampler.
+).tolist()
+
+diff_of_best_of_n_avg_scores_df = src.analyze.compute_diff_of_best_of_n_avg_scores_df(
+    runs_scores_df,
+    Ns_list=Ns_list,
+    # num_repeats=15,
+    # num_repeats=30,
+    num_repeats=150,
+)
+plt.close()
+g = sns.relplot(
+    data=diff_of_best_of_n_avg_scores_df,
+    kind="line",
+    x="Number of Hyperparameters Swept",
+    y="Best Min-p Exact Match - Best Other Exact Match (Strict)",
+    style="Model Type",
+    style_order=src.globals.MODELS_TYPE_ORDER_LIST,
+    # palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+)
+# Add dashed horizontal line at 0.
+for ax in g.axes.flat:
+    ax.axhline(0, color="black", linestyle="--")
+g.set(ylabel="Best Min-p - Best Other Sampler", ylim=(-0.2, 0.1))
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task",
+)
+g.set(
+    xscale="log",
+    # xlabel="Number of Hyperparameters Swept",
+    # ylabel="Best Exact Match (Strict)",
+)
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model_col=task",
+)
+plt.show()
+
 
 best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
     runs_scores_df,
-    Ns_list=np.unique(
-        np.logspace(0, np.log10(179), 60).astype(
-            int
-        )  # We have max 180 hyperparameters per sampler.
-    ).tolist(),
+    Ns_list=Ns_list,
     num_repeats=150,
 )
 
@@ -65,8 +130,6 @@ g = sns.relplot(
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
     col_wrap=6,
-    # row="Task",
-    # row_order=src.globals.TASKS_ORDER_LIST,
     facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
 )
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
@@ -287,5 +350,31 @@ src.plot.save_plot_with_multiple_extensions(
     plot_filename="y=survival_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model_col=task",
 )
 # plt.show()
+
+plt.close()
+g = sns.relplot(
+    data=runs_scores_df,
+    kind="line",
+    x="Temperature",
+    y="_runtime",
+    hue="Sampler",
+    hue_order=src.globals.SAMPLERS_ORDER_LIST,
+    style="Model Type",
+    style_order=src.globals.MODELS_TYPE_ORDER_LIST,
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=6,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+)
+g.set(
+    ylabel="Runtime (s)",
+)
+g.set_titles(col_template="{col_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=runtime_x=temperature_hue=sampler_style=type_col=model",
+)
+plt.show()
 
 print("Finished notebooks/00_gsm8k_cot")

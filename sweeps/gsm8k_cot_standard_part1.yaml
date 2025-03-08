@@ -17,8 +17,6 @@ parameters:
      "Qwen/Qwen2.5-3B-Instruct",
      "Qwen/Qwen2.5-7B",
      "Qwen/Qwen2.5-7B-Instruct",
-     "Qwen/Qwen2.5-14B",
-     "Qwen/Qwen2.5-14B-Instruct",
      "mistralai/Mistral-7B-v0.1",
      "mistralai/Mistral-7B-Instruct-v0.1",
     ]
