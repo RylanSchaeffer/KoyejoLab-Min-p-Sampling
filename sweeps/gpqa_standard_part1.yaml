@@ -25,7 +25,7 @@ parameters:
   num_fewshot:
     values: [5]
   sampler:
-    values: ["standard"]
+    values: ["basic"]
   sampler_value:
     values: [0.0]
   seed:

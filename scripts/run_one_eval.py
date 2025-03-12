@@ -20,13 +20,14 @@ def run_one_eval():
 
     do_sample = True if config["temperature"] > 0 else False
 
-    if config["sampler"] == "standard":
+    if config["sampler"] == "basic":
         gen_kwargs = f"temperature={config['temperature']},do_sample={do_sample}"
     else:
         gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
 
     if (
-        config["task"] == "gsm8k_cot_llama"
+        config["task"] == "gsm8k_cot"
+        or config["task"] == "gsm8k_cot_llama"
         or config["task"] == "gpqa_main_generative_n_shot"
     ):
         command = f"""lm_eval \

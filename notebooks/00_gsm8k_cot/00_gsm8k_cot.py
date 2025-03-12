@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-# refresh = False
-refresh = True
+refresh = False
+# refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -42,6 +42,8 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     max_workers=30,
 )
 
+num_repeats = 150
+
 # TODO: Debug why W&B API does not grab 100% of runs; seems to grab >99% but not 100%.
 # See GitHub issue: https://github.com/wandb/wandb/issues/8594
 # for cols, subset_df in runs_scores_df.groupby(
@@ -69,9 +71,7 @@ Ns_list = np.unique(
 diff_of_best_of_n_avg_scores_df = src.analyze.compute_diff_of_best_of_n_avg_scores_df(
     runs_scores_df,
     Ns_list=Ns_list,
-    # num_repeats=15,
-    # num_repeats=30,
-    num_repeats=150,
+    num_repeats=num_repeats,
 )
 plt.close()
 g = sns.relplot(
@@ -84,7 +84,7 @@ g = sns.relplot(
     # palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
-    col_wrap=6,
+    col_wrap=4,
     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
 )
 # Add dashed horizontal line at 0.
@@ -92,7 +92,7 @@ for ax in g.axes.flat:
     ax.axhline(0, color="black", linestyle="--")
 g.set(ylabel="Best Min-p - Best Other Sampler", ylim=(-0.2, 0.1))
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
-sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task",
@@ -106,16 +106,14 @@ src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model_col=task",
 )
-plt.show()
+# plt.show()
 
 
 best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
     runs_scores_df,
     Ns_list=Ns_list,
-    num_repeats=150,
+    num_repeats=num_repeats,
 )
-
-
 plt.close()
 g = sns.relplot(
     data=best_of_n_avg_scores_df,
@@ -129,11 +127,11 @@ g = sns.relplot(
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     col="Model",
     col_order=src.globals.MODELS_ORDER_LIST,
-    col_wrap=6,
+    col_wrap=4,
     facet_kws={"margin_titles": True, "sharey": False, "sharex": True},
 )
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
-sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
