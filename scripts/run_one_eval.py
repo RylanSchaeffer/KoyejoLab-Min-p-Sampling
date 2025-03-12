@@ -79,7 +79,8 @@ def run_one_eval():
             print(process.stderr)
 
         if (
-            config["task"] == "gsm8k_cot_llama"
+            config["task"] == "gsm8k_cot"
+            or config["task"] == "gsm8k_cot_llama"
             or config["task"] == "gpqa_main_generative_n_shot"
         ):
             scores = extract_exact_match_scores_from_output(process.stdout)
