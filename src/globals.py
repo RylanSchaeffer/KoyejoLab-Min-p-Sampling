@@ -84,6 +84,9 @@ MODELS_TYPE_ORDER_LIST = [
 ]
 
 SAMPLERS_NICE_NAMES_DICT = {
+    "basic": "Basic",
+    # In earlier version of the code, we called basic sampling "standard sampling" and then decided to rename it
+    # to "basic" because "standard" has a presumption of normalcy that we don't want to imply.
     "standard": "Basic",
     "min_p": "Min-p",
     "top_p": "Top-p",

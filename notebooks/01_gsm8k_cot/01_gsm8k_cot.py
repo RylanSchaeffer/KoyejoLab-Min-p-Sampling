@@ -12,8 +12,8 @@ import src.globals
 import src.plot
 
 
-# refresh = False
-refresh = True
+refresh = False
+# refresh = True
 
 data_dir, results_dir = src.analyze.setup_notebook_dir(
     notebook_dir=os.path.dirname(os.path.abspath(__file__)),
@@ -23,12 +23,12 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 wandb_sweep_ids = [
     "x020u4i0",  # GSM8K CoT Basic Part 1.
     "s8lhdbk3",  # GSM8K CoT Basic Part 2.
-    # "",  # GSM8K CoT Top-p Part 1.
-    # "",  # GSM8K CoT Top-p Part 2.
+    "yi07bb1c",  # GSM8K CoT Top-p Part 1.
+    "i0ih8i3m",  # GSM8K CoT Top-p Part 2.
     "q795qwia",  # GSM8K CoT Top-k Part 1.
-    # "",  # GSM8K CoT Top-k Part 2.
+    "4h0qi5cs",  # GSM8K CoT Top-k Part 2.
     "4s7jy41m",  # GSM8K CoT Min-p Part 1.
-    # "",  # GSM8K CoT Min-p Part 2.
+    "rllr99uc",  # GSM8K CoT Min-p Part 2.
 ]
 
 runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
@@ -39,7 +39,7 @@ runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
     wandb_username="rylan",
     # wandb_username=wandb.api.default_entity,
     finished_only=True,
-    max_workers=30,
+    max_workers=60,
 )
 
 num_repeats = 150
@@ -68,45 +68,45 @@ Ns_list = np.unique(
     )  # We have max 180 hyperparameters per sampler.
 ).tolist()
 
-# diff_of_best_of_n_avg_scores_df = src.analyze.compute_diff_of_best_of_n_avg_scores_df(
-#     runs_scores_df,
-#     Ns_list=Ns_list,
-#     num_repeats=num_repeats,
-# )
-# plt.close()
-# g = sns.relplot(
-#     data=diff_of_best_of_n_avg_scores_df,
-#     kind="line",
-#     x="Number of Hyperparameters Swept",
-#     y="Best Min-p Exact Match - Best Other Exact Match (Strict)",
-#     style="Model Type",
-#     style_order=src.globals.MODELS_TYPE_ORDER_LIST,
-#     # palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
-#     col="Model",
-#     col_order=src.globals.MODELS_ORDER_LIST,
-#     col_wrap=4,
-#     facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
-# )
-# # Add dashed horizontal line at 0.
-# for ax in g.axes.flat:
-#     ax.axhline(0, color="black", linestyle="--")
-# g.set(ylabel="Best Min-p - Best Other Sampler", ylim=(-0.2, 0.1))
-# g.set_titles(col_template="{col_name}", row_template="{row_name}")
-# sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
-# src.plot.save_plot_with_multiple_extensions(
-#     plot_dir=results_dir,
-#     plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task",
-# )
-# g.set(
-#     xscale="log",
-#     # xlabel="Number of Hyperparameters Swept",
-#     # ylabel="Best Exact Match (Strict)",
-# )
-# src.plot.save_plot_with_multiple_extensions(
-#     plot_dir=results_dir,
-#     plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model_col=task",
-# )
-# # plt.show()
+diff_of_best_of_n_avg_scores_df = src.analyze.compute_diff_of_best_of_n_avg_scores_df(
+    runs_scores_df,
+    Ns_list=Ns_list,
+    num_repeats=num_repeats,
+)
+plt.close()
+g = sns.relplot(
+    data=diff_of_best_of_n_avg_scores_df,
+    kind="line",
+    x="Number of Hyperparameters Swept",
+    y="Best Min-p Exact Match - Best Other Exact Match (Strict)",
+    style="Model Type",
+    style_order=src.globals.MODELS_TYPE_ORDER_LIST,
+    # palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    col="Model",
+    col_order=src.globals.MODELS_ORDER_LIST,
+    col_wrap=4,
+    facet_kws={"margin_titles": True, "sharey": True, "sharex": True},
+)
+# Add dashed horizontal line at 0.
+for ax in g.axes.flat:
+    ax.axhline(0, color="black", linestyle="--")
+g.set(ylabel="Best Min-p - Best Other Sampler", ylim=(-0.2, 0.1))
+g.set_titles(col_template="{col_name}", row_template="{row_name}")
+sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task",
+)
+g.set(
+    xscale="log",
+    # xlabel="Number of Hyperparameters Swept",
+    # ylabel="Best Exact Match (Strict)",
+)
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model_col=task",
+)
+# plt.show()
 
 
 best_of_n_avg_scores_df = src.analyze.compute_best_of_n_avg_scores_df(
@@ -375,4 +375,4 @@ src.plot.save_plot_with_multiple_extensions(
 )
 plt.show()
 
-print("Finished notebooks/00_gsm8k_cot_llama")
+print("Finished notebooks/01_gsm8k_cot")

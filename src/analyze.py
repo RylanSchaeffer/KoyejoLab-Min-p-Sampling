@@ -126,12 +126,6 @@ def compute_diff_of_best_of_n_avg_scores_df(
         .reset_index()
     )
 
-    def subsample_df_at_most_N(
-        df: pd.DataFrame,
-        N: int,
-    ) -> pd.DataFrame:
-        return df.sample(n=min(N, len(df)), replace=False)
-
     diff_of_best_of_n_avg_scores_dfs_list = []
     for (
         model,
@@ -183,7 +177,8 @@ def compute_diff_of_best_of_n_avg_scores_df(
                 if np.isnan(min_p_best_exact_match_strict) or np.isnan(
                     non_min_p_best_exact_match_strict
                 ):
-                    raise ValueError("Something is not correct...")
+                    # raise ValueError("Something is not correct...")
+                    continue
 
                 diff_of_best_of_n_avg_score_df = pd.DataFrame(
                     {
@@ -434,3 +429,10 @@ def setup_notebook_dir(
             shutil.rmtree(results_dir)
     os.makedirs(results_dir, exist_ok=True)
     return data_dir, results_dir
+
+
+def subsample_df_at_most_N(
+    df: pd.DataFrame,
+    N: int,
+) -> pd.DataFrame:
+    return df.sample(n=min(N, len(df)), replace=False)

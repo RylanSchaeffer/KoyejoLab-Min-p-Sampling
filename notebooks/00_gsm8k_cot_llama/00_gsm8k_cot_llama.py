@@ -95,7 +95,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task",
+    plot_filename="y=diff_of_em_strict_x=N_hue=sampler_row=model",
 )
 g.set(
     xscale="log",
@@ -104,7 +104,7 @@ g.set(
 )
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model_col=task",
+    plot_filename="y=diff_of_em_strict_x=log_N_hue=sampler_row=model",
 )
 # plt.show()
 
@@ -134,7 +134,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "center right", bbox_to_anchor=(0.95, 0.1), frameon=True)
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=em_strict_x=N_hue=sampler_row=model_col=task",
+    plot_filename="y=em_strict_x=N_hue=sampler_row=model",
 )
 g.set(
     xscale="log",
@@ -143,7 +143,7 @@ g.set(
 )
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=em_strict_x=log_N_hue=sampler_row=model_col=task",
+    plot_filename="y=em_strict_x=log_N_hue=sampler_row=model",
 )
 # plt.show()
 
@@ -186,7 +186,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=neg_log_em_strict_x=N_hue=sampler_row=model_col=task",
+    plot_filename="y=neg_log_em_strict_x=N_hue=sampler_row=model",
 )
 # plt.show()
 
@@ -212,7 +212,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=kde_x=em_strict_hue=sampler_row=model_col=task",
+    plot_filename="y=kde_x=em_strict_hue=sampler_row=model",
 )
 # plt.show()
 
@@ -238,7 +238,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=kde_x=em_flexible_hue=sampler_row=model_col=task",
+    plot_filename="y=kde_x=em_flexible_hue=sampler_row=model",
 )
 # plt.show()
 
@@ -317,7 +317,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=kde_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model_col=task",
+    plot_filename="y=kde_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model",
 )
 # plt.show()
 
@@ -345,7 +345,7 @@ g.set_titles(col_template="{col_name}", row_template="{row_name}")
 sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
-    plot_filename="y=survival_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model_col=task",
+    plot_filename="y=survival_x=sampler_pairwise_diff_hue=sampler1_sampler2_row=model",
 )
 # plt.show()
 
