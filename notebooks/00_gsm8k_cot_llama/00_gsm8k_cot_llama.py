@@ -21,14 +21,14 @@ data_dir, results_dir = src.analyze.setup_notebook_dir(
 )
 
 wandb_sweep_ids = [
-    "fco8drwz",  # GSM8K CoT Basic Part 1.
-    "8mzf5s01",  # GSM8K CoT Basic Part 2.
-    "23dj4sc5",  # GSM8K CoT Top-p Part 1.
-    "wutvcxa6",  # GSM8K CoT Top-p Part 2.
-    "k1k9o4o3",  # GSM8K CoT Top-k Part 1.
-    "wav3hizz",  # GSM8K CoT Top-k Part 2.
-    "bx2lxry7",  # GSM8K CoT Min-p Part 1.
-    "qdrjunpa",  # GSM8K CoT Min-p Part 2.
+    "fco8drwz",  # GSM8K CoT Llama Basic Part 1.
+    "8mzf5s01",  # GSM8K CoT Llama Basic Part 2.
+    "23dj4sc5",  # GSM8K CoT Llama Top-p Part 1.
+    "wutvcxa6",  # GSM8K CoT Llama Top-p Part 2.
+    "k1k9o4o3",  # GSM8K CoT Llama Top-k Part 1.
+    "wav3hizz",  # GSM8K CoT Llama Top-k Part 2.
+    "bx2lxry7",  # GSM8K CoT Llama Min-p Part 1.
+    "qdrjunpa",  # GSM8K CoT Llama Min-p Part 2.
 ]
 
 runs_scores_df: pd.DataFrame = src.analyze.download_wandb_project_runs_configs(
@@ -375,4 +375,4 @@ src.plot.save_plot_with_multiple_extensions(
 )
 plt.show()
 
-print("Finished notebooks/00_gsm8k_cot")
+print("Finished notebooks/00_gsm8k_cot_llama")

@@ -98,7 +98,8 @@ SAMPLERS_ORDER_LIST = [
 ]
 
 TASK_NICE_NAMES_DICT = {
-    "gsm8k_cot_llama": "GSM8K CoT",
+    "gsm8k_cot_llama": "GSM8K CoT Llama",
+    "gsm8k_cot": "GSM8K CoT",
 }
 
 TASKS_ORDER_LIST = [
