@@ -43,15 +43,20 @@ sns.countplot(
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
     ax=ax1,
 )
-ax1.set_ylabel("Number of Swept Hyperparameters")
+ax1.set_ylabel("Num. Swept Hyperparameters")
 
 # Second subplot - Scatterplot with error bars
 # Define offsets based on sampling method
-offset_dict = {"Basic": -0.05, "Min-p": 0.0, "Top-p": 0.05}
+alpaca_eval_scores_df["Horizontal Offset"] = np.linspace(
+    -0.1, 0.1, len(alpaca_eval_scores_df)
+)
+
+
+# offset_dict = {"Basic": -0.05, "Min-p": 0.0, "Top-p": 0.05}
 # Create a copy of the dataframe with adjusted x-coordinates
 plotting_df = alpaca_eval_scores_df.copy()
 plotting_df["Offset_Temperature"] = plotting_df.apply(
-    lambda row: row["Temperature"] + offset_dict.get(row["Sampler"], 0), axis=1
+    lambda row: row["Temperature"] + row["Horizontal Offset"], axis=1
 )
 
 # Plot error bars with offset x-coordinates
@@ -118,7 +123,7 @@ sns.countplot(
     order=["Basic", "Top-p", "Min-p"],
     palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
 )
-plt.ylabel("Number of Swept Hyperparameters")
+plt.ylabel("Num. Swept Hyperparameters")
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="countplot_samplers",
@@ -127,13 +132,13 @@ plt.show()
 
 plt.close()
 fig, ax = plt.subplots(figsize=(16, 12))
-# Define offsets based on sampling method
-offset_dict = {"Basic": -0.05, "Min-p": 0.0, "Top-p": 0.05}  # No offset for Top-p
+
 # Create a copy of the dataframe with adjusted x-coordinates
 plotting_df = alpaca_eval_scores_df.copy()
 plotting_df["Offset_Temperature"] = plotting_df.apply(
-    lambda row: row["Temperature"] + offset_dict.get(row["Sampler"], 0), axis=1
+    lambda row: row["Temperature"] + row["Horizontal Offset"], axis=1
 )
+
 # Plot error bars with offset x-coordinates
 for method in plotting_df["Sampler"].unique():
     for param in plotting_df["Sampling Hyperparameter"].unique():
