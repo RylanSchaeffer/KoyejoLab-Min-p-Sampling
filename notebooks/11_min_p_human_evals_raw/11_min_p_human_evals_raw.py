@@ -507,7 +507,37 @@ src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_boxnwhisker",
 )
+# plt.show()
+
+plt.close()
+g = sns.catplot(
+    data=raw_human_evals_scores_tall_df[
+        raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
+        & (raw_human_evals_scores_tall_df["Diversity"] == "High")
+    ],
+    kind="box",
+    y="Temperature",
+    x="Score",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Metric",
+    col="Diversity",
+    margin_titles=True,
+    order=[3.0, 2.0, 1.0],
+)
+g.set(xlim=(0.5, 10.5))
+# By default, y axis goes from top to bottom: 1.0, 2.0, 3.0.
+# We want 3.0 on top and 1.0 on bottom.
+# for ax in g.axes.flat:
+#     ax.invert_yaxis()
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=temp_x=score_hue=sampler_row=metric_col=diversity_boxnwhisker",
+)
 plt.show()
+
 
 plt.close()
 g = sns.catplot(
