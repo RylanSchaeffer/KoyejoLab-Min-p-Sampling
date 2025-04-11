@@ -509,6 +509,296 @@ src.plot.save_plot_with_multiple_extensions(
 )
 # plt.show()
 
+# Filter the data first
+filtered_data = raw_human_evals_scores_tall_df[
+    raw_human_evals_scores_tall_df["Annotator Passed Attention Check"]
+    & (raw_human_evals_scores_tall_df["Diversity"] == "High")
+]
+
+# Create the base stripplot using catplot
+plt.close()
+g = sns.catplot(
+    data=filtered_data,
+    kind="strip",  # Changed from "box" to "strip"
+    y="Temperature",
+    x="Score",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Metric",
+    col="Diversity",
+    margin_titles=True,
+    order=[3.0, 2.0, 1.0],
+    # Optional: Adjust strip plot parameters for better visibility if needed
+    # jitter=True,
+    # dodge=True,
+    # alpha=0.7
+)
+
+# Overlay the pointplot on each facet's axes
+# We iterate through the axes dictionary provided by catplot
+for (row_val, col_val), ax in g.axes_dict.items():
+    # Filter data for the specific facet
+    facet_data = filtered_data[
+        (filtered_data["Metric"] == row_val) & (filtered_data["Diversity"] == col_val)
+    ]
+    sns.pointplot(
+        data=facet_data,
+        y="Temperature",
+        x="Score",
+        hue="Sampler",
+        hue_order=["Basic", "Top-p", "Min-p"],
+        palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+        order=[3.0, 2.0, 1.0],
+        ax=ax,
+        # Pointplot parameters to control appearance and avoid redundancy
+        dodge=True,  # Dodge points along the categorical axis like the stripplot
+        join=False,  # Do not draw lines connecting points across categories
+        markers=["d", "o", "s"],  # Optional: different markers per hue level
+        scale=0.7,  # Optional: adjust point size
+        ci="sd",  # Show standard deviation, can be 95 for 95% CI, etc.
+        errwidth=1,  # Width of error bar lines
+        capsize=0.2,  # Width of the caps on error bars
+    )
+    # Remove the legend created by pointplot on each subplot to avoid duplicates
+    # We'll keep the main legend created by catplot
+    handles, labels = ax.get_legend_handles_labels()
+    # Only keep the handles/labels corresponding to the hue levels for the legend
+    # The pointplot adds extra handles we don't need in the main legend.
+    # Assuming 3 hue levels, pointplot might add 3 handles for points + 3 for error bars
+    # Adjust slice if number of hue levels or pointplot elements changes
+    if handles:  # Check if handles exist before trying to remove legend
+        ax.legend_.remove()
+
+
+g.set(xlim=(0.5, 10.5))
+# By default, y axis goes from top to bottom: 1.0, 2.0, 3.0.
+# We want 3.0 on top and 1.0 on bottom.
+# Uncomment if you need to invert y-axis (already commented in original)
+# for ax in g.axes.flat:
+#     ax.invert_yaxis()
+
+# Move the original legend created by catplot
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+
+# Save the combined plot
+# Make sure the filename reflects the new plot type
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=temp_x=score_hue=sampler_row=metric_col=diversity_stripnpoint",  # Updated filename
+)
+# plt.show()
+
+# Create the base barplot using catplot
+# Barplot shows mean and 95% CI by default
+plt.close()
+g = sns.catplot(
+    data=filtered_data,
+    kind="bar",  # Changed to "bar"
+    y="Temperature",
+    x="Score",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Metric",
+    col="Diversity",
+    margin_titles=True,
+    order=[3.0, 2.0, 1.0],
+    # Optional: Adjust bar plot parameters
+    # ci=95, # Default confidence interval is 95%
+    # errwidth=1.5, # Width of error bar lines
+    # capsize=.1 # Width of the caps on error bars
+    # alpha=0.7 # Make bars slightly transparent?
+)
+
+# Overlay the stripplot on each facet's axes
+# Iterate through the axes dictionary provided by catplot
+for (row_val, col_val), ax in g.axes_dict.items():
+    # Filter data for the specific facet
+    facet_data = filtered_data[
+        (filtered_data["Metric"] == row_val) & (filtered_data["Diversity"] == col_val)
+    ]
+    sns.stripplot(
+        data=facet_data,
+        y="Temperature",
+        x="Score",
+        hue="Sampler",
+        hue_order=["Basic", "Top-p", "Min-p"],
+        # Use a different palette (e.g., grayscale) or marker for strips
+        # to distinguish them from the bars, or make them subtle.
+        palette=["#555555"] * len(src.globals.SAMPLERS_ORDER_LIST),  # Dark gray points
+        order=[3.0, 2.0, 1.0],
+        ax=ax,
+        dodge=True,  # Dodge points along the categorical axis like the bars
+        jitter=True,  # Add jitter to prevent points overlapping perfectly
+        size=3,  # Make points smaller
+        alpha=0.5,  # Make points semi-transparent
+    )
+    # Remove the legend created by stripplot on each subplot
+    # We'll keep the main legend created by catplot's barplot
+    if ax.legend_:
+        ax.legend_.remove()
+
+
+g.set(xlim=(0.5, 10.5))
+# By default, y axis goes from top to bottom: 1.0, 2.0, 3.0.
+# We want 3.0 on top and 1.0 on bottom.
+# Uncomment if you need to invert y-axis
+# for ax in g.axes.flat:
+#     ax.invert_yaxis()
+
+# Move the original legend created by catplot (from the bars)
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+
+# Save the combined plot
+# Make sure the filename reflects the new plot type
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=temp_x=score_hue=sampler_row=metric_col=diversity_barnstrip",  # Updated filename
+)
+plt.show()
+
+
+# Create the base barplot using catplot
+# Barplot shows mean and 95% CI by default
+plt.close()
+g = sns.catplot(
+    data=filtered_data,
+    kind="bar",  # Changed to "bar"
+    y="Temperature",
+    x="Score",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Diversity",
+    col="Metric",
+    margin_titles=True,
+    order=[3.0, 2.0, 1.0],
+    # Optional: Adjust bar plot parameters
+    # ci=95, # Default confidence interval is 95%
+    # errwidth=1.5, # Width of error bar lines
+    # capsize=.1 # Width of the caps on error bars
+    # alpha=0.7 # Make bars slightly transparent?
+)
+
+# Overlay the stripplot on each facet's axes
+# Iterate through the axes dictionary provided by catplot
+for (row_val, col_val), ax in g.axes_dict.items():
+    # Filter data for the specific facet
+    facet_data = filtered_data[
+        (filtered_data["Metric"] == col_val) & (filtered_data["Diversity"] == row_val)
+    ]
+    sns.stripplot(
+        data=facet_data,
+        y="Temperature",
+        x="Score",
+        hue="Sampler",
+        hue_order=["Basic", "Top-p", "Min-p"],
+        # Use a different palette (e.g., grayscale) or marker for strips
+        # to distinguish them from the bars, or make them subtle.
+        palette=["#555555"] * len(src.globals.SAMPLERS_ORDER_LIST),  # Dark gray points
+        order=[3.0, 2.0, 1.0],
+        ax=ax,
+        dodge=True,  # Dodge points along the categorical axis like the bars
+        jitter=True,  # Add jitter to prevent points overlapping perfectly
+        size=3,  # Make points smaller
+        alpha=0.5,  # Make points semi-transparent
+    )
+    # Remove the legend created by stripplot on each subplot
+    # We'll keep the main legend created by catplot's barplot
+    if ax.legend_:
+        ax.legend_.remove()
+
+
+g.set(xlim=(0.5, 10.5))
+# By default, y axis goes from top to bottom: 1.0, 2.0, 3.0.
+# We want 3.0 on top and 1.0 on bottom.
+# Uncomment if you need to invert y-axis
+# for ax in g.axes.flat:
+#     ax.invert_yaxis()
+
+# Move the original legend created by catplot (from the bars)
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+
+# Save the combined plot
+# Make sure the filename reflects the new plot type
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_barnstrip",  # Updated filename
+)
+plt.show()
+
+
+# Create the base barplot using catplot
+# Barplot shows mean and 95% CI by default
+plt.close()
+g = sns.catplot(
+    data=filtered_data,
+    kind="bar",  # Changed to "bar"
+    y="Temperature",
+    x="Score",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    row="Diversity",
+    col="Metric",
+    margin_titles=True,
+    order=[3.0, 2.0, 1.0],
+    # Optional: Adjust bar plot parameters
+    # ci=95, # Default confidence interval is 95%
+    # errwidth=1.5, # Width of error bar lines
+    # capsize=.1 # Width of the caps on error bars
+    # alpha=0.7 # Make bars slightly transparent?
+)
+
+# Overlay the stripplot on each facet's axes
+# Iterate through the axes dictionary provided by catplot
+for (row_val, col_val), ax in g.axes_dict.items():
+    # Filter data for the specific facet
+    facet_data = filtered_data[
+        (filtered_data["Metric"] == row_val) & (filtered_data["Diversity"] == col_val)
+    ]
+    sns.stripplot(
+        data=facet_data,
+        y="Temperature",
+        x="Score",
+        hue="Sampler",
+        hue_order=["Basic", "Top-p", "Min-p"],
+        # Use a different palette (e.g., grayscale) or marker for strips
+        # to distinguish them from the bars, or make them subtle.
+        palette=["#555555"] * len(src.globals.SAMPLERS_ORDER_LIST),  # Dark gray points
+        order=[3.0, 2.0, 1.0],
+        ax=ax,
+        dodge=True,  # Dodge points along the categorical axis like the bars
+        jitter=True,  # Add jitter to prevent points overlapping perfectly
+        size=3,  # Make points smaller
+        alpha=0.5,  # Make points semi-transparent
+    )
+    # Remove the legend created by stripplot on each subplot
+    # We'll keep the main legend created by catplot's barplot
+    if ax.legend_:
+        ax.legend_.remove()
+
+
+g.set(xlim=(0.5, 10.5))
+# By default, y axis goes from top to bottom: 1.0, 2.0, 3.0.
+# We want 3.0 on top and 1.0 on bottom.
+# Uncomment if you need to invert y-axis
+# for ax in g.axes.flat:
+#     ax.invert_yaxis()
+
+# Move the original legend created by catplot (from the bars)
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+
+# Save the combined plot
+# Make sure the filename reflects the new plot type
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_barnstrip",  # Updated filename
+)
+plt.show()
+
+
 plt.close()
 g = sns.catplot(
     data=raw_human_evals_scores_tall_df[
