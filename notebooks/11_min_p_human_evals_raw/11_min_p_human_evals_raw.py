@@ -162,7 +162,7 @@ rylans_annotations_df["Preferred Sampler"] = rylans_annotations_df[
     "Rylan's Annotations of Which Model(s) Were Most Preferred"
 ].map(compute_preferred_sampler)
 
-human_annotators_preferred_samplers_df = (
+attentive_human_annotators_preferred_samplers_df = (
     rylans_annotations_df[rylans_annotations_df["Annotator Passed Attention Check"]]
     .groupby("Preferred Sampler")
     .size()
@@ -173,10 +173,12 @@ human_annotators_preferred_samplers_df = (
 plt.close()
 plt.figure(figsize=(10, 6))
 g = sns.barplot(
-    data=human_annotators_preferred_samplers_df,
+    data=attentive_human_annotators_preferred_samplers_df,
     x="Num. Human Evaluators",
     y="Preferred Sampler",
+    order=["Basic", "Basic = Min-p", "Min-p", "None Specified", "Top-p"],
     hue="Preferred Sampler",
+    hue_order=["Basic", "Basic = Min-p", "Min-p", "None Specified", "Top-p"],
 )
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
