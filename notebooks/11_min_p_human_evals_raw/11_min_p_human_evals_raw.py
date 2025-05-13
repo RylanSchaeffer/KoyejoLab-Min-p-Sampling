@@ -798,7 +798,7 @@ src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_barnstrip",  # Updated filename
 )
-plt.show()
+# plt.show()
 
 
 plt.close()
@@ -828,7 +828,7 @@ src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="attentive_y=temp_x=score_hue=sampler_row=metric_col=diversity_boxnwhisker",
 )
-plt.show()
+# plt.show()
 
 
 plt.close()
@@ -882,6 +882,96 @@ sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
 src.plot.save_plot_with_multiple_extensions(
     plot_dir=results_dir,
     plot_filename="attentive_y=temp_x=score_hue=sampler_row=diversity_col=metric_violin",
+)
+# plt.show()
+
+print()
+
+# Print averages to confirm numerical values against Nguyen et al. (2024)'s Table 15.
+mean_and_sem_scores_for_all_conditions_df = (
+    filtered_data
+    .groupby(["Diversity", "Metric", "Temperature", "Sampler"])
+    .agg({"Score": ["mean", "sem"]})["Score"]
+    .reset_index()
+)
+print(mean_and_sem_scores_for_all_conditions_df)
+
+pivoted_mean_and_sem_scores_for_all_conditions_df = (
+    mean_and_sem_scores_for_all_conditions_df.pivot_table(
+        index=["Diversity", "Temperature", "Sampler"],
+        columns=["Metric"],
+        values=["mean", "sem"],
+    )
+)
+pivoted_mean_and_sem_scores_for_all_conditions_df.columns = [
+    f"{metric} {stat}"
+    for metric, stat in pivoted_mean_and_sem_scores_for_all_conditions_df.columns
+]
+pivoted_mean_and_sem_scores_for_all_conditions_df.reset_index(inplace=True, drop=False)
+pivoted_mean_and_sem_scores_for_all_conditions_df["ci95 Quality"] = (
+    1.96 * pivoted_mean_and_sem_scores_for_all_conditions_df["sem Quality"]
+)
+pivoted_mean_and_sem_scores_for_all_conditions_df["ci95 Diversity"] = (
+    1.96 * pivoted_mean_and_sem_scores_for_all_conditions_df["sem Diversity"]
+)
+
+plt.close()
+g = sns.relplot(
+    data=pivoted_mean_and_sem_scores_for_all_conditions_df,
+    kind="scatter",
+    x="mean Quality",
+    y="mean Diversity",
+    hue="Sampler",
+    hue_order=["Basic", "Top-p", "Min-p"],
+    palette=sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST)),
+    col="Diversity",
+    col_order=["High"],  # Only plot "High". This is intentional.
+    style="Temperature",
+    s=100,
+    linewidth=0,
+)
+hue_order = ["Basic", "Top-p", "Min-p"]
+color_map = dict(zip(hue_order, sns.hls_palette(len(src.globals.SAMPLERS_ORDER_LIST))))
+for col_name, ax in zip(g.col_names, g.axes.flat):
+    facet_data = pivoted_mean_and_sem_scores_for_all_conditions_df[
+        pivoted_mean_and_sem_scores_for_all_conditions_df["Diversity"] == col_name
+    ]
+    # 4. Iterate through each row in this filtered data subset
+    for _, row in facet_data.iterrows():
+        # Get the sampler for this specific point to determine the color
+        sampler_value = row["Sampler"]
+        color = color_map.get(
+            sampler_value, "black"
+        )  # Default to black if sampler not in map
+        # 5. Plot the error bar on the current axis 'ax'
+        ax.errorbar(
+            x=row["mean Quality"],
+            y=row["mean Diversity"],
+            xerr=row["ci95 Quality"],
+            yerr=row["ci95 Diversity"],
+            fmt="none",  # Don't plot a marker or line for the error bar point
+            ecolor=color,  # Use the color corresponding to the sampler
+            elinewidth=2,  # Adjust line width as needed
+            capsize=3,  # Adjust cap size as needed
+            alpha=0.7,  # Optional: make error bars slightly transparent
+        )
+# g.axes.flat[0].axhline(
+#     y=7.5, xmin=0.0, xmax=0.725, linestyle="--", color="black", alpha=0.5
+# )
+# g.axes.flat[0].axvline(
+#     x=7.75, ymin=0.0, ymax=0.7, linestyle="--", color="black", alpha=0.5
+# )
+g.set(
+    xlabel="Quality Score",
+    ylabel="Diversity Score",
+    xlim=(0.5, 10.5),
+    ylim=(0.5, 10.5),
+)
+g.set_titles(col_template="Diversity Setting = {col_name}")
+sns.move_legend(g, "upper left", bbox_to_anchor=(1, 1))
+src.plot.save_plot_with_multiple_extensions(
+    plot_dir=results_dir,
+    plot_filename="attentive_y=diversity_score_x=quality_score_hue=sampler_col=diversity_style=temp",  # Updated filename
 )
 # plt.show()
 
