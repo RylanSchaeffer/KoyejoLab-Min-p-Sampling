@@ -83,6 +83,7 @@ def run_one_eval():
             or config["task"] == "gsm8k_cot_llama"
             or config["task"] == "gpqa_main_generative_n_shot"
         ):
+            print(process.stdout)
             scores = extract_exact_match_scores_from_output(process.stdout)
             # Log the results to wandb
             wandb.log(scores)
