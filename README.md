@@ -1,4 +1,5 @@
-# Min-P, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models
+# Min-P, Max Exaggeration
+## A Critical Analysis of Min-p Sampling in Language Models
 
 This repository contains code and figures for our Arxiv preprint [Min-p, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models](https://arxiv.org/abs/2506.13681).
 We investigate Nguyen et al. (2025)'s [Turning Up the Heat: Min-p Sampling for Creative and Coherent LLM Outputs](https://openreview.net/forum?id=FBkpCyujtS) and find what we believe are substantive flaws across all four lines of evidence: human evals, NLP benchmark evals, LLM-as-a-Judge evals and community adoption. We conclude that evidence presented in the original paper fails to support claims that min-p improves quality, diversity, or a trade-off between quality and diversity. 
