@@ -1,4 +1,4 @@
-# Koyejo Lab Min-p Sampling
+# Min-P, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models
 
 This repository contains code and figures for our Arxiv preprint [Min-p, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models](https://arxiv.org/abs/2506.13681).
 We investigate Nguyen et al. (2025)'s [Turning Up the Heat: Min-p Sampling for Creative and Coherent LLM Outputs](https://openreview.net/forum?id=FBkpCyujtS) and find what we believe are substantive flaws across all four lines of evidence: human evals, NLP benchmark evals, LLM-as-a-Judge evals and community adoption. We conclude that evidence presented in the original paper fails to support claims that min-p improves quality, diversity, or a trade-off between quality and diversity. 
@@ -37,7 +37,7 @@ or exactly install the versions we used:
 
 To evaluate a single model (to sanity check that the code runs), run:
 
-`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=0 && conda activate min_p_env && python -u scripts/run_one_eval.py`
+`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=<YOUR GPU NUMBER> && conda activate min_p_env && python -u scripts/run_one_eval.py`
 
 To run the full evaluation, create a W&B sweep:
 
@@ -45,14 +45,14 @@ To run the full evaluation, create a W&B sweep:
 
 And then launch an agent per GPU:
 
-`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=YOUR GPU NUMBER && conda activate min_p_env && wandb agent ...`
+`export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=<YOUR GPU NUMBER> && conda activate min_p_env && wandb agent ...`
 
 ## Citation
 
 To cite this work, please use:
 
 ```bibtex
-@inproceedings{schaeffer2025minpmaxexaggeration,
+@misc{schaeffer2025turningheatcriticalanalysis,
       title={Min-p, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models}, 
       author={Rylan Schaeffer and Joshua Kazdan and Yegor Denisov-Blanch},
       year={2025},
@@ -60,7 +60,7 @@ To cite this work, please use:
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2506.13681}, 
- }
+}
 ```
 
 ## Contact
