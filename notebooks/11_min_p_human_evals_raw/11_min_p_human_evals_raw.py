@@ -889,8 +889,7 @@ print()
 
 # Print averages to confirm numerical values against Nguyen et al. (2024)'s Table 15.
 mean_and_sem_scores_for_all_conditions_df = (
-    filtered_data
-    .groupby(["Diversity", "Metric", "Temperature", "Sampler"])
+    filtered_data.groupby(["Diversity", "Metric", "Temperature", "Sampler"])
     .agg({"Score": ["mean", "sem"]})["Score"]
     .reset_index()
 )
