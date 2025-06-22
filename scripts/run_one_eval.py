@@ -29,6 +29,8 @@ def run_one_eval():
         config["task"] == "gsm8k_cot"
         or config["task"] == "gsm8k_cot_llama"
         or config["task"] == "gpqa_main_generative_n_shot"
+        or config["task"].startswith("hendrycks_math")
+        or config["task"].startswith("mmlu_pro")
     ):
         command = f"""lm_eval \
         --model {config['model']} \
@@ -82,6 +84,8 @@ def run_one_eval():
             config["task"] == "gsm8k_cot"
             or config["task"] == "gsm8k_cot_llama"
             or config["task"] == "gpqa_main_generative_n_shot"
+            or config["task"].startswith("hendrycks_math")
+            or config["task"].startswith("mmlu_pro")
         ):
             print(process.stdout)
             scores = extract_exact_match_scores_from_output(process.stdout)

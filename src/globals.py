@@ -1,17 +1,23 @@
 EVAL_DEFAULT_CONFIG = {
     "model": "vllm",
-    "model_hf_path": "meta-llama/Llama-3.1-8B",
+    "model_hf_path": "google/gemma-2-2b",
+    # "model_hf_path": "google/gemma-2-2b-it",
+    # "model_hf_path": "meta-llama/Llama-3.1-8B",
     # "model_hf_path": "meta-llama/Llama-3.2-3B-Instruct",
     # "model_hf_path": "mistralai/Mistral-7B-v0.1",
     # "model_hf_path": "Qwen/Qwen2.5-0.5B",
-    "num_fewshot": 8,
+    "num_fewshot": 5,
+    # "num_fewshot": 8,
     # "sampler": "min_p",
     "sampler": "basic",
     "sampler_value": 0.0,
     # "sampler_value": 0.1,
     "seed": 0,
     # "task": "gpqa_main_generative_n_shot",
-    "task": "gsm8k_cot_llama",
+    # "task": "gsm8k_cot",
+    # "task": "gsm8k_cot_llama",
+    # "task": "hendrycks_math_algebra",
+    "task": "mmlu_pro_biology",
     "temperature": 1.0,
 }
 
@@ -101,6 +107,7 @@ SAMPLERS_ORDER_LIST = [
 ]
 
 TASK_NICE_NAMES_DICT = {
+    "gpqa_main_generative_n_shot": "GPQA",
     "gsm8k_cot_llama": "GSM8K CoT Llama",
     "gsm8k_cot": "GSM8K CoT",
 }
