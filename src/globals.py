@@ -112,7 +112,7 @@ TASK_NICE_NAMES_DICT = {
     "gsm8k_cot": "GSM8K CoT",
     "hendrycks_math_algebra": "MATH Algebra",
     "hendrycks_math_counting_and_prob": "MATH Counting and Probability",
-    "hendrycks_math_geometry": "MATH Geom",
+    "hendrycks_math_geometry": "MATH Geometry",
     "hendrycks_math_intermediate_algebra": "MATH Intermediate Algebra",
     "hendrycks_math_num_theory": "MATH Num Theory",
     "hendrycks_math_prealgebra": "MATH Prealgebra",

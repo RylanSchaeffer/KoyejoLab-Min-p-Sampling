@@ -8,7 +8,11 @@ We investigate Nguyen et al. (2025)'s [Turning Up the Heat: Min-p Sampling for C
 
 [![arXiv](https://img.shields.io/badge/arXiv-2506.13681-df2a2a.svg?style=for-the-badge)](https://arxiv.org/abs/2506.13681)
 
-[**Installation**](#installation) | [**Usage**](#usage) | [**Citation**](#citation) | [**Contact**](#contact)
+[**Explanation**](#explanation) | [**Installation**](#installation) | [**Usage**](#usage) | [**Citation**](#citation) | [**Contact**](#contact)
+
+## Explanation
+
+
 
 ## Installation
 
@@ -28,7 +32,7 @@ or exactly install the versions we used:
 
 `conda env create -f environment.yml`
 
-4. (If running NLP benchmark evaluations) Sign into `wandb` with `wandb login`
+4. (If running NLP benchmark evaluations) Sign into `wandb` with `wandb login` and into HuggingFace with `huggingface-cli login`
 
 ## Usage
 
@@ -47,6 +51,8 @@ To run the full evaluation, create a W&B sweep:
 And then launch an agent per GPU:
 
 `export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=<YOUR GPU NUMBER> && conda activate min_p_env && wandb agent ...`
+
+Our W&B sweeps are [publicly available](https://wandb.ai/rylan/min-p-evals/sweeps).
 
 ## Citation
 
