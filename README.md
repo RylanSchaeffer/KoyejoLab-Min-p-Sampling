@@ -54,6 +54,12 @@ And then launch an agent per GPU:
 
 Our W&B sweeps are [publicly available](https://wandb.ai/rylan/min-p-evals/sweeps).
 
+Note: When adding GPQA, Hendrycks MATH and MMLU Pro, we found out that Gemma 2 2B IT and Gemma 2 9B IT
+have a [templating error](https://github.com/EleutherAI/lm-evaluation-harness/issues/2069#issuecomment-2994459740) in
+`lm_eval` version `0.4.7` when using `vllm`. We are currently not going to update our version of `lm_eval` to 
+avoid introducing a potential confounder in our sweeps.
+
+
 ## Citation
 
 To cite this work, please use:

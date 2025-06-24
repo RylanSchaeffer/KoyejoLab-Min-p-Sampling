@@ -40,6 +40,8 @@ def compute_best_of_n_avg_scores_df(
             {
                 "Exact Match (Strict)": "mean",
                 "Exact Match (Flexible)": "mean",
+                "Exact Match (Custom)": "mean",
+                "Exact Match (None)": "mean",
             }
         )
         .reset_index()
@@ -73,6 +75,10 @@ def compute_best_of_n_avg_scores_df(
                 best_exact_match_flexible = subset_of_size_N_df[
                     "Exact Match (Flexible)"
                 ].max()
+                best_exact_match_custom = subset_of_size_N_df[
+                    "Exact Match (Custom)"
+                ].max()
+                best_exact_match_none = subset_of_size_N_df["Exact Match (None)"].max()
                 best_of_n_avg_score_df = pd.DataFrame(
                     {
                         "Model": [model],
@@ -85,6 +91,8 @@ def compute_best_of_n_avg_scores_df(
                         "Number of Hyperparameters Swept": [N],
                         "Exact Match (Strict)": [best_exact_match_strict],
                         "Exact Match (Flexible)": [best_exact_match_flexible],
+                        "Exact Match (Custom)": [best_exact_match_custom],
+                        "Exact Match (None)": [best_exact_match_none],
                     }
                 )
                 best_of_n_avg_scores_dfs_list.append(best_of_n_avg_score_df)
@@ -99,6 +107,7 @@ def compute_diff_of_best_of_n_avg_scores_df(
     runs_scores_df: pd.DataFrame,
     Ns_list: Optional[List[int]] = None,
     num_repeats: int = 31,
+    exact_match_col_name: str = "Exact Match (Strict)",
 ) -> pd.DataFrame:
     if Ns_list is None:
         Ns_list = [1, 3, 6, 10, 31, 56, 100]
@@ -119,8 +128,7 @@ def compute_diff_of_best_of_n_avg_scores_df(
         )
         .agg(
             {
-                "Exact Match (Strict)": "mean",
-                "Exact Match (Flexible)": "mean",
+                exact_match_col_name: "mean",
             }
         )
         .reset_index()
@@ -153,29 +161,17 @@ def compute_diff_of_best_of_n_avg_scores_df(
                 min_p_rows = subset_of_at_most_N_per_sampler_df["Sampler"] == "Min-p"
 
                 # Take the max exact match (strict) score of Min-p.
-                min_p_best_exact_match_strict = subset_of_at_most_N_per_sampler_df[
-                    min_p_rows
-                ]["Exact Match (Strict)"].max()
-
-                # Take the max exact match (flexible) score of Min-p.
-                min_p_best_exact_match_flexible = subset_of_at_most_N_per_sampler_df[
-                    min_p_rows
-                ]["Exact Match (Flexible)"].max()
+                min_p_best_exact_match = subset_of_at_most_N_per_sampler_df[min_p_rows][
+                    exact_match_col_name
+                ].max()
 
                 # Take the max exact match (strict) score of non-Min-p samplers.
-                non_min_p_best_exact_match_strict = subset_of_at_most_N_per_sampler_df[
+                non_min_p_best_exact_match = subset_of_at_most_N_per_sampler_df[
                     ~min_p_rows
-                ]["Exact Match (Strict)"].max()
+                ][exact_match_col_name].max()
 
-                # Take the max exact match (flexible) score of non-Min-p samplers.
-                non_min_p_best_exact_match_flexible = (
-                    subset_of_at_most_N_per_sampler_df[~min_p_rows][
-                        "Exact Match (Flexible)"
-                    ].max()
-                )
-
-                if np.isnan(min_p_best_exact_match_strict) or np.isnan(
-                    non_min_p_best_exact_match_strict
+                if np.isnan(min_p_best_exact_match) or np.isnan(
+                    non_min_p_best_exact_match
                 ):
                     # raise ValueError("Something is not correct...")
                     continue
@@ -189,13 +185,8 @@ def compute_diff_of_best_of_n_avg_scores_df(
                         "Task": [task],
                         "repeat_idx": [repeat_idx],
                         "Number of Hyperparameters Swept": [N],
-                        "Best Min-p Exact Match - Best Other Exact Match (Strict)": [
-                            min_p_best_exact_match_strict
-                            - non_min_p_best_exact_match_strict
-                        ],
-                        "Best Min-p Exact Match - Best Other Exact Match (Flexible)": [
-                            min_p_best_exact_match_flexible
-                            - non_min_p_best_exact_match_flexible
+                        "Best Min-p Exact Match - Best Other Exact Match": [
+                            min_p_best_exact_match - non_min_p_best_exact_match
                         ],
                     }
                 )
@@ -211,6 +202,7 @@ def compute_diff_of_best_of_n_avg_scores_df(
 
 def compute_samplers_pairwise_scores_differences_df(
     runs_scores_df: pd.DataFrame,
+    exact_match_col_name: str = "Exact Match (Flexible)",
 ) -> pd.DataFrame:
     samplers = runs_scores_df["Sampler"].unique()
 
@@ -229,10 +221,10 @@ def compute_samplers_pairwise_scores_differences_df(
             if sampler2 == sampler1:
                 continue
             sampler1_scores = subset_df[subset_df["Sampler"] == sampler1][
-                "Exact Match (Strict)"
+                exact_match_col_name
             ].values
             sampler2_scores = subset_df[subset_df["Sampler"] == sampler2][
-                "Exact Match (Strict)"
+                exact_match_col_name
             ].values
 
             # Compute the distribution of pairwise differences of scores.
@@ -240,7 +232,7 @@ def compute_samplers_pairwise_scores_differences_df(
             pairwise_differences = sampler1_scores[:, None] - sampler2_scores
             pairwise_differences_df = pd.DataFrame(
                 pairwise_differences.flatten(),
-                columns=["Difference of Exact Matches (Strict)"],
+                columns=[f"Difference of {exact_match_col_name}"],
             )
             pairwise_differences_df["Model"] = model
             pairwise_differences_df["model_hf_path"] = model_hf_path
@@ -266,7 +258,7 @@ def download_wandb_project_runs_configs(
     refresh: bool = False,
     wandb_username: Optional[str] = None,
     filetype: str = "csv",
-    max_workers: int = 30,  # New parameter to control the number of parallel workers
+    max_workers: int = 30,  # Parameter to control the number of parallel workers.
 ) -> pd.DataFrame:
     assert filetype in {"csv", "feather", "parquet"}
 
@@ -313,6 +305,17 @@ def download_wandb_project_runs_configs(
         runs_configs_df = pd.DataFrame(sweep_results_list)
         runs_configs_df.reset_index(inplace=True, drop=True)
 
+        # Different tasks log different exact matches. Let's make sure all columns are present,
+        # even if the data aren't.
+        for col in [
+            "exact_match_strict-match",
+            "exact_match_flexible-extract",
+            "exact_match_custom-extract",
+            "exact_match_none",
+        ]:
+            if col not in runs_configs_df.columns:
+                runs_configs_df[col] = np.nan
+
         # For some unknown reason (maybe my error handling?), sometimes, the API returns multiple
         # copies of the same run_id. Let's drop duplicates based on the run_id.
         runs_configs_df.drop_duplicates(subset=["run_id"], inplace=True)
@@ -336,6 +339,8 @@ def download_wandb_project_runs_configs(
                 "sampler_value": "Sampler Value",
                 "exact_match_strict-match": "Exact Match (Strict)",
                 "exact_match_flexible-extract": "Exact Match (Flexible)",
+                "exact_match_none": "Exact Match (None)",
+                "exact_match_custom-extract": "Exact Match (Custom)",
             },
             inplace=True,
         )
