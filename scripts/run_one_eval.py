@@ -48,6 +48,21 @@ def run_one_eval():
     else:
         raise NotImplementedError(f"Task {config['task']} is not implemented.")
 
+    # For the larger models, we will use parallelism.
+    if config["model_hf_path"] in {
+        "Qwen/Qwen2.5-14B",
+        "Qwen/Qwen2.5-14B-Instruct",
+        "Qwen/Qwen2.5-32B",
+        "Qwen/Qwen2.5-32B-Instruct",
+        "Qwen/Qwen2.5-72B",
+        "Qwen/Qwen2.5-72B-Instruct",
+        "google/gemma-2-27b",
+        "google/gemma-2-27b-it",
+        "meta-llama/Llama-3.1-70B",
+        "meta-llama/Llama-3.1-70B-Instruct",
+    }:
+        command = command.replace("dtype=auto", "dtype=auto,tensor_parallel_size=2")
+
     # These models do not have a chat template. All other models should.
     # Use the chat template for all other models.
     # If we don't do this, we'll receive the following error:
