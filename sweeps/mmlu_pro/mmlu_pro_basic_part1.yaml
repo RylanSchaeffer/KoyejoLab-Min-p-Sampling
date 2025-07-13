@@ -34,16 +34,6 @@ parameters:
       "mmlu_pro_business",
       "mmlu_pro_chemistry",
       "mmlu_pro_computer_science",
-      "mmlu_pro_economics",
-      "mmlu_pro_engineering",
-      "mmlu_pro_health",
-      "mmlu_pro_history",
-      "mmlu_pro_law",
-      "mmlu_pro_math",
-      "mmlu_pro_other",
-      "mmlu_pro_philosophy",
-      "mmlu_pro_physics",
-      "mmlu_pro_psychology",
     ]
   temperature:
     values: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
