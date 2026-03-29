@@ -42,7 +42,7 @@ We address each concern below, beginning with the ethics flag.
 
 ### Q3: Single case study
 
-We have added a second case study: p-less sampling (Tan et al., ICLR 2026 Oral). See the General Response. Different authors, different venue, different method — same evaluation methodology problems. Preliminary Best-of-N results are forthcoming; we will update once sweeps complete.
+We have added a second case study: p-less sampling (Tan et al., ICLR 2026 Oral). P-less is an information-theoretic truncation sampler — fundamentally different from min-p in design and motivation — yet exhibits the same four categories of evaluation failure: default-only baselines (tuned min-p matches p-less on GPQA), no significance tests on accuracy (despite including them for efficiency), a confounded human evaluation (different temperatures, author annotators), and overclaiming ("consistently outperforms" when min-p wins 2/4 datasets on Llama3-70b; "excels in creative writing" when p-less ranks last at T=1.0). Different authors, different venue, different method — same problems. Preliminary Best-of-N results are forthcoming; we will update once sweeps complete.
 
 ### Standards are known best practices / limited originality
 

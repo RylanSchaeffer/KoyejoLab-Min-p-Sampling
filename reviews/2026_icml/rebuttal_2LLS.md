@@ -34,7 +34,9 @@ In the revision, we will restructure the narrative to lead with the general eval
 
 ### Single case study
 
-We have added a second case study: p-less sampling (Tan et al., ICLR 2026 Oral). See the General Response for details. Different authors, different venue, different method -- same evaluation methodology problems, same outcome when Best-of-N is applied: [TBD: preliminary results].
+We have added a second case study: p-less sampling (Tan et al., ICLR 2026 Oral), an information-theoretic truncation sampler with no design relationship to min-p. The violations are structurally identical despite the methods being fundamentally different: min-p uses a heuristic threshold (fraction of modal probability), p-less uses an information-theoretic one (Herfindahl index). Both inflate claims through default-only baselines, missing or selective significance tests, confounded evaluations, and overclaiming relative to their own tables. Specific examples: the paper claims to "consistently outperform" all methods but min-p wins on 2/4 datasets for Llama3-70b (Table 1); claims to "excel" at creative writing but ranks last among all 7 methods at T=1.0 (Table 2); applies significance tests to efficiency claims (Table 14) but not to accuracy — the primary metric. We are running Best-of-N sweeps across 28 models with 3 seeds each — [TBD: preliminary results].
+
+This is evidence that the problems our blueprint detects are endemic to how sampling methods are evaluated, not specific to one paper or one set of authors.
 
 ### Standards 2-4 lack operationalization
 
