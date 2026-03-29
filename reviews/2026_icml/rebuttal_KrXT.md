@@ -13,8 +13,8 @@ Three of four reviewers raise the same concern: the blueprint relies on a single
 Independent of the Best-of-N results, the p-less paper already violates all four standards:
 - **Standard 1 (Fair comparison):** Baselines use default hyperparameters. The paper's own Table 8 (Llama-2-7b only) shows tuned min-p matches or beats p-less on GPQA (0.249 vs 0.248). No tuned-baseline analysis exists for Mistral-7b or Llama3-70b.
 - **Standard 2 (Valid inference):** No significance tests on any accuracy metric, despite including t-tests for efficiency claims (Table 14). Mistral-7B and Llama3-70B use only 1 random seed — making reported differences of 0.001 AUC uninterpretable.
-- **Standard 3 (Transparency):** Human evaluation compares p-less at T=2.0 against default sampling at T=1.0, with 3 of 6 annotators being paper authors. No inter-annotator agreement reported. No evaluation code released.
-- **Standard 4 (Consistent reporting):** "Consistently outperforms" is claimed despite min-p winning on 2/4 datasets for Llama3-70B (Table 1). The AUC metric assigns 2/3 of its weight to temperatures above 1.0, inflating p-less's high-temperature advantage — never discussed or justified.
+- **Standard 3 (Transparency):** Human evaluation compares p-less at T=2.0 against default sampling at T=1.0, with 3 of 6 annotators being paper authors. No inter-annotator agreement reported. The Reproducibility Statement promises source code "upon publication," but the published repo contains only the sampler — no evaluation scripts, benchmarks, or sweep configurations.
+- **Standard 4 (Consistent reporting):** "Consistently outperforms" is claimed despite min-p winning on 2/4 datasets for Llama3-70B (Table 1). The paper claims p-less "excels in the domain of creative writing," but at T=1.0 p-less ranks last among all 7 methods (Table 2). The AUC metric gives T=1.5 the single largest weight (33.3%) due to unevenly-spaced temperature points — the regime where p-less has its biggest advantage — never disclosed or justified.
 
 Different paper, different authors, different venue, same evaluation problems. The blueprint generalizes.
 
