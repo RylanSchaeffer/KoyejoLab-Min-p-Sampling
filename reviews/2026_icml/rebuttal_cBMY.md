@@ -36,7 +36,7 @@ We address each concern below, beginning with the ethics flag.
 
 ### Q1: Best-of-N cost / Q2: Distinction from grid search
 
-**Cost:** The 6,000 A100-hour figure is the cost of running hyperparameter sweeps, not the Best-of-N protocol itself. The protocol is trivial post-hoc computation on existing sweep data. The sweeps are the cost of fair comparison — a cost that should be paid whenever a paper claims one method outperforms another. The protocol degrades gracefully: even N=5-10 configurations per method reveals whether a claimed advantage is robust or fragile. We will demonstrate this empirically in the revision.
+**Cost:** The 6,000 A100-hour figure is the cost of running hyperparameter sweeps, not the Best-of-N protocol itself. The protocol is trivial post-hoc computation on existing sweep data. The sweeps are the cost of fair comparison — a cost that should be paid whenever a paper claims -- based on hyperparameter choices -- that one method outperforms another. The protocol degrades gracefully: even N=5-10 configurations per method reveals whether a claimed advantage is robust or fragile under a Mann-Whitney U-test. We will demonstrate this empirically in the revision.
 
 **Grid search distinction:** Grid search is an optimization algorithm: it selects the best hyperparameters for one method and outputs a single configuration. Best-of-N is an evaluation protocol: it diagnoses whether a claimed advantage survives equalized tuning budgets by producing comparative performance-vs-budget curves. Same mechanics, different purpose. We will add Algorithm 1 (pseudocode) in the revision.
 
@@ -69,22 +69,3 @@ The reviewer suggests our significance "depends on the significance of min-p its
 The paper does not sufficiently explain min-p's motivations and mechanism, limiting accessibility. Min-p is an adaptive truncation sampler that removes tokens with probability below a fraction of the maximum token probability, intended as a temperature-robust alternative to top-p and top-k. We will add a self-contained "Background: Min-p Sampling" section in the revision.
 
 We note that the reviewer was unfamiliar with min-p before reviewing and independently found the evidence on LLM-as-a-Judge under-specification, incorrect data pooling, and unsupported human evaluation claims persuasive.
-
-Fixes planned: URL overflows, Figure 9 sizing, inline links moved to footnotes, reference format consistency, reduced repetition.
-
----
-
-## Summary of Planned Revisions
-
-For reference, here is what we plan for the camera-ready version:
-
-1. **Second case study (p-less):** ~1 page demonstrating blueprint generality with new Best-of-N experiments across 28 models
-2. **Algorithm 1:** Formal pseudocode for the Best-of-N evaluation protocol, with analysis of statistical properties (variance as a function of N, minimum N for reliable conclusions)
-3. **Operationalized checklist:** Table mapping each standard to concrete items, failure modes, and violations found in both case studies
-4. **Related Work section:** Positioning relative to Dodge 2019, Bouthillier 2021, Henderson 2018, Dror 2018, Melis 2020
-5. **Background section:** What min-p is — motivation, mechanism, and claimed merits — for reader accessibility
-6. **Grid search distinction:** Explicit paragraph differentiating Best-of-N (evaluation protocol) from grid search (optimization algorithm)
-7. **Narrative restructuring:** Blueprint and protocol presented first as general tools; case studies reframed as illustrative applications; adversarial language softened; numerical discrepancies and author interactions moved to appendix
-8. **Expanded Limitations section:** Adoption challenges, structural incentives, compute asymmetry between authors and verifiers
-9. **Presentation fixes:** URL formatting, Figure 9 sizing, anonymized links, reference format consistency, reduced repetition
-10. **Wilcoxon robustness checks:** Non-parametric confirmation of all statistical conclusions
