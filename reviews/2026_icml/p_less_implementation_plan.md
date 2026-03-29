@@ -167,6 +167,20 @@ Table 10 (Appendix) shows min-p achieves higher diversity than p-less on Llama3-
 
 ---
 
+## CRITICAL CONSTRAINT: Backwards Compatibility
+
+**Everything MUST be backwards compatible.** All changes to vLLM, project scripts, and analysis code must preserve existing behavior for all current samplers (basic, top-p, top-k, min-p). Specifically:
+
+- **vLLM `SamplingParams`:** `p_less` defaults to `0.0` (disabled). Existing configs that don't specify `p_less` are unaffected. When temperature is 0 (greedy), `p_less` is reset to `0.0` just like `min_p`.
+- **vLLM sampler:** The `do_p_less` flag defaults to `False`. The p-less truncation function is only called when at least one request has `p_less > 0`. Zero performance overhead when not used.
+- **`run_one_eval.py`:** The new `elif config["sampler"] == "p_less"` branch only triggers for p-less sweep configs. The existing `if/else` for basic and other samplers is unchanged.
+- **`src/globals.py`:** Adding entries to dicts/lists is additive — existing entries remain, existing ordering preserved. New `"P-less"` is appended to the end of `SAMPLERS_ORDER_LIST`.
+- **`src/analyze.py`:** The `compute_diff_of_best_of_n_avg_scores_df` function is generalized with a `target_sampler` parameter that defaults to `"Min-p"`, preserving the exact current behavior for all existing notebooks. The new parameter is only used explicitly in new p-less analysis notebooks.
+- **Sweep YAMLs:** New YAML files added alongside existing ones. No existing YAMLs modified.
+- **Notebooks:** All existing notebooks (`00-04`, `10-12`, `20`) continue to work without modification.
+
+---
+
 ## 3. Implementation: Adding P-less to Our Evaluation Infrastructure
 
 ### Option A: Patch vLLM's sampler (RECOMMENDED)
@@ -312,26 +326,39 @@ parameters:
 
 ### Which models and benchmarks
 
-**Minimum viable (for overlapping comparison with p-less paper):**
-- Models: `mistralai/Mistral-7B-Instruct-v0.1` (shared with both our sweeps and p-less paper)
-- Benchmarks: `gsm8k_cot`, `gpqa_main_generative_n_shot` (shared with both)
-- Sweep size: 1 model × 31 temperatures × 3 seeds = 93 runs
+**Scope: Extensive — match all existing model/benchmark coverage.**
 
-**Stronger (all our existing models, overlapping benchmarks):**
-- Models: All 18 models in our existing sweeps
-- Benchmarks: `gsm8k_cot`, `gpqa_main_generative_n_shot`
-- Sweep size: 18 models × 31 temperatures × 3 seeds = 1,674 runs
+P-less has the same sweep footprint as "basic" (no sampler_value, just temperature × seeds = 93 runs per model). We mirror the existing part splits exactly:
 
-**Strongest (all models, all benchmarks):**
-- Models: All 18 models + optionally Llama-2-7B-Chat for direct comparison
-- Benchmarks: All 5 benchmark families (gsm8k_cot, gpqa, mmlu_pro, hendrycks_math, bbh_cot_fewshot)
-- Sweep size: much larger, probably unnecessary for the rebuttal
+| Part | Models |
+|------|--------|
+| Part 1 | Qwen2.5-{0.5B,1.5B,3B,7B}{,Instruct}, Mistral-7B-{v0.1,Instruct-v0.1} (10 models) |
+| Part 2 | Llama-3.2-3B{,Instruct}, Llama-3.1-8B{,Instruct}, Gemma-2-{2b,2b-it,9b,9b-it} (8 models) |
+| Part 3 | Qwen2.5-{14B,32B,72B}{,Instruct}, Gemma-2-{27b,27b-it}, Llama-3.1-70B{,Instruct} (10 models) |
 
-**Recommendation:** Start with the minimum viable set (93 runs on Mistral-7B-Instruct). If results are clear, that's sufficient for the paper. Expand to more models if needed.
+Benchmarks and their part coverage (mirroring existing sweeps):
+
+| Benchmark | num_fewshot | Parts | Runs per part | Total runs |
+|-----------|-------------|-------|---------------|------------|
+| gsm8k_cot | 8 | 1,2,3 | 930, 744, 930 | **2,604** |
+| gsm8k_cot_llama | 8 | 1,2 | 930, 744 | **1,674** |
+| gpqa | 5 | 1,2 | 930, 744 | **1,674** |
+
+**Grand total: 7 YAML files, 5,952 runs.**
 
 ### Sweep YAML files to create
 
-Place in `sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part1.yaml` and `sweeps/nlp_benchmarks/gpqa/gpqa_p_less_part1.yaml`.
+```
+sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part1.yaml
+sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part2.yaml
+sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part3.yaml
+sweeps/nlp_benchmarks/gsm8k_cot_llama/gsm8k_cot_llama_p_less_part1.yaml
+sweeps/nlp_benchmarks/gsm8k_cot_llama/gsm8k_cot_llama_p_less_part2.yaml
+sweeps/nlp_benchmarks/gpqa/gpqa_p_less_part1.yaml
+sweeps/nlp_benchmarks/gpqa/gpqa_p_less_part2.yaml
+```
+
+Each follows the exact same template as the corresponding `_basic_partN.yaml` but with `sampler: ["p_less"]`.
 
 ---
 
@@ -376,3 +403,240 @@ Place in `sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part1.yaml` and `swee
 - Mistral-7B-Instruct on GPQA: ~15 min per run on A100 → 93 runs × 15 min = ~23 GPU-hours
 - **Total minimum viable: ~54 A100-hours** (trivial compared to the 6,000 hours for the main study)
 - Expanding to all 18 models: ~18× = ~970 A100-hours
+
+---
+
+## 8. Detailed Implementation Spec (from code reading)
+
+### Environment & vLLM Location
+
+- Conda env: `min_p_env` (Python 3.11)
+- vLLM version: **0.7.3**
+- vLLM install: `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/`
+- lm_eval version: 0.4.7
+- Default engine: **V0** (`VLLM_USE_V1=0` by default)
+- `SamplingParams` is a **`msgspec.Struct`** (not a dataclass) — fields are positional; adding a new field requires care with ordering and `from_optional()`
+
+### gen_kwargs Flow
+
+1. `run_one_eval.py` constructs gen_kwargs string: `"p_less=1.0,temperature=0.5,do_sample=True"`
+2. lm_eval parses the string into a dict of key=value pairs
+3. `lm_eval/models/vllm_causallms.py:modify_gen_kwargs()` pops `do_sample`, adjusts temperature
+4. Remaining kwargs passed to `SamplingParams(max_tokens=max_tokens, stop=stop, **kwargs)`
+5. Since `SamplingParams` is a msgspec.Struct, **kwargs are matched by name — so `p_less=1.0` will set the `p_less` field if it exists
+
+### Files to Modify (exact paths and line numbers)
+
+#### File 1: `vllm/sampling_params.py` — Add p_less field
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/sampling_params.py`
+
+Changes:
+- **Line ~180:** Add `p_less: float = 0.0` after `min_p: float = 0.0`
+- **Line ~223 (`from_optional`):** Add `p_less: float = 0.0` parameter, pass to constructor
+- **Line ~265:** Add `p_less=p_less` in the `SamplingParams(...)` constructor call
+- **Line ~347 (`__post_init__`):** When temperature < eps (greedy), add `self.p_less = 0.0` alongside `self.min_p = 0.0`
+- **Line ~378 (`_verify_args`):** Add validation: `if not 0.0 <= self.p_less <= 1.0: raise ValueError(...)`
+- **Line ~479 (`__repr__`):** Add `f"p_less={self.p_less}, "` after the min_p line
+- **Docstring (~124):** Add description of the p_less parameter
+
+#### File 2: `vllm/model_executor/layers/sampler.py` — V0 engine truncation
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/model_executor/layers/sampler.py`
+
+Changes:
+- **Line ~207-214 (`_init_sampling_tensors`):** Unpack `do_p_less` from `SamplingTensors.from_sampling_metadata()`, store as `self._do_p_less`
+- **Line ~256:** Add `do_p_less = self._do_p_less`
+- **Line ~278 (after min_p block):** Add:
+  ```python
+  if do_p_less:
+      logits = _apply_p_less(logits, sampling_tensors.p_less_vals)
+  ```
+- **After `_apply_min_p` function (line ~431):** Add new function:
+  ```python
+  def _apply_p_less(
+      logits: torch.Tensor,
+      p_less_vals: torch.Tensor,
+  ) -> torch.Tensor:
+      """Apply p-less truncation sampling (Hewitt et al., ICLR 2026).
+      Threshold = sum of squared probabilities (Herfindahl index)."""
+      probs = torch.softmax(logits, dim=-1)
+      threshold = probs.square().sum(dim=-1, keepdim=True)
+      tokens_to_remove = probs < threshold
+      logits = logits.masked_fill_(tokens_to_remove, -float("inf"))
+      return logits
+  ```
+  Note: The `p_less_vals` tensor is not used in the threshold computation (p-less is parameter-free). It only serves as a flag. The actual filtering is `do_p_less` gating above. But we carry the tensor to follow the same pattern as min_p for consistency. We could alternatively just use the bool flag — either works.
+
+  **Simplification:** Since p-less has no tunable value (unlike min_p which scales by the parameter), we don't actually need the tensor values in the computation. The `do_p_less` bool is sufficient. But carrying the tensor through SamplingTensors keeps the pattern uniform.
+
+#### File 3: `vllm/model_executor/sampling_metadata.py` — V0 tensors
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/model_executor/sampling_metadata.py`
+
+Changes to `SamplingTensors` dataclass:
+- **Line ~378:** Add `p_less_vals: torch.Tensor` field
+- **Line ~398:** Add `p_less_vals: List[float] = []` in `from_sampling_metadata`
+- **Line ~404:** Add `do_p_less = False`
+- **Line ~415:** Add `p_less_val = sampling_params.p_less`
+- **Line ~428:** Add `if not do_p_less and p_less_val > _SAMPLING_EPS: do_p_less = True`
+- **Line ~445 (prefill):** Add `p_less_vals += [p_less_val] * prefill_len`
+- **Line ~456 (sample):** Add `p_less_vals += [p_less_val] * sample_lens`
+- **Line ~484 (`from_lists` call):** Add `p_less_vals` argument
+- **Line ~494 (return):** Change to `return (sampling_tensors, do_penalties, do_top_p_top_k, do_min_p, do_p_less)`
+- **Line ~502 (`from_lists` signature):** Add `p_less_vals: List[float]` parameter
+- **After min_ps_t tensor creation (~550-555):** Add:
+  ```python
+  p_less_vals_t = torch.tensor(p_less_vals, device="cpu", dtype=dtype, pin_memory=pin_memory)
+  ```
+- **Line ~583 (constructor return):** Add `p_less_vals=p_less_vals_t.to(device=device, non_blocking=True)`
+
+**IMPORTANT:** The return tuple from `from_sampling_metadata` changes from 4 to 5 elements. The caller in `sampler.py` must be updated to unpack all 5.
+
+#### File 4: `vllm/v1/sample/metadata.py` — V1 metadata
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/v1/sample/metadata.py`
+
+Changes:
+- **Line ~21:** Add `p_less: Optional[torch.Tensor]` after `min_p`
+
+#### File 5: `vllm/v1/sample/sampler.py` — V1 engine truncation
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/v1/sample/sampler.py`
+
+Changes:
+- **Line ~108 (after min_p block):** Add:
+  ```python
+  # Apply p_less.
+  if sampling_metadata.p_less is not None:
+      logits = self.apply_p_less(logits, sampling_metadata.p_less)
+  ```
+- **After `apply_min_p` method (~line 214):** Add:
+  ```python
+  def apply_p_less(
+      self,
+      logits: torch.Tensor,
+      p_less: torch.Tensor,
+  ) -> torch.Tensor:
+      """Apply p-less truncation (Hewitt et al., ICLR 2026)."""
+      probability_values = torch.nn.functional.softmax(logits, dim=-1)
+      threshold = probability_values.square().sum(dim=-1, keepdim=True)
+      valid_token_mask = probability_values >= threshold
+      logits[~valid_token_mask] = -float('inf')
+      return logits
+  ```
+
+#### File 6: `vllm/v1/worker/gpu_input_batch.py` — V1 batch management
+
+**Location:** `/lfs/skampere2/0/rschaef/miniconda3/envs/min_p_env/lib/python3.11/site-packages/vllm/v1/worker/gpu_input_batch.py`
+
+Mirror all `min_p` patterns for `p_less`:
+- **~Line 126-134:** Add `p_less`, `p_less_cpu_tensor`, `p_less_cpu`, `p_less_reqs` (same pattern as min_p)
+- **~Line 257-261:** Add `self.p_less_cpu[req_index] = sampling_params.p_less` and req tracking
+- **~Line 314:** Add `self.p_less_reqs.discard(req_id)`
+- **~Line 387:** Add `self.p_less_cpu[empty_index] = self.p_less_cpu[last_req_index]`
+- **~Line 418-419:** Add `if not self.no_p_less: copy_slice(self.p_less_cpu_tensor, self.p_less, num_reqs)`
+- **~Line 445:** Add `p_less=None if self.no_p_less else self.p_less[:num_reqs]` to SamplingMetadata constructor
+- **~Line 531-532:** Add `no_p_less` property: `return len(self.p_less_reqs) == 0`
+
+#### File 7: `scripts/run_one_eval.py` — Project eval script
+
+**Location:** `/lfs/skampere2/0/rschaef/KoyejoLab-Min-p-Sampling/scripts/run_one_eval.py`
+
+Changes (line ~23-26):
+```python
+if config["sampler"] == "basic":
+    gen_kwargs = f"temperature={config['temperature']},do_sample={do_sample}"
+elif config["sampler"] == "p_less":
+    gen_kwargs = f"p_less=1.0,temperature={config['temperature']},do_sample={do_sample}"
+else:
+    gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
+```
+
+**Key design:** Like `basic`, `p_less` does not use `config['sampler_value']`. The `p_less=1.0` is a flag value (any positive float triggers it). The sweep YAML uses `sampler_value: [0.0]` as a placeholder.
+
+#### File 8: `src/globals.py` — Project globals
+
+**Location:** `/lfs/skampere2/0/rschaef/KoyejoLab-Min-p-Sampling/src/globals.py`
+
+Changes:
+- **Line ~99 (`SAMPLERS_NICE_NAMES_DICT`):** Add `"p_less": "P-less",`
+- **Line ~106 (`SAMPLERS_ORDER_LIST`):** Add `"P-less",` at the end (after "Min-p")
+
+#### File 9: `src/analyze.py` — Analysis functions (deferred to Phase 3)
+
+**Location:** `/lfs/skampere2/0/rschaef/KoyejoLab-Min-p-Sampling/src/analyze.py`
+
+Changes to `compute_diff_of_best_of_n_avg_scores_df` (line ~106):
+- Add `target_sampler: str = "Min-p"` parameter with default preserving current behavior
+- Replace hardcoded `"Min-p"` references with `target_sampler` parameter
+- Rename column from `"Best Min-p Exact Match - Best Other Exact Match"` to a generic name, or parameterize it
+
+Changes to `compute_samplers_pairwise_scores_differences_df` (line ~203):
+- Add `target_sampler: str = "Min-p"` parameter
+- Replace hardcoded `sampler1 = "Min-p"` with `sampler1 = target_sampler`
+
+**These changes are backwards-compatible** because the default parameter value preserves the current behavior.
+
+### Sweep YAML Files to Create (7 files)
+
+All p-less YAMLs mirror the corresponding `_basic_partN.yaml` exactly (same models, same num_fewshot, same temperatures, same seeds) but with `sampler: ["p_less"]` and `sampler_value: [0.0]`.
+
+#### gsm8k_cot (3 files, num_fewshot=8)
+
+**`sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part1.yaml`** — mirrors `gsm8k_cot_basic_part1.yaml`
+- Models: Qwen2.5-{0.5B,0.5B-Instruct,1.5B,1.5B-Instruct,3B,3B-Instruct,7B,7B-Instruct}, Mistral-7B-{v0.1,Instruct-v0.1}
+- 10 models × 31 temps × 3 seeds = **930 runs**
+
+**`sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part2.yaml`** — mirrors `gsm8k_cot_basic_part2.yaml`
+- Models: Llama-3.2-3B{,-Instruct}, Llama-3.1-8B{,-Instruct}, Gemma-2-{2b,2b-it,9b,9b-it}
+- 8 models × 31 temps × 3 seeds = **744 runs**
+
+**`sweeps/nlp_benchmarks/gsm8k_cot/gsm8k_cot_p_less_part3.yaml`** — mirrors `gsm8k_cot_basic_part3.yaml`
+- Models: Qwen2.5-{14B,14B-Instruct,32B,32B-Instruct,72B,72B-Instruct}, Gemma-2-{27b,27b-it}, Llama-3.1-70B{,-Instruct}
+- 10 models × 31 temps × 3 seeds = **930 runs**
+
+#### gsm8k_cot_llama (2 files, num_fewshot=8)
+
+**`sweeps/nlp_benchmarks/gsm8k_cot_llama/gsm8k_cot_llama_p_less_part1.yaml`** — mirrors `gsm8k_cot_llama_basic_part1.yaml`
+- Same 10 models as gsm8k_cot part 1 = **930 runs**
+
+**`sweeps/nlp_benchmarks/gsm8k_cot_llama/gsm8k_cot_llama_p_less_part2.yaml`** — mirrors `gsm8k_cot_llama_basic_part2.yaml`
+- Same 8 models as gsm8k_cot part 2 = **744 runs**
+
+#### gpqa (2 files, num_fewshot=5)
+
+**`sweeps/nlp_benchmarks/gpqa/gpqa_p_less_part1.yaml`** — mirrors `gpqa_basic_part1.yaml`
+- Same 10 models as gsm8k_cot part 1 = **930 runs**
+
+**`sweeps/nlp_benchmarks/gpqa/gpqa_p_less_part2.yaml`** — mirrors `gpqa_basic_part2.yaml`
+- Same 8 models as gsm8k_cot part 2 = **744 runs**
+
+**Grand total: 5,952 runs across 7 YAML files.**
+
+### Implementation Order
+
+1. **vLLM SamplingParams** (File 1) — must come first, everything depends on the parameter existing
+2. **vLLM V0 sampling_metadata** (File 3) — tensors for V0 engine
+3. **vLLM V0 sampler** (File 2) — truncation logic for V0 engine
+4. **vLLM V1 metadata** (File 4) — field for V1 engine
+5. **vLLM V1 sampler** (File 5) — truncation logic for V1 engine
+6. **vLLM V1 gpu_input_batch** (File 6) — batch management for V1 engine
+7. **run_one_eval.py** (File 7) — project-level eval handling
+8. **globals.py** (File 8) — display names
+9. **Sweep YAMLs** — create all 7 YAML files
+10. **analyze.py** (File 9) — deferred to Phase 3, not needed for running sweeps
+
+### Testing Plan
+
+After implementation, verify with a single dry-run:
+```bash
+export PYTHONPATH=. && export CUDA_VISIBLE_DEVICES=0 && python -u scripts/run_one_eval.py
+```
+With `EVAL_DEFAULT_CONFIG` temporarily set to `sampler: "p_less"`, `temperature: 1.0`.
+
+Check that:
+1. No errors in vLLM sampler construction
+2. `SamplingParams(p_less=1.0, temperature=1.0)` is accepted
+3. Scores are logged to W&B
+4. Running with `sampler: "basic"` still works (backwards compatibility)

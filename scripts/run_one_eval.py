@@ -22,6 +22,8 @@ def run_one_eval():
 
     if config["sampler"] == "basic":
         gen_kwargs = f"temperature={config['temperature']},do_sample={do_sample}"
+    elif config["sampler"] == "p_less":
+        gen_kwargs = f"p_less=1.0,temperature={config['temperature']},do_sample={do_sample}"
     else:
         gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
 

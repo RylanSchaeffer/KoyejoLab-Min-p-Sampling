@@ -40,6 +40,16 @@ MODELS_NICE_NAMES_DICT = {
     "google/gemma-2-2b-it": "Gemma 2 2B Instruct",
     "google/gemma-2-9b": "Gemma 2 9B",
     "google/gemma-2-9b-it": "Gemma 2 9B Instruct",
+    "Qwen/Qwen2.5-14B": "Qwen 2.5 14B",
+    "Qwen/Qwen2.5-14B-Instruct": "Qwen 2.5 14B Instruct",
+    "Qwen/Qwen2.5-32B": "Qwen 2.5 32B",
+    "Qwen/Qwen2.5-32B-Instruct": "Qwen 2.5 32B Instruct",
+    "Qwen/Qwen2.5-72B": "Qwen 2.5 72B",
+    "Qwen/Qwen2.5-72B-Instruct": "Qwen 2.5 72B Instruct",
+    "google/gemma-2-27b": "Gemma 2 27B",
+    "google/gemma-2-27b-it": "Gemma 2 27B Instruct",
+    "meta-llama/Llama-3.1-70B": "Llama 3.1 70B",
+    "meta-llama/Llama-3.1-70B-Instruct": "Llama 3.1 70B Instruct",
 }
 
 MODELS_ORDER_LIST = [
@@ -61,6 +71,16 @@ MODELS_ORDER_LIST = [
     "Gemma 2 2B Instruct",
     "Gemma 2 9B",
     "Gemma 2 9B Instruct",
+    "Qwen 2.5 14B",
+    "Qwen 2.5 14B Instruct",
+    "Qwen 2.5 32B",
+    "Qwen 2.5 32B Instruct",
+    "Qwen 2.5 72B",
+    "Qwen 2.5 72B Instruct",
+    "Gemma 2 27B",
+    "Gemma 2 27B Instruct",
+    "Llama 3.1 70B",
+    "Llama 3.1 70B Instruct",
 ]
 
 MODELS_TYPE_DICT = {
@@ -82,6 +102,16 @@ MODELS_TYPE_DICT = {
     "google/gemma-2-2b-it": "Instruct",
     "google/gemma-2-9b": "Base",
     "google/gemma-2-9b-it": "Instruct",
+    "Qwen/Qwen2.5-14B": "Base",
+    "Qwen/Qwen2.5-14B-Instruct": "Instruct",
+    "Qwen/Qwen2.5-32B": "Base",
+    "Qwen/Qwen2.5-32B-Instruct": "Instruct",
+    "Qwen/Qwen2.5-72B": "Base",
+    "Qwen/Qwen2.5-72B-Instruct": "Instruct",
+    "google/gemma-2-27b": "Base",
+    "google/gemma-2-27b-it": "Instruct",
+    "meta-llama/Llama-3.1-70B": "Base",
+    "meta-llama/Llama-3.1-70B-Instruct": "Instruct",
 }
 
 MODELS_TYPE_ORDER_LIST = [
@@ -97,6 +127,7 @@ SAMPLERS_NICE_NAMES_DICT = {
     "min_p": "Min-p",
     "top_p": "Top-p",
     "top_k": "Top-k",
+    "p_less": "P-less",
 }
 
 SAMPLERS_ORDER_LIST = [
@@ -104,6 +135,7 @@ SAMPLERS_ORDER_LIST = [
     "Top-p",
     "Top-k",
     "Min-p",
+    "P-less",
 ]
 
 TASK_NICE_NAMES_DICT = {
