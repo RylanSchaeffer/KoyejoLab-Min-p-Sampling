@@ -26,7 +26,7 @@ Different paper, different authors, different venue, same evaluation problems. T
 
 ## Response to Reviewer 2LLS
 
-We address each concern below.
+We appreciate the thorough review of our paper and the acknowledgement that rethinking execution of empirical evaluation is important.  We address the reviewer's concerns about our work below.
 
 ### Tone and framing
 
@@ -54,7 +54,7 @@ Every row is now validated against two independent papers.
 
 ### Best-of-N: formalization, grid search distinction, and further analyses
 
-Grid search selects the best hyperparameters for one method; output is a single configuration. Best-of-N diagnoses whether a claimed advantage survives equalized tuning budgets; output is comparative performance-vs-budget curves. Same mechanics, different purpose. We will add Algorithm 1 (pseudocode) to formalize the protocol.
+Grid search selects the best hyperparameters for one method; the output is a single configuration. Best-of-N diagnoses whether a claimed advantage survives equalized tuning budgets; output is comparative performance-vs-budget curves. Same mechanics, different purpose. We will add Algorithm 1 (pseudocode) to formalize the protocol.
 
 On further analyses: the revision will include empirical analysis of how Best-of-N estimate variance decreases with N and the minimum N needed for stable rankings in our case studies.
 
@@ -88,7 +88,7 @@ One caveat: the curve measures effort as configuration count, not wall-clock tim
 
 The 6,000 A100-hour figure is the cost of running sweeps, not the Best-of-N protocol itself. The protocol is trivial post-hoc computation on existing sweep results (subsample N configurations per method, take the max).
 
-Whether dense sweeps are needed: (1) this is the cost of fair comparison -- the cost that should be paid whenever a paper claims one method outperforms another; (2) the protocol degrades gracefully -- even N=5-10 per method reveals whether a claimed advantage is robust or fragile.
+Whether dense sweeps are needed: (1) this is the cost of fair comparison -- the cost that should be paid whenever a paper claims one method outperforms another and this claim hinges on hyperparameter selection; (2) the protocol degrades gracefully -- even N=5-10 per method can reveal whether a claimed advantage is robust or fragile based on a Mann-Whitney U-test.
 
 ### Venue fit
 
@@ -119,19 +119,4 @@ Yes. Full codebase including sweep configurations, evaluation scripts, and analy
 
 Seeds 0, 1, 2 across all runs. Hyperparameters swept on a fixed grid: 31 temperatures from 0.0 to 3.0 in 0.1 increments; sampler-specific values per sweep configurations. All configurations enumerated, not randomly sampled. These details will be added to the revision.
 
----
 
-## Summary of Planned Revisions
-
-For reference, here is what we plan for the camera-ready version:
-
-1. **Second case study (p-less):** ~1 page demonstrating blueprint generality with new Best-of-N experiments across 28 models
-2. **Algorithm 1:** Formal pseudocode for the Best-of-N evaluation protocol, with analysis of statistical properties (variance as a function of N, minimum N for reliable conclusions)
-3. **Operationalized checklist:** Table mapping each standard to concrete items, failure modes, and violations found in both case studies
-4. **Related Work section:** Positioning relative to Dodge 2019, Bouthillier 2021, Henderson 2018, Dror 2018, Melis 2020
-5. **Background section:** What min-p is — motivation, mechanism, and claimed merits — for reader accessibility
-6. **Grid search distinction:** Explicit paragraph differentiating Best-of-N (evaluation protocol) from grid search (optimization algorithm)
-7. **Narrative restructuring:** Blueprint and protocol presented first as general tools; case studies reframed as illustrative applications; adversarial language softened; numerical discrepancies and author interactions moved to appendix
-8. **Expanded Limitations section:** Adoption challenges, structural incentives, compute asymmetry between authors and verifiers
-9. **Presentation fixes:** URL formatting, Figure 9 sizing, anonymized links, reference format consistency, reduced repetition
-10. **Wilcoxon robustness checks:** Non-parametric confirmation of all statistical conclusions
