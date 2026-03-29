@@ -58,19 +58,4 @@ This is one of Best-of-N's advantages over fixed-grid comparisons: it handles me
 
 See our response to Reviewer 2LLS. The submission contains: (1) a formalized evaluation protocol with pseudocode, (2) over 6,000 A100-hours of new experiments across 28 models, (3) corrected re-analyses showing a high-visibility ICLR 2025 Oral's claims are unsupported, (4) a second case study demonstrating generality, and (5) an operationalized checklist validated against two independent papers. Henderson et al. (2018, "Deep RL that Matters") was published at AAAI with a similar structure. If post-publication verification is excluded from main research tracks, the field has no venue — and therefore no incentive — for this work. The cost is that evaluation failures in high-visibility papers go uncorrected and propagate downstream, as we document.
 
----
 
-## Summary of Planned Revisions
-
-For reference, here is what we plan for the camera-ready version:
-
-1. **Second case study (p-less):** ~1 page demonstrating blueprint generality with new Best-of-N experiments across 28 models
-2. **Algorithm 1:** Formal pseudocode for the Best-of-N evaluation protocol, with analysis of statistical properties (variance as a function of N, minimum N for reliable conclusions)
-3. **Operationalized checklist:** Table mapping each standard to concrete items, failure modes, and violations found in both case studies
-4. **Related Work section:** Positioning relative to Dodge 2019, Bouthillier 2021, Henderson 2018, Dror 2018, Melis 2020
-5. **Background section:** What min-p is — motivation, mechanism, and claimed merits — for reader accessibility
-6. **Grid search distinction:** Explicit paragraph differentiating Best-of-N (evaluation protocol) from grid search (optimization algorithm)
-7. **Narrative restructuring:** Blueprint and protocol presented first as general tools; case studies reframed as illustrative applications; adversarial language softened; numerical discrepancies and author interactions moved to appendix
-8. **Expanded Limitations section:** Adoption challenges, structural incentives, compute asymmetry between authors and verifiers
-9. **Presentation fixes:** URL formatting, Figure 9 sizing, anonymized links, reference format consistency, reduced repetition
-10. **Wilcoxon robustness checks:** Non-parametric confirmation of all statistical conclusions
