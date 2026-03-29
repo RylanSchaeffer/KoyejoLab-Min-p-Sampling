@@ -26,7 +26,7 @@ Different paper, different authors, different venue, same evaluation problems. T
 
 ## Response to Reviewer KrXT
 
-We thank Reviewer KrXT for the thorough review.
+We thank Reviewer KrXT for the thorough and positive review.
 
 ### Q1: Statistical test selection and justification
 
@@ -48,23 +48,8 @@ Best-of-N formalizes this into a protocol with a standard diagnostic output: com
 - **Grid search** selects the best hyperparameters for one method. Output: a single configuration.
 - **Best-of-N** diagnoses whether a claimed advantage is real or an artifact of unequal tuning. Output: curves showing relative performance as a function of hyperparameter budget across methods.
 
-Crucially, the Best-of-N curves do not merely show that "more search helps everything equally." They show that baselines *match or exceed* min-p at equal budgets — meaning the original advantage was specifically an artifact of unequal tuning, not a genuine algorithmic improvement. This is a substantive empirical finding, not a foregone conclusion.
+Crucially, the Best-of-N curves do not merely show that "more search helps everything equally." They show that baselines *match or exceed* min-p at equal budgets — meaning the original advantage was specifically an artifact of unequal tuning, not a genuine algorithmic improvement. This is a substantive empirical finding, not a foregone conclusion.  Best-of-N is a powerful way to sanity check superiority claims and identify cherry-picking.
 
 We will add Algorithm 1 (pseudocode) to the revision.
 
----
 
-## Summary of Planned Revisions
-
-For reference, here is what we plan for the camera-ready version:
-
-1. **Second case study (p-less):** ~1 page demonstrating blueprint generality with new Best-of-N experiments across 28 models
-2. **Algorithm 1:** Formal pseudocode for the Best-of-N evaluation protocol, with analysis of statistical properties (variance as a function of N, minimum N for reliable conclusions)
-3. **Operationalized checklist:** Table mapping each standard to concrete items, failure modes, and violations found in both case studies
-4. **Related Work section:** Positioning relative to Dodge 2019, Bouthillier 2021, Henderson 2018, Dror 2018, Melis 2020
-5. **Background section:** What min-p is — motivation, mechanism, and claimed merits — for reader accessibility
-6. **Grid search distinction:** Explicit paragraph differentiating Best-of-N (evaluation protocol) from grid search (optimization algorithm)
-7. **Narrative restructuring:** Blueprint and protocol presented first as general tools; case studies reframed as illustrative applications; adversarial language softened; numerical discrepancies and author interactions moved to appendix
-8. **Expanded Limitations section:** Adoption challenges, structural incentives, compute asymmetry between authors and verifiers
-9. **Presentation fixes:** URL formatting, Figure 9 sizing, anonymized links, reference format consistency, reduced repetition
-10. **Wilcoxon robustness checks:** Non-parametric confirmation of all statistical conclusions
