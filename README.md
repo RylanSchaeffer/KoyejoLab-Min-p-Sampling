@@ -59,6 +59,9 @@ have a [templating error](https://github.com/EleutherAI/lm-evaluation-harness/is
 `lm_eval` version `0.4.7` when using `vllm`. We are currently not going to update our version of `lm_eval` to 
 avoid introducing a potential confounder in our sweeps.
 
+### Alpaca Creative Writing Evaluations (WIP)
+
+Install the library: `pip install "alpaca_eval[all]"`.
 
 ## Citation
 

@@ -1,0 +1,34 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Machine learning research is currently experiencing crises on multiple fronts \citep{kim2025position,schaeffer2025positionmachinelearningconferences}:
+The number of submissions to each conference is skyrocketing \citep{papercopilot2025neurips}, reproducibility concerns are giving rise to a standalone machine learning reproducibility conference \citep{pineau2017iclr,sinha2023mlrc}, and scandals concerning prominent publications are proliferating, e.g., 
+\citep{carlini2020instahide,
+agarwal2021deep,carlini2021neuracryptprivate,
+carlini2022freelunchprivacyfree,kirsch2022bayesianmodelselection,schaeffer2022nofreelunch,
+orabona2023yetanothericmlawardfiasco,schaeffer2023mirage,
+gerstgrasser2024modelcollapseinevitablebreaking,kirsch2024rholossattribution,markov2024falsedawnreevaluatinggoogles,schaeffer2024does,
+chandak2025llmrlincorrect,golechha2025intricacies,ivanova2025towardsmorerigorous,kazdan2025collapsethriveperilspromises,maini2025reassessingemnlp2024s,zhang2025evaluatingrobustnessensembleeverywhere, schaeffer2025positionmodelcollapsedoes}.
+
+In this work, we push back against these trends by providing a blueprint for meticulous science, defining four critical standards for empirical research: (1) fair comparison via controlled hyperparameter optimization volume, (2) valid statistical inference, (3) full data transparency, and (4) consistent reporting. Central to this blueprint is our proposed ``Best-of-N'' evaluation protocol, a novel methodology designed to address the first standard. Unlike traditional comparisons that often pit tuned proposed methods against under-tuned baselines, the Best-of-N protocol explicitly controls for the volume of the hyperparameter search space, ensuring that performance gains are attributable to algorithmic superiority rather than unequal optimization effort.
+
+To demonstrate the critical necessity of this blueprint, we present a detailed case study of a high-visibility publication: ``Turning Up the Heat: Min-P Sampling for Creative and Coherent LLM Outputs'' \citep{nguyen2024minp}. This work ranked as the \href{https://papercopilot.com/statistics/iclr-statistics/iclr-2025-statistics/}{18th highest-scoring submission to ICLR 2025} and was selected for an Oral presentation. Given the widespread potential impact of its claims—improving both the quality \emph{and} diversity of language model outputs—it serves as an ideal test case for rigorous evaluation standards.
+
+\begin{figure*}[t!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/nlp_benchmark_evals/gsm8k_cot_llama/y=em_strict_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{Applying the Best-of-N Protocol to GSM8K: \texttt{Min-p} Does Not Consistently Outperform Baselines.}
+    We visualize the maximum Exact Match (Strict) score achieved as a function of the hyperparameter optimization budget $N$.
+    By controlling for the optimization search space size (Standard 1), we isolate algorithmic performance from optimization budget (i.e., tuning effort).
+    For the vast majority of models, the scaling curve of \texttt{min-p} (purple) closely tracks or overlaps with \texttt{top-p} (green) and \texttt{top-k} (cyan), indicating that previously reported gains were likely artifacts of unequal tuning rather than inherent algorithmic superiority.
+    }
+    \label{fig:gsm8k_em_strict}
+\end{figure*}
+
+
+This manuscript goes far beyond \emph{reproducibility} to assess \emph{scientific validity}, verifying if conclusions follow from the methods and data.
+Our analysis is supported by substantial original research, including over 6,000 A100-hours of hyperparameter sweeps to execute the Best-of-N protocol on standard NLP benchmarks. We further scrutinized the authors' additional lines of evidence: human evaluations, LLM-As-A-Judge evaluations, and community adoption metrics. Our results demonstrate that when the Best-of-N protocol is applied and statistical rigor is enforced, the evidence for \texttt{min-p}'s superiority vanishes.
+
+This work represents the culmination of an iterative scientific dialogue. We engaged in extensive constructive communication with the original authors regarding our findings prior to this publication. In response to our feedback, the original authors added previously omitted baseline data to their camera-ready manuscript, retracted unsubstantiated claims regarding GitHub repositories and stars, and conducted a new human evaluation study. We include an analysis of this new human study in our results, showing that even with a different experimental protocol and a different implementation, \texttt{min-p} yields no statistically significant advantage when analyzed correctly.
+
+By promoting and adhering to robust methodologies like our blueprint, including our novel Best-of-N protocol, researchers and reviewers alike can better contribute to genuine scientific progress.

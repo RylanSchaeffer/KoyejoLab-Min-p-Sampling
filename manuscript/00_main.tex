@@ -1,0 +1,103 @@
+
+\documentclass{article} % For LaTeX2e
+
+\usepackage{icml2026}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{url}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+% \usepackage[draft]{hyperref} 
+\usepackage{hyperref}       % hyperlinks
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+\usepackage{graphicx}
+\usepackage{booktabs}  % For \toprule, \midrule, \bottomrule, \cmidrule
+\usepackage{multirow}  % For \multirow command
+\usepackage{lineno}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{changepage}
+
+\definecolor{darkblue}{rgb}{0, 0, 0.5}
+\newcommand{\rylan}[1]{\textcolor{red}{rs: #1}}
+% \newcommand{\bm}[1]{\textcolor{purple}{bm: #1}}
+\newcommand{\joshua}[1]{\textcolor{red}{jk: #1}}
+
+\icmltitlerunning{Turning Down the Heat: A Blueprint for Rigorous Evaluation in Empirical Machine Learning Research}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+%\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Turning Down the Heat: A Blueprint for Rigorous Evaluation\\in Empirical Machine Learning Research}
+
+  % List of affiliations: The first argument should be a (short) identifier you
+  % will use later to specify author affiliations
+  % Academic affiliations should list Department, University, City, Region, Country
+  % Industry affiliations should list Company, City, Region, Country
+
+  % You can specify symbols, otherwise they are numbered in order.
+  % Ideally, you should not use this facility. Affiliations will be numbered in order of
+  % appearance and this is the preferred way.
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+  \icmlauthor{Anonymous Author}{anon}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{anon}{Anonymous Institution, Anonymous City, Anonymous Region, Anonymous Country}
+
+  \icmlcorrespondingauthor{Anonymous Author}{anon.email@domain.com}
+
+  % You may provide any keywords that you
+  % find helpful for describing your paper; these are used to populate
+  % the "keywords" metadata in the PDF but will not be shown in the document
+  \icmlkeywords{Machine Learning, ICML, Verification, Polling, LLM}
+
+  \vskip 0.3in
+]
+
+\printAffiliationsAndNotice{} % leave empty for submission
+
+
+\begin{abstract}
+In light of a growing crisis of rigor in empirical machine learning research, this paper provides a blueprint for meticulous science, defining four critical standards: (1) fair comparison via controlled hyperparameter optimization volume, (2) valid statistical inference, (3) full data transparency, and (4) consistent reporting.
+We introduce a novel ``Best-of-N'' evaluation protocol to address the first standard, offering a rigorous general method to compare any hyperparameter-dependent algorithms while controlling for search space size.
+To demonstrate the necessity of this blueprint, we apply it to a high-visibility ICLR 2025 Oral ``Turning Up the Heat: \texttt{Min-P} Sampling for Creative and Coherent LLM Outputs''.
+This work is supported by substantial original research, including over 6,000 A100-hours of hyperparameter sweeps and the analysis of a new human study conducted in response to our feedback.
+Our re-evaluation reveals that when baselines receive an equivalent optimization budget under the ``Best-of-N'' evaluation protocol, \texttt{min-p}'s claimed superiority vanishes.
+Furthermore, enforcing rigorous statistical and transparency standards exposes that the original human evaluations relied on omitted data and incorrect hypothesis testing; a corrected analysis yields no significant advantage.
+These findings invalidate the original conclusions and underscore the fragility of state-of-the-art claims absent rigorous methods. We offer this blueprint and the Best-of-N protocol as essential tools for the community to ensure the validity of scientific claims and foster genuine progress in machine learning research.
+\end{abstract}
+
+\input{01_introduction}
+\input{02_best_of_n_eval}
+\input{03_valid_stat_inf}
+\input{04_full_data_transparency}
+\input{05_consistent_reporting}
+\input{06_discussion}
+\clearpage
+\input{07_impact_statement}
+
+\clearpage
+
+\bibliographystyle{icml2026}
+\bibliography{references_rylan}
+
+\clearpage
+\appendix
+\onecolumn
+\input{99_appendix}
+
+\end{document}

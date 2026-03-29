@@ -1,0 +1,31 @@
+\section{Standard 4: Consistent Reporting}
+
+\paragraph{Selective Score Reporting}
+
+As evidence for the LLM-As-A-Judge evaluation scores in the original paper's Table 3(b), the first author \href{https://t.me/senior_augur/76}{publicly shared a Telegram link} that showed the higher of two scores was reported for \texttt{min-p} (the reported win rate of $52.01$ corresponds to $p=0.05$, but $p=0.01$ yields a lower win rate of $50.14$) but the lower of two score was reported for \texttt{top-p} (the reported win rate of $50.07$ corresponds to $p=0.9$, but $p=0.98$ yields a higher win rate of $50.43$).
+
+\paragraph{Human Evaluators' Qualitative Responses Fail to Support Claim That \texttt{Min-p} Is Preferred Over Other Samplers}
+\label{sec:human_evals:subsec:human_feedback}
+
+
+At the end of the human evaluation study, the original paper asked human participants to qualitatively describe which sampler(s) they preferred. The paper claimed that human evaluators' qualitative responses support \texttt{min-p} over \texttt{top-p}: ``Participants frequently noted that outputs generated with min-p sampling were more coherent and creative, especially at higher temperatures.''
+%
+% 
+However, we believe that the paper's qualitative human responses contradict this.
+We manually annotated the \href{https://github.com/menhguin/minp_paper/blob/main/min_p%20user%20preference%20study%20v2.0%20(Responses)%20-%20Form%20responses%201%20(1)%20(2).csv}{qualitative responses}, then visualized our annotations of the humans' expressed preferences (Fig.~\ref{fig:attentive_human_annotators_preferred_samplers}) and \href{https://docs.google.com/spreadsheets/d/1-KNh4-dbrXBafb9iUQINqFBjDrZvkScPNbGH6IENecQ/edit?gid=1288914057#gid=1288914057}{publicly posted our annotations} in the same format.
+We found two results: (1) more human evaluators explicitly preferred \texttt{basic} sampling than preferred \texttt{min-p} sampling, which was not immediately obvious because the \texttt{basic} sampling data were previously excluded (Sec.~\ref{sec:human_evals:subsec:omitted_data}), and (2) \texttt{min-p} was only slightly preferred over \texttt{top-p}.
+We provide quotations from human evaluators favoring \texttt{basic} sampling in Appendix~\ref{app:sec:human_qual_responses}.
+
+
+
+\subsection{Unsubstantiated and Retracted Adoption Metrics}
+\label{sec:community_adoption}
+
+\citet{nguyen2024minp} included specific claims about \texttt{min-p}'s widespread adoption: ``\textbf{Community Adoption:} Min-p sampling has been rapidly adopted by the open-source community, with over 54,000 GitHub repositories using it, amassing a cumulative 1.1 million stars across these projects.''
+%
+We attempted to verify these numbers through analysis of major GitHub language modeling repositories.
+Per our calculations, the combined GitHub stars of leading LM repositories (\texttt{transformers}, \texttt{ollama}, \texttt{llama.cpp}, \texttt{vLLM}, \texttt{Unsloth}, \texttt{mamba}, \texttt{SGLang}, \texttt{llama-cpp-python}) sum to 453k stars as of March 2025, less than half the 1.1M stars claimed by \texttt{min-p} alone.
+We could not substantiate either 49k GitHub repositories or 1.1M GitHub stars. 
+When we inquired how these numbers were calculated, the authors \href{https://github.com/menhguin/minp_paper/issues/6#issuecomment-2686274162}{publicly stated that GitHub was searched for ``min-p''}, which yields many false positives. The authors retracted both the 54k GitHub repository claim and the 1.1M GitHub stars claim from the ICLR 2025 Camera Ready manuscript.
+We highlight this point because 3 of 4 ICLR 2025 reviewers and the Area Chair identified these (retracted) community adoption numbers as the main justification for their strong endorsement.
+The ICLR 2025 Camera Ready manuscript has a different statement of community adoption, which we believe remains misleading.

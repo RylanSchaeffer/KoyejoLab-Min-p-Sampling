@@ -1,0 +1,95 @@
+
+
+
+\section{Language Model Usage}
+\label{app:sec:language_model_usage}
+
+Language models were used by the authors to aid or polish the writing of the paper.
+Authors take full responsibility for the content.
+
+\clearpage
+
+
+\section{Examples of Human Qualitative Responses Favoring \texttt{Basic} Sampling Over \texttt{Min-P} Sampling}
+\label{app:sec:human_qual_responses}
+
+In Section~\ref{sec:human_evals:subsec:human_feedback}, we described how qualitative responses from many human participants in the original paper's study favored \texttt{basic} sampling. Direct quotes from human evaluators favoring \texttt{basic} sampling are provided below. In the study, \texttt{basic} sampling was called “Model A”; for clarity, we substituted the pseudonyms for the actual sampling methods):
+%
+\begin{itemize}
+    \item ``[\texttt{basic} sampling] on Temp 3.0 - High Diversity setting. The stories where [sic] more interenting [sic], felt more different compared to the others, which felt like the same ideia [sic] just in a different format.”
+    \item ``I felt like [\texttt{basic} sampling] was most diverse and most interesting with it's [sic] descriptions of the characters and the setting. It appealed to me most and seemed to have less 'broken' sentences that didn't make sense. Descriptions were painterly [sic] and elaborate.”
+    \item ``[\texttt{basic} sampling] was more engaging, it aroused my curiosity.”
+    \item ``[\texttt{basic} sampling] provided more depth and easy to read for me and there was more diversity.”
+    \item ``[\texttt{basic} sampling], they presented creative storytelling”
+    \item ``[\texttt{basic} sampling]. From the very beginning the verbiage and descriptions were very creative and vivid. And each story was unique”
+    \item ``I believe that [\texttt{basic} sampling] has provided stories with more differentiation overall than the other two models. From the point of view of creativity, all three models are more or less equivalent as they almost always talk about stories set in extraterrestrial worlds both from a physical and mental (dreams) point of view"
+    \item ``[\texttt{Basic} sampling]: Sample 2: Temperature Setting F (Temp 3.0 - High Diversity). The story was captivating, it took inside the mystical land and walked you right besides all the characters, you can even draw the characters from just th descriptions provided by the prompt. you Could even smell them, smell the setting and be at one with the setting."
+    \item ``I personally preferred [\texttt{basic} sampling] on the setting of creative, descriptive storytelling. I enjoyed how the writing was creative, showing imagination and a strong use of language. The stories were quite evocative, with intriguing settings and characters that helped to draw the reader in. I also appreciated the diversity of themes that were explored, from night weavers to dream manipulation and mysterious libraries, which kept the stories engaging and interesting."
+    \item ``Temporature setting C on [\texttt{basic} sampling] was the best. The story was fascinating and very engaging. I wanted to read more."
+    \item ``I prefered the first [\texttt{basic} sampling]. Tho [\texttt{basic} sampling] and C seem to be very head to head. But something about [\texttt{basic} sampling] seemed different in quality about it to me."
+\end{itemize}
+
+More quotes are in the \href{https://github.com/menhguin/minp_paper/blob/main/min_p%20user%20preference%20study%20v2.0%20(Responses)%20-%20Form%20responses%201%20(1)%20(2).csv)}{original paper's data}. We urge readers to draw their own conclusions.
+
+
+\clearpage
+\section{GSM8K Chain-of-Thought Scores with ``Standard" Formatting}
+\label{app:sec:gsm_cot_scores}
+
+At the request of \citet{nguyen2024minp}, we reran our GSM8K Chain-of-Thought sweeps using ``standard" formatting instead of ``Llama" formatting. \textbf{Both analyses reached consistent results: \texttt{min-p} does not consistently outperform other samplers when controlling the volume of hyperparameter space.}
+
+\begin{figure*}[b!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{figures/nlp_benchmark_evals/gsm8k_cot/y=em_strict_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{\texttt{Min-P} Does Not Consistently Outperform Other Samplers on GSM8K When Controlling For Hyperparameter Volume.}
+    We reran our GSM8K sweep using ``standard" formatting rather than ``Llama" formatting and observed qualitatively similar data.
+    }
+\end{figure*}
+
+\clearpage
+
+\begin{figure*}[t!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{figures/nlp_benchmark_evals/gsm8k_cot/y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{\texttt{Min-P} Does Not Consistently Outperform Other Samplers on GSM8K When Controlling For Hyperparameter Volume.}
+    We reran our GSM8K sweep using ``standard" formatting rather than ``Llama" formatting and observed qualitatively similar data.}
+\end{figure*}
+
+\clearpage
+
+
+% \section{Minor Discoveries}
+% \label{app:sec:minor_discoveries}
+
+% In this section, we compile a list of other discoveries and oddities.
+
+% \paragraph{Human Judgments of Diversity Don't Increase with Temperature}
+
+% As a minor comment, we note that higher temperature $\tau$ does not correspond to higher diversity scores.
+% We do not know whether the human evaluations were inadequate or underpowered, or perhaps the field's conceptual understandings of temperature at the per-token level is disconnected from temperature at the sentence and paragraph level.
+
+% \paragraph{\texttt{Min-p} Typically Scores Highest on GSM8K at Low Temperatures}
+
+% Our GSM8K and GSM8K Llama experiments revealed a different pattern than reported by \citet{nguyen2024minp}.
+% Specifically, the authors wrote:
+% “Notably, across all experiments, best scores were achieved with \texttt{min-p} across a range of temperatures, rather than greedy decoding, challenging assumptions that greedy decoding is strictly optimal for task benchmarks
+% \citep{castel2022optimalgreedydecodingextractive, wiher2022decoding})."
+% In contrast, our more extensive sweep showed that when using \texttt{min-p}, most models achieved their best performance at low temperatures (Appendix Fig.~\ref{fig:gsm8k_per_sampler_scores}), which aligns with conventional understanding of task benchmark optimization.
+
+
+% \paragraph{Swapped Column Labels in \citet{nguyen2024minp}'s Table 7}
+
+% Two columns in \citet{nguyen2024minp}'s Table 7 are switched. Specifically, based on comparing the reported values in Table 7 with the provided Telegram link\footnote{\url{https://t.me/senior_augur/76}}, the authors appear to have switched Win Rate and Length-Controlled Win Rate.
+
+
+
+% \clearpage
+
+\section{GSM8K Scores By Model, Sampler and Hyperparameters}
+
+\begin{figure*}[b!]
+    \centering
+    \includegraphics[width=0.41\linewidth]{figures/appendix/y=em_strict_x=sampler_value_hue=temperature_style=model_type_row=model_col=sampler.pdf}
+    \caption{\textbf{GSM8K Scores By Model, Sampler and Sampler Hyperparameters.} Many models achieve their highest scores at low temperatures across samplers.}
+    \label{fig:gsm8k_per_sampler_scores}
+\end{figure*}

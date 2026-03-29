@@ -1,0 +1,22 @@
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+
+\textbf{General Lessons for Researchers and Reviewers: } This work serves as a practical demonstration of our four critical standards for rigorous empirical machine learning research:
+%
+\begin{enumerate}
+    \item \textbf{Standard 1: Fair comparison via controlled hyperparameter optimization volume.} As demonstrated in our NLP benchmark analysis, apparent algorithmic superiority often evaporates when the search space size is controlled. Our proposed ``Best-of-N'' protocol offers a rigorous mechanism to ensure that reported gains reflect genuine innovation rather than unequal tuning budgets.
+
+    \item \textbf{Standard 2: Valid statistical inference.} Our re-analysis of the human evaluation data underscores that statistical rigor cannot be an afterthought. Researchers must avoid pooling data across distinct experimental conditions and must apply appropriate corrections for multiple comparisons. Furthermore, visualizing data with confidence intervals is essential to prevent the over-interpretation of noise as signal.
+
+    \item \textbf{Standard 3: Full data transparency.} Rigorous science requires that conclusions can be independently verified. We found that the unjustified omission of one-third of the human evaluation data fundamentally altered the paper's conclusions, while under-specified LLM-as-a-Judge methodologies hindered reproduction. Researchers must release all collected data (including excluded baselines), raw annotations, and precise methodological details to ensure scientific validity.
+
+    \item \textbf{Standard 4: Consistent reporting.} Selective reporting creates a distorted view of progress. This was evident in the LLM-as-a-Judge analysis—where the maximal score was reported for the proposed method while a sub-optimal score was reported for the baseline—as well as in the misalignment between qualitative summaries and actual human feedback. To foster genuine progress, results must be reported comprehensively, accurately, and without bias.
+\end{enumerate}
+
+\textbf{Scientific Conclusions: } Our case study led us to conclude that the four lines of evidence presented by \citet{nguyen2024minp} -- (1) NLP benchmark evaluations, (2) human evaluations, (3) LLM-as-a-Judge evaluations, (4) community adoption -- do not support \texttt{min-p}'s claimed superiority.
+While \texttt{min-p} is useful as another method to try, the original paper's data and our extensions of the original paper's data suggest that samplers perform approximately equally if given equal hyperparameter tuning.
+
+\textbf{Key Limitation: } Our manuscript re-analyzes the evidence presented by \citet{nguyen2024minp} and additional evidence created using the original paper's code. \textit{Conclusions here are based on that evidence}. We emphasize that new evidence might lead to different conclusions.
+
+\textbf{Closing Remark:} By adhering to this blueprint, we hope the community can move past the current crisis of rigor and ensure that future claims of state-of-the-art performance represent genuine scientific progress.
