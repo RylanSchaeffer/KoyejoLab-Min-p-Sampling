@@ -2,34 +2,30 @@
 
 ## General Response
 
-Three of four reviewers note the blueprint relies on a single case study. We now have a second.
+Three of four reviewers note that the blueprint relies on a single case study. Since submission, we have added a second: p-less sampling (Tan et al., ICLR 2026 Oral), a truncation sampler claiming to "consistently outperform existing sampling approaches." We implemented p-less in vLLM v0.7.3 and are running sweeps across 28 models (5,952 runs, 3 seeds each). Best-of-N results will follow within 1-2 days. P-less has a novel theoretical contribution (connecting thresholds to Renyi entropy) and real efficiency gains; our critique targets evaluation methodology, not the method itself.
 
-**Second case study: p-less sampling.** We applied Best-of-N to p-less (Tan et al., ICLR 2026 Oral), which claims to "consistently outperform." We implemented p-less in vLLM v0.7.3 and are sweeping 28 models on GSM8K CoT and GPQA (5,952 runs, 3 seeds). Best-of-N results will follow within 1-2 days.
+Independent of Best-of-N, the p-less paper violates all four standards: baselines at default hyperparameters only (their own Table 8 shows tuned min-p matches p-less on GPQA); no significance tests on accuracy despite including them for efficiency; human evaluation comparing T=2.0 vs T=1.0 with 3 of 6 author annotators; and "consistently outperforms" claimed when min-p wins 2/4 datasets on Llama3-70B and p-less loses 3/4 at T=1.0. Different paper, different authors, different venue, same problems.
 
-P-less has a novel theoretical contribution (Renyi entropy) and real efficiency gains. Our critique targets evaluation, not the method. Independent of Best-of-N, it violates all four standards: default-only baselines (tuned min-p matches p-less on GPQA per their Table 8); no significance tests on accuracy despite having them for efficiency; human eval at T=2.0 vs T=1.0 with 3/6 author annotators; and "consistently outperforms" claimed when min-p wins 2/4 datasets on Llama3-70B, p-less loses 3/4 at T=1.0, and ranks last in creative writing at T=1.0. Different paper, authors, venue: same problems.
+Separately, Jiang et al. (Artificial Hivemind, NeurIPS 2025 Best Paper) independently tested min-p for diversity across 70+ models and found 61% of response pairs exceeded 0.8 similarity, corroborating our finding that min-p's diversity claims are unsupported.
 
-**Independent corroboration.** Jiang et al. (Artificial Hivemind, NeurIPS 2025 Best Paper) tested min-p for diversity across 70+ models: 61% of pairs exceeded 0.8 similarity. They over-generalized to "decoding-time interventions are insufficient": based on the unverified assumption that min-p represents decoding-time methods.
-
-**Revisions.** Blueprint and Best-of-N presented first; case studies as illustrations. Adding Related Work (Dodge 2019, Bouthillier 2021, Henderson 2018, Dehghani 2021, Dror 2018, Melis 2020), Algorithm 1 (pseudocode), and operationalized checklist.
+The revision will restructure the paper so the blueprint comes first, with case studies as illustrations. We are adding a Related Work section, Algorithm 1 (Best-of-N pseudocode), and an operationalized checklist validated against both case studies.
 
 ---
 
 ## Response to Reviewer 2LLS
 
-**Q1: Code availability.** Yes. All code, sweep configs, W&B data, and notebooks are public at [anonymized URL]. P-less vLLM patch included.
+**Q1: Code availability.** Yes. All code, sweep configurations, W&B sweep data, and analysis notebooks are publicly available at [anonymized URL]. The p-less vLLM patch will be included.
 
-**Q2: Why equal-effort fairness?** The Best-of-N curve serves multiple philosophies: "best achievable" (large N), "tuning as part of the method" (small N; faster rise = easier to tune), "equal effort" (fixed N). A single number collapses this into one gameable point. Limitation: effort = configuration count, not compute.
+**Q2: Why equal-effort fairness?** The Best-of-N curve does not privilege one fairness philosophy. It reveals information relevant to several: "best achievable performance" (right end, large N), "tuning is part of the method" (left end, small N; faster rise means easier to tune), and "equal effort" (any fixed N). A single reported number collapses this into one point that can be gamed by choosing favorable hyperparameters. The curve makes the full picture visible. Limitation: effort is measured as configuration count, not compute; we discuss this in the revision.
 
-**Best-of-N formalization.** Grid search outputs one best configuration; Best-of-N outputs comparative performance-vs-budget curves. Same mechanics, different purpose: like pass@k (Chen et al., 2021), the contribution is applying a known mechanism as a diagnostic protocol. Revision adds Algorithm 1, variance-vs-N analysis, and limitations.
+**Best-of-N formalization.** Grid search selects the best hyperparameters for one method (output: one configuration). Best-of-N diagnoses whether a claimed advantage survives equalized tuning budgets (output: comparative performance-vs-budget curves). Same mechanics, different purpose. Like pass@k (Chen et al., 2021), the contribution is not the subsampling mechanism but its application as a diagnostic protocol. The revision adds Algorithm 1 (pseudocode) and analysis of how variance decreases with N.
 
-**Related work.** Dodge 2019 and Bouthillier 2021 characterize unequal tuning without a reusable protocol. Henderson 2018 shows RL pitfalls without formalization. Melis 2020 does fair comparison ad hoc. Best-of-N systematizes these.
+**Related work.** Dodge et al. (2019) and Bouthillier et al. (2021) characterize unequal tuning but propose no reusable protocol. Henderson et al. (2018) show RL evaluation pitfalls without formalized comparison. Melis et al. (2020) do fair comparison ad hoc. Best-of-N systematizes these into a general diagnostic applicable post-hoc to existing sweep data.
 
-**Standards 2-4 operationalization.** Revision adds a checklist: Standard 2 (significance tests with correction: violated in min-p via pooling, in p-less via absence). Standard 3 (release eval code: p-less released none). Standard 4 (win/loss tables: both overclaimed). Each validated against two papers. Scaling enforcement through automated tools is active work.
+**Standards 2-4 operationalization.** The revision adds a checklist mapping each standard to concrete items and failure modes, validated against both case studies. For example: Standard 2 requires per-model significance tests with correction (min-p pooled across models; p-less omitted tests entirely). Standard 3 requires releasing evaluation code (p-less released none). Standard 4 requires win/loss tables across all comparisons (both papers overclaimed). Scaling enforcement through automated tools is active work in progress.
 
-**Tone.** Blueprint first; case studies as illustrations. Discrepancies to appendix.
+**Tone and framing.** Blueprint and protocol will be presented first as general tools, with case studies as illustrations. Numerical discrepancies move to appendix; author interactions to footnotes.
 
-**Venue fit.** Revised paper: formalized protocol with pseudocode, 6,000+ A100-hours across 28 models, corrected re-analyses overturning an ICLR 2025 Oral, second case study, operationalized checklist. Precedent: Henderson 2018 (AAAI), Dodge 2019 (EMNLP), Dehghani 2021 (NeurIPS).
+**Venue fit.** The revised paper contains a formalized protocol with pseudocode, 6,000+ A100-hours of experiments across 28 models, corrected re-analyses overturning an ICLR 2025 Oral, a second case study (ICLR 2026 Oral), and an operationalized checklist. Evaluation methodology papers are regularly accepted at top venues: Henderson 2018 (AAAI), Dodge 2019 (EMNLP), Dehghani 2021 (NeurIPS).
 
-**Cost.** 6,000 hours = sweep cost, not protocol cost. Protocol is post-hoc subsampling: zero additional compute. Even N=5-10 reveals whether claims hold.
-
-**Reproducibility.** Seeds 0-2. Fixed grid: 31 temperatures (0.0-3.0), sampler values per sweep configs. All enumerated, not sampled.
+**Cost.** The 6,000 A100-hour figure is the sweep cost, not the protocol cost. The protocol is post-hoc subsampling from existing results, adding zero compute. Even N=5-10 per method reveals whether a claimed advantage is robust.
