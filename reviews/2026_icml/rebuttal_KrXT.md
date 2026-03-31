@@ -14,7 +14,7 @@ The revision will restructure the paper so the blueprint comes first, with case 
 
 ## Response to Reviewer KrXT
 
-We thank the reviewer for the careful evaluation.
+We thank the reviewer for the careful and positive evaluation.
 
 **Q1: Can you elaborate on the selection and justification of statistical tests?**
 
@@ -30,7 +30,7 @@ The revision will add Wilcoxon signed-rank tests as a non-parametric robustness 
 
 **Q2: How important is Best-of-N? Prior work (e.g., Mogrifier LSTM) showed similar results without it.**
 
-Best-of-N detects a specific problem: inflated claims caused by unequal hyperparameter budgets. In Nguyen et al., min-p received a more extensive sweep than top-p, making it appear superior. Equalizing the budget eliminates the advantage.
+Best-of-N detects a specific problem: inflated claims caused by unequal hyperparameter budgets. In Nguyen et al., min-p received a more extensive sweep than top-p, making it appear superior. Equalizing the budget eliminates the advantage. Best-of-N is a powerful way to sanity check superiority claims and identify cherry-picking.
 
 Melis et al. (2020) demonstrated this same insight for LSTMs, but their analysis was ad hoc and setting-specific. Best-of-N formalizes the idea into a reusable protocol with performance-vs-budget curves and pseudocode (Algorithm 1 in the revision). It is not always necessary, but when cherry-picking is suspected, it provides definitive evidence.
 

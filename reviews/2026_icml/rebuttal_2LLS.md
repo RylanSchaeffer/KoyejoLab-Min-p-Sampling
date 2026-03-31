@@ -28,6 +28,6 @@ The revision restructures the paper so the blueprint comes first, with case stud
 
 **Venue fit.** The revised paper contributes a formalized protocol with pseudocode, 6,000+ A100-hours of experiments across 28 models, corrected re-analyses overturning an ICLR 2025 Oral, a second case study targeting an ICLR 2026 Oral, and an operationalized checklist. Evaluation methodology papers are regularly accepted at top venues (Henderson 2018, AAAI; Dodge 2019, EMNLP; Dehghani 2021, NeurIPS).
 
-**Compute cost.** The 6,000 A100-hour figure is the total sweep cost, not the protocol cost. The protocol itself is post-hoc subsampling from existing sweep results and adds zero compute. Even N=5 or N=10 per method is enough to reveal whether a claimed advantage is robust.
+**Compute cost.** The 6,000 A100-hour figure is the total sweep cost, not the protocol cost. The protocol itself is post-hoc subsampling from existing sweep results and adds zero compute. Even N=5 or N=10 per method can reveal whether a claimed advantage is robust, testable via a Mann-Whitney U-test.
 
 **Presentation issues.** We will fix the typos, reference overflows, and oversized appendix figure. Thank you.
