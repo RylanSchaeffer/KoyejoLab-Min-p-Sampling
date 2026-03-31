@@ -77,10 +77,10 @@ This is exactly the right test: p-less claims its advantage is that you don't ne
 - GPQA: p-less_norm **0.391** vs p-less 0.387 → p-less itself loses to its own variant
 
 **At T=1.0 on Llama3-70b (Table 5):** p-less loses on 3 of 4 datasets:
-- CSQA: epsilon **82.6** vs p-less 81.7
-- GPQA: mirostat **41.1** vs p-less 38.2
+- CSQA: epsilon **82.6** vs p-less 81.4
+- GPQA: mirostat **41.1** vs p-less 38.4
 - GSM8K: p-less **93.3** (wins)
-- QASC: epsilon/top-p **90.6** vs p-less 89.0
+- QASC: min-p **90.6** vs p-less 89.8
 
 **Critical context:** Mistral-7b and Llama3-70b use only **1 random seed** (Appendix C.3). Llama-2-7b uses 3 seeds. The strongest results are on the models with zero replication. Margins of 0.001 AUC are meaningless with 1 seed.
 
@@ -153,7 +153,7 @@ Top-k — one of the most commonly used sampling methods — is not included in 
 - 1 model (Llama-2-7b)
 - 5 temperature points
 
-Table 10 (Appendix) shows min-p achieves higher diversity than p-less on Llama3-70b QASC at T=2.0 (78.7 vs 76.3) with comparable accuracy. The Pareto claim does not generalize.
+Table 10 (Appendix) shows min-p achieves higher diversity than p-less on Llama3-70b QASC at T=2.0 (81.9 vs 77.8) with comparable accuracy. The Pareto claim does not generalize.
 
 ### Investigation I: Theoretical Strengths (Fairness)
 

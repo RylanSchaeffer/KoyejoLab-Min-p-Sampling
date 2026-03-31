@@ -52,10 +52,10 @@ At the most practically relevant temperature on the largest model:
 
 | Dataset | p-less | Best other | Winner |
 |---------|--------|-----------|--------|
-| CSQA | 81.7 | epsilon **82.6** | epsilon |
-| GPQA | 38.2 | mirostat **41.1** | mirostat |
-| GSM8K | **93.3** | min-p 93.0 | p-less |
-| QASC | 89.0 | epsilon/top-p **90.6** | epsilon/top-p |
+| CSQA | 81.4 | epsilon **82.6** | epsilon |
+| GPQA | 38.4 | mirostat **41.1** | mirostat |
+| GSM8K | **93.3** | min-p 92.4 | p-less |
+| QASC | 89.8 | min-p **90.6** | min-p |
 
 **p-less loses on 3 of 4 datasets at T=1.0 for Llama3-70b.** Its advantage is concentrated at high temperatures.
 
@@ -134,7 +134,7 @@ GitHub repo (https://github.com/ryttry/p-less) contains only: `p_less_samplers.p
 
 ### Diversity/Pareto claim is thin
 
-"Pareto dominance" claim (Figure 3) is based on 1 dataset (QASC), 1 model (Llama-2-7b), 5 temperature points. Table 10 shows min-p achieves higher diversity than p-less on Llama3-70b QASC at T=2.0 (78.7 vs 76.3).
+"Pareto dominance" claim (Figure 3) is based on 1 dataset (QASC), 1 model (Llama-2-7b), 5 temperature points. Table 10 shows min-p achieves higher diversity than p-less on Llama3-70b QASC at T=2.0 (81.9 vs 77.8).
 
 ### False claim that baselines "do not consider the output token distribution"
 

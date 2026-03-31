@@ -82,13 +82,19 @@ Apply Best-of-N to a paper outside LLM sampling where public sweep data already 
 
 **Targets:** Objection 8 | **Moves:** 2LLS, cBMY
 
-Clarify: the protocol is trivial post-hoc analysis; the 6,000 hours was the sweep cost. Acknowledge honestly that sweeps are needed, but argue this is the cost of fair comparison. The protocol degrades gracefully — even N=5-10 per method beats single-config comparisons.
+Clarify: the 6,000 A100-hours was the sweep cost (running all evaluations), not the protocol cost. The Best-of-N analysis itself requires only subsampling from existing results — it adds zero compute. Acknowledge honestly that sweeps are needed, but argue this is the cost of fair comparison that should have been paid all along.
+
+The protocol degrades gracefully — even N=5-10 per method beats single-config comparisons. **TODO: produce a concrete plot or table showing that min-p's advantage vanishes at small N (e.g., N=5, 10, 20). Without empirical backing, this claim is unsupported.**
+
+Tone note: avoid "trivial post-hoc analysis" — this reads as dismissive of the concern. Better: "We appreciate this question and clarify that the 6,000 A100-hours reflects the sweep cost, not the protocol cost. The Best-of-N analysis requires only subsampling from existing results. Importantly, we show that even at modest budgets (N=5-10), the diagnostic curves are informative."
 
 ### 4. Address Alternative Fairness Philosophies — LOW EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 9 | **Moves:** 2LLS
 
-The Best-of-N curve subsumes multiple fairness notions: it shows performance at every budget level N. If a method's advantage is ease of tuning, the curve shows this (steeper rise at low N). If the claim is algorithmic superiority, the curves should separate at high N.
+The Best-of-N curve *reveals information relevant to* multiple fairness notions (not "subsumes" — do not overclaim). It shows performance at every budget level N. If a method's advantage is ease of tuning, the curve shows this (steeper rise at low N). If the claim is algorithmic superiority, the curves should separate at high N. This addresses 2LLS's "tuning as part of the method" philosophy: the curve's shape directly visualizes tuning difficulty, so researchers can read off whichever fairness comparison they prefer.
+
+**Important:** Do not claim the protocol subsumes all philosophies — it reveals the data needed to apply them. This distinction matters for a careful reviewer like 2LLS.
 
 ### 5. Operationalize Standards 2-4: Checklist Table — LOW EFFORT, MEDIUM IMPACT
 
@@ -111,13 +117,17 @@ Add a table: each standard → concrete checklist item → failure mode it preve
 
 **Targets:** Objection 7 | **Moves:** 2LLS, dH2p
 
-Enumerate: (1) formalized protocol with pseudocode, (2) 6,000+ A100-hours of experiments, (3) corrected statistical re-analysis, (4) second case study, (5) operationalized checklist. Cite Henderson et al. 2018 (AAAI) as precedent.
+Enumerate: (1) formalized protocol with pseudocode, (2) 6,000+ A100-hours of experiments, (3) corrected statistical re-analysis, (4) second case study, (5) operationalized checklist.
+
+Cite strongest available precedents at top ML venues: Dodge et al. 2019 ("Show Your Work: Improved Reporting of Experimental Results," EMNLP), Dehghani et al. 2021 ("The Benchmark Lottery," NeurIPS), Henderson et al. 2018 (AAAI). These are peer evaluation methodology papers accepted at top venues — our paper is squarely in this lineage.
 
 ### 8. Statistical Test Justification — LOW EFFORT, MEDIUM IMPACT
 
-**Targets:** KrXT Q1 | **Moves:** KrXT (retain Accept)
+**Targets:** KrXT Q1, KrXT minor concern | **Moves:** KrXT (retain Accept)
 
-Paired t-tests because paired observations. One-sided to match directional claim. Bonferroni as most conservative correction. IUT because "consistent superiority" = its alternative hypothesis. Wilcoxon yields identical conclusions.
+Paired t-tests because paired observations. One-sided to match directional claim. Bonferroni as most conservative correction. IUT because "consistent superiority" = its alternative hypothesis. Wilcoxon yields identical conclusions (**TODO: verify empirically before writing rebuttal — if Wilcoxon diverges, this backfires**).
+
+Additionally, KrXT notes "one might suspect fair comparison through hyperparameter search is the main driving factor." Address this head-on: that equalization of search effort is the main driver is precisely the point — it confirms the protocol's value rather than undermining it. The original claims of min-p superiority were artifacts of unequal hyperparameter search, and the Best-of-N protocol makes this visible. This reframe arms KrXT with language to champion the paper during deliberation.
 
 ### 9. Ethics Response — LOW EFFORT, MEDIUM IMPACT
 
@@ -125,7 +135,33 @@ Paired t-tests because paired observations. One-sided to match directional claim
 
 Anonymize all identifying links. State clearly: paper does not allege misconduct. Cite Ioannidis 2005 and NeurIPS D&B track as precedent.
 
-### 10. Incentives Paragraph — LOW EFFORT, LOW IMPACT
+### 10. Answer 2LLS Q1: Code Availability — LOW EFFORT, LOW IMPACT
+
+**Targets:** 2LLS Q1 | **Moves:** 2LLS
+
+Direct answer: Yes. All code, sweep configurations, and W&B sweep data are publicly available at [repo URL, anonymized for review]. State this explicitly in the rebuttal — 2LLS asked a yes/no question and the current manuscript apparently does not make this clear enough.
+
+### 11. Answer dH2p Q1: Fair Ranges for Heterogeneous Methods — LOW EFFORT, HIGH IMPACT
+
+**Targets:** dH2p Q1 | **Moves:** dH2p
+
+This is dH2p's most substantive technical question and currently has no planned response. The answer: Best-of-N sidesteps the range-fairness problem by equalizing total configuration budget (N) rather than requiring identical parameter spaces. A method with fewer hyperparameters naturally explores its space more densely at the same budget N — and this is appropriate, because ease of tuning is a genuine advantage of such methods. The p-less case study is a concrete worked example: p-less has 1 hyperparameter (temperature) while other samplers have 2 (temperature + sampler value). At budget N=20, p-less draws 20 temperature configurations while min-p draws 20 (temperature, p-value) pairs. If p-less's advantage is that it needs less tuning, its curve should rise faster at low N. The protocol makes this visible rather than assuming it.
+
+### 12. Address Circular Significance (cBMY) — LOW EFFORT, MEDIUM IMPACT
+
+**Targets:** cBMY "circular significance" concern | **Moves:** cBMY
+
+cBMY argues "the overall significance of this contribution depends on the significance of min-p itself." Reframe: the significance derives not from min-p as a method but from the downstream consequences of its flawed evaluation. We trace a concrete contamination chain: Nguyen et al.'s flawed claims → Artificial Hivemind (NeurIPS 2025 Best Paper) draws incorrect conclusions about decoding-time interventions → p-less (ICLR 2026 Oral) repeats the same evaluation methodology. The cost of not adopting rigorous standards is measurable in misdirected research effort across three papers at top venues. Our contribution's significance is proportional to the damage caused by the evaluation failures we identify, not to min-p's intrinsic importance.
+
+### 13. Promote pass@k Analogy to Rebuttal Text — LOW EFFORT, MEDIUM IMPACT
+
+**Targets:** Objections 3, 5 (Best-of-N ≈ grid search, lacks novelty) | **Moves:** 2LLS, dH2p, cBMY
+
+The pass@k analogy from the Discussion Notes section must appear in the actual rebuttal, not just internal notes. One sentence: "Like pass@k in code generation (Chen et al. 2021), our contribution is not the subsampling mechanism — which is well-known — but its systematic application as a diagnostic evaluation protocol that answers a new question: does a method's advantage survive when optimization budgets are equalized?" This directly parallels Yang et al. (arXiv:2504.13837), who similarly repurposed pass@k to ask a new question. Cite both.
+
+This is the single most effective counter to the "conceptually simple" / "resembles grid search" objection. It reframes novelty from mechanism to purpose.
+
+### 14. Incentives Paragraph — LOW EFFORT, LOW IMPACT
 
 **Targets:** cBMY Q4 | **Moves:** cBMY
 
@@ -141,10 +177,10 @@ Fix: URL overflows, Figure 9 sizing, "resaerch" typo, repetitive restatements, i
 
 | Reviewer | Score | Key Lever | Lead With |
 |----------|-------|-----------|-----------|
-| KrXT | 5 → retain | Answer Q1 (stat tests) + Q2 (Mogrifier) | Algorithm 1 + Wilcoxon robustness checks |
-| 2LLS | 3 → 4+ | Most movable; methodical objections | Second case study + Related Work + fairness answer |
-| dH2p | 3 → 4+ | Significance=4 already; needs originality | Algorithm 1 + grid search distinction + venue-fit |
-| cBMY | 2 → 3+ | Hardest to move; ethics + originality=1 | Ethics response, then second case study + checklist |
+| KrXT | 5 → retain | Answer Q1 (stat tests) + Q2 (Mogrifier) + reframe "main driver" concern | Algorithm 1 + Wilcoxon robustness checks + "equalization is the point" reframe |
+| 2LLS | 3 → 4+ | Most movable; methodical objections | Second case study + Related Work + fairness answer + code availability (Q1) + pass@k analogy |
+| dH2p | 3 → 4+ | Significance=4 already; needs originality; confidence=3 | Algorithm 1 + grid search distinction + venue-fit + direct answer to Q1 (heterogeneous ranges via config budget) |
+| cBMY | 2 → 3+ | Hardest to move; ethics + originality=1 | Ethics response (2 sentences, gracious) → circular significance reframe → second case study + checklist |
 
 ---
 
@@ -224,16 +260,19 @@ Not a case study for Best-of-N (they don't compare samplers under equal tuning).
 
 | # | Change | Effort | Impact |
 |---|--------|--------|--------|
-| 1 | Second case study | High | Critical |
-| 2 | Algorithm 1 + grid search distinction | Medium | High |
+| 1 | Second case study (p-less) | High | Critical |
+| 2 | Algorithm 1 + grid search distinction + pass@k analogy | Medium | High |
 | 3 | Restructure intro + Related Work + min-p background + implementation details | Medium | High |
-| 4 | Venue-fit argument in rebuttal | Low | High |
+| 4 | Venue-fit argument in rebuttal (cite Dodge 2019, Dehghani 2021) | Low | High |
 | 5 | Standards 2-4 checklist table | Low | Medium |
-| 6 | Cost clarification paragraph | Low | Medium |
-| 7 | Fairness philosophies paragraph | Low | Medium |
-| 8 | Statistical test justification + Wilcoxon | Low | Medium |
-| 9 | Anonymize links + ethics response | Low | Medium |
+| 6 | Cost clarification paragraph + N=5-10 empirical evidence (TODO) | Low-Med | Medium |
+| 7 | Fairness philosophies paragraph (reveals, not subsumes) | Low | Medium |
+| 8 | Statistical test justification + Wilcoxon (TODO: verify) + "equalization is the point" reframe | Low | Medium |
+| 9 | Anonymize links + ethics response (2 sentences, gracious) | Low | Medium |
 | 10 | Contamination chain argument in Discussion (Nguyen → Hivemind → p-less) | Low | High |
 | 11 | Cite Artificial Hivemind as independent corroboration of min-p diversity findings | Low | Medium |
-| 12 | Incentives paragraph in Discussion | Low | Low |
-| 13 | Presentation fixes | Low | Low |
+| 12 | Answer 2LLS Q1: code is publicly available | Low | Low |
+| 13 | Answer dH2p Q1: heterogeneous methods handled via config budget equalization | Low | High |
+| 14 | Address circular significance: significance derives from contamination, not min-p's importance | Low | Medium |
+| 15 | Incentives paragraph in Discussion | Low | Low |
+| 16 | Presentation fixes | Low | Low |
