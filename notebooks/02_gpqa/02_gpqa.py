@@ -29,6 +29,8 @@ wandb_sweep_ids = [
     "qmi5s16v",  # GSM8K CoT Top-k Part 2.
     "klxcmzue",  # GSM8K CoT Min-p Part 1.
     "vwdltdv8",  # GSM8K CoT Min-p Part 2.
+    "o8o8rcap",  # GPQA P-less Part 1.
+    "odz5v1s2",  # GPQA P-less Part 2.
 ]
 
 exact_match_col_name = "Exact Match (Flexible)"
