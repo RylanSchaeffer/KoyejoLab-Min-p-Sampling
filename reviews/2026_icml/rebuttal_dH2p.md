@@ -2,7 +2,7 @@
 
 ## General Response
 
-Three of four reviewers note that the blueprint relies on a single case study. We have since added a second: p-less sampling (Tan et al., ICLR 2026 Oral), a truncation sampler claiming to "consistently outperform existing sampling approaches." We implemented p-less in vLLM v0.7.3 and are running sweeps across 28 models (5,952 runs, 3 seeds each). Best-of-N results will follow within 1-2 days.
+Three of four reviewers note that the blueprint relies on a single case study. We have since added a second: p-less sampling (Tan et al., ICLR 2026 Oral), a truncation sampler claiming to "consistently outperform existing sampling approaches." We implemented p-less in vLLM v0.7.3 and ran Best-of-N sweeps across 18 models on GSM8K and GPQA (5,022 runs, 3 seeds each). Under equal tuning budget, p-less's best configuration loses to the best other sampler on 40/45 model-benchmark pairs and wins on only 7/45.
 
 The p-less paper violates all four standards independently of Best-of-N. Baselines use default hyperparameters only (their own Table 8 shows tuned min-p matches p-less on GPQA). Accuracy comparisons lack significance tests, even though the paper includes them for efficiency. Human evaluation compares T=2.0 vs. T=1.0 with 3 of 6 annotators being authors. The claim "consistently outperforms" does not hold: min-p wins 2/4 datasets on Llama3-70B, and p-less loses 3/4 at T=1.0. Different paper, different authors, different venue, same problems.
 

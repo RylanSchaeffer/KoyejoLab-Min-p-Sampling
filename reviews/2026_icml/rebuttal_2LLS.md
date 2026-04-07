@@ -2,7 +2,7 @@
 
 ## General Response
 
-Three of four reviewers note that the blueprint relies on a single case study. We have added a second: p-less sampling (Tan et al., ICLR 2026 Oral), which claims to "consistently outperform existing sampling approaches." We implemented p-less in vLLM v0.7.3 and are running sweeps across 28 models (5,952 runs, 3 seeds each). Best-of-N results will follow within 1-2 days.
+Three of four reviewers note that the blueprint relies on a single case study. We have added a second: p-less sampling (Tan et al., ICLR 2026 Oral), which claims to "consistently outperform existing sampling approaches." We implemented p-less in vLLM v0.7.3 and ran Best-of-N sweeps across 18 models on GSM8K and GPQA (5,022 runs, 3 seeds each). Under equal tuning budget, p-less's best configuration loses to the best other sampler on 40/45 model-benchmark pairs and wins on only 7/45.
 
 The p-less paper violates all four standards. Baselines use default hyperparameters only; their own Table 8 shows tuned min-p matches p-less on GPQA. Accuracy comparisons omit significance tests despite including them for efficiency. Human evaluation compares T=2.0 vs T=1.0, with 3 of 6 annotators being paper authors. And "consistently outperforms" is claimed when min-p wins 2/4 datasets on Llama3-70B and p-less loses 3/4 at T=1.0. Different paper, different authors, different venue, same problems.
 
@@ -14,7 +14,7 @@ The revision restructures the paper so the blueprint comes first, with case stud
 
 ## Responses to Specific Points
 
-**Q1: Code availability.** Yes. All code, sweep configs, W&B data, and analysis notebooks are publicly available at [anonymized URL]. The p-less vLLM patch will be included.
+**Q1: Code availability.** Yes. All code, sweep configs, W&B data, and analysis notebooks will be made publicly available upon acceptance. The p-less vLLM patch will be included.
 
 **Q2: Why equal-effort fairness?** The Best-of-N curve does not commit to one fairness philosophy. It shows performance as a function of tuning budget, which is informative under several views. The right end of the curve (large N) shows best achievable performance. The left end (small N) shows how easy a method is to tune. Any fixed N gives an equal-effort comparison. A single reported number collapses this into one cherry-pickable point. The curve makes the full picture visible. We now note as a limitation that effort is measured by configuration count, not compute.
 
