@@ -1,0 +1,24 @@
+{
+   "stamp" : true,
+   "sources" : [
+      {
+         "usage" : "toplevel",
+         "filename" : "00_arxiv.tex"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "colm2025_conference.bib"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "colm2025_conference.bst"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "references_rylan.bib"
+      }
+   ],
+   "process" : {
+      "compiler" : "pdflatex"
+   }
+}

@@ -1,0 +1,36 @@
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+\paragraph{Scientific Conclusions} This investigation led us to conclude that the four lines of evidence presented by \citet{nguyen2024minp} -- (1) human evaluations, (2) NLP benchmark evaluations, (3) LLM-as-a-Judge evaluations, (4) community adoption -- do not support claims of \texttt{min-p}'s superiority.
+While \texttt{min-p} is useful for providing users another options to try, the original paper's data and our extensions of the original paper's data suggest that all samplers perform roughly the same once given the same amount of hyperparameter tuning; however, in our view, more research would be needed to assess the veracity of this conclusion.
+The paper's data does weakly suggest that \texttt{min-p} sampling can sometimes provide a benefit at higher temperatures, albeit with the critical caveat that absolute performance is meaningfully worse in this high-temperature regime than in standard temperature regimes.
+
+\paragraph{Key Limitation} Our manuscript re-analyzes the evidence presented by the original paper \citep{nguyen2024minp} and additional evidence created using the original paper's code. \textit{Conclusions here are based on that evidence}. We emphasize that new evidence might lead to different conclusions.
+
+
+\paragraph{What Went Wrong During the ICLR 2025 Review Process?}
+
+\citet{nguyen2024minp}'s outstanding success in the ICLR 2025 review process---achieving Oral presentation status and ranking as the 18th highest-scoring submission\footnote{\url{https://papercopilot.com/statistics/iclr-statistics/iclr-2025-statistics/}}---is difficult to reconcile with the flaws our investigation uncovered.
+
+The reviewers overlooked methodological issues such as which model(s) are being sampled from
+for the LLM-as-judge evals and missing/inadequate/improper consideration of uncertainty in presented results.
+Reviewers uncritically accepted the authors' claim that "over 54,000 GitHub repositories" were using \texttt{min-p} sampling, 
+when intuition or a quick GitHub search reveals cause for pause.
+
+The Area Chair's comment also contains a clear misstatement: it highlights \texttt{min-p}'s success in the low temperature regime ("in the low temperature regime, [\texttt{min-p}] provides a significant advantage"), when the paper specifically claims benefits in the \emph{high} temperature regime.
+% \section{Discussion and Limitations}
+% \label{sec:discussion}
+
+% This investigation led us to conclude that the four lines of evidence presented by \citet{nguyen2024minp} -- (1) human evaluations, (2) NLP benchmark evaluations, (3) LLM-as-a-Judge evaluations, (4) community adoption -- do not support claims of \texttt{min-p}'s superiority.
+% While \texttt{min-p} is useful for providing users another options to try, the original paper's data and our extensions of the original paper's data suggest that all samplers perform roughly the same once given the same amount of hyperparameter tuning; however, in our view, more research would be needed to assess the veracity of this conclusion.
+% The paper's data does weakly suggest that \texttt{min-p} sampling can sometimes provide a benefit at higher temperatures, albeit with the critical caveat that absolute performance is meaningfully lower in this high-temperature regime than in standard temperature regimes.
+
+% As a key limitation, our manuscript re-analyzes the evidence presented by the original paper \citep{nguyen2024minp} and additional evidence created using the original paper's code. \textit{Conclusions here are based on that evidence}. We emphasize that new evidence might lead to different conclusions.
+
+
+% We conclude with two final comments:
+
+% \begin{enumerate}
+%     \item Following our investigations, the authors conducted new experiments and revised their manuscript, partially acknowledging the validity of the limitations we identified. However, the new evidence (especially the new human evaluation) strengthens the evidence that \texttt{min-p} does not improve quality, diversity or a tradeoff between quality and diversity.
+%     \item While we commend the authors for responding positively to our feedback, performing new experiments and unilaterally altering a published paper compromises its peer-reviewed status since its contents have no longer been scrutinized and verified by independent experts.
+% \end{enumerate}

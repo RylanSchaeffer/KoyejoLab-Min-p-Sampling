@@ -1,0 +1,91 @@
+\documentclass[10pt]{article} % For LaTeX2e
+
+
+% ready for anonymous double-blind submission (default, no options)
+\usepackage{tmlr}
+% to compile a preprint version for arXiv (de-anonymized, no "under review" banner), use:
+%     \usepackage[preprint]{tmlr}
+% if accepted, use the following line for the camera-ready submission (also set \month, \year, \openreview below):
+%     \usepackage[accepted]{tmlr}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+\usepackage{graphicx}
+\usepackage{multirow}  % For \multirow command
+\usepackage{lineno}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{darkblue}{rgb}{0, 0, 0.5}
+\newcommand{\rylan}[1]{\textcolor{red}{rylan: #1}}
+\newcommand{\bm}[1]{\textcolor{purple}{bm: #1}}
+
+
+\title{\texttt{Min-p}, Max Exaggeration: A Critical Analysis of\\\texttt{Min-p} Sampling in Language Models}
+
+
+% Authors must not appear in the submitted version. They are hidden
+% automatically as long as the tmlr package is used without the
+% [accepted] or [preprint] options above.
+\author{%
+  Rylan Schaeffer\\
+  Stanford University\\
+  \texttt{rschaef@cs.stanford.edu}\\
+  \And
+  Joshua Kazdan\\
+  Stanford University \\
+  \texttt{jkazdan@stanford.edu} \\
+  \And
+  Yegor Denisov-Blanch\\
+  Stanford University \\
+  \texttt{ydebl@stanford.edu} \\
+}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+Sampling from language models impacts the quality and diversity of generated outputs, affecting both research and real-world applications.
+Recently, \citet{nguyen2024minp}'s ``Turning Up the Heat: Min-p Sampling for Creative and Coherent LLM Outputs'' introduced a new sampler called \texttt{min-p}, claiming it achieves superior quality and diversity over established methods such as \texttt{basic}, \texttt{top-k}, and \texttt{top-p} sampling.
+The significance of these claims was underscored by the paper's recognition as the 18th highest-scoring submission to ICLR 2025 and selection for an Oral presentation.
+This paper conducts a comprehensive re-examination of the evidence supporting \texttt{min-p} and reaches different conclusions across the original paper's four main lines of evidence.
+First, the original paper's human evaluations omitted data, conducted statistical tests incorrectly, and described qualitative feedback inaccurately; our reanalysis demonstrates \texttt{min-p} did not outperform baseline samplers in quality, diversity, or a trade-off between quality and diversity. In response to our findings, the authors of the original paper conducted a new human evaluation using a different sampler implementation, task, and rubric that nevertheless provides further evidence \texttt{min-p} does not improve over baseline samplers.
+Second, comprehensively sweeping the original paper's NLP benchmark evaluations reveals \texttt{min-p} does not surpass baseline samplers when controlling for the number of hyperparameters.
+Third, the original paper's LLM-as-a-Judge evaluations lack methodological clarity and appear inconsistently reported: the higher of two scores was reported for \texttt{min-p} while the lower of two scores was reported for \texttt{top-p}.
+Fourth, community adoption claims (49k GitHub repositories, 1.1M GitHub stars) were found to be unsubstantiated, leading to their removal from the ICLR 2025 Camera Ready; the revised adoption claim remains misleading.
+We conclude that evidence presented in the original paper fails to support claims that \texttt{min-p} improves quality, diversity, or a trade-off between quality and diversity.
+\end{abstract}
+
+\input{01_introduction}
+\input{02_human_evals}
+\input{03_nlp_evals}
+\input{04_llm_as_judge_evals}
+\input{05_community_adoption}
+\input{06_discussion}
+
+\clearpage
+\bibliography{references_rylan}
+\bibliographystyle{tmlr}
+
+\clearpage
+\appendix
+
+\input{99_appendix}
+
+
+\end{document}

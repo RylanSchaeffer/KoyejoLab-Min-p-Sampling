@@ -1,0 +1,46 @@
+\section{Substantiating \texttt{Min-p}'s Community Adoption Claims}
+\label{sec:community_adoption}
+
+\subsection{Claimed GitHub Repositories \& Stars Were Unsubstantiated and Retracted}
+
+The Arxiv and peer-reviewed manuscripts of \citet{nguyen2024minp} included specific claims about \texttt{min-p}'s adoption in the language modeling community:
+%
+\begin{quote}
+    ``\textbf{Community Adoption:} Min-p sampling has been rapidly adopted by the open-source community, with over 54,000 GitHub repositories using it, amassing a cumulative 1.1 million stars across these projects."
+\end{quote}
+%
+We attempted to verify these numbers through analysis of major GitHub language modeling repositories.
+Per our calculations, the combined GitHub stars of leading LM repositories (\texttt{transformers}, \texttt{ollama}, \texttt{llama.cpp}, \texttt{vLLM}, \texttt{Unsloth}, \texttt{mamba}, \texttt{SGLang}, \texttt{llama-cpp-python}) sum to 453k stars as of March 2025, less than half the 1.1M stars claimed by \texttt{min-p} alone.
+We could not substantiate either 49k GitHub repositories or 1.1M GitHub stars. 
+When we inquired how these numbers were calculated, the authors \href{https://github.com/menhguin/minp_paper/issues/6#issuecomment-2686274162}{publicly stated that GitHub was searched for ``min-p''}, which yields many false positives. \textbf{The authors retracted both the 54k GitHub repository claim and the 1.1M GitHub stars claim from the ICLR 2025 Camera Ready manuscript.}
+
+Given that the numbers have been retracted, we debated whether to include this section.
+We decided to include it for three reasons.
+First, we wanted to document this clear failure of the review process.
+These numbers were unsubstantiated in the manuscript, and, in our opinion, were preposterous. 
+Yet three out of four reviewers and the Area Chair highly commended the community adoption as evidence of \texttt{min-p}'s superiority;
+for instance, the \href{https://openreview.net/forum?id=FBkpCyujtS&noteId=WH4Y2gZs6R}{Area Chair wrote}:
+%
+\begin{quote}
+    ``[\texttt{Min-p}] is simple and is already widely adopted by the community (as mentioned by [Reviewer] D38H, “The usage of it in 54,000 Github repositories alone is very impressive”). [...] The resulting review scores reflect the high quality of the paper: It presents convincing experiments, thorough analysis, and the provided method has an extremely high impact."
+\end{quote}
+%
+\href{https://openreview.net/forum?id=FBkpCyujtS&noteId=tMSeNlMmSa}{Reviewer fwNb similarly emphasized} the community adoption numbers:
+\begin{quote}
+    ``[\texttt{min-p}] has good empirical results, both as measured on benchmarks and (more important [sic]) by adoption of the community"
+\end{quote}
+
+Second, the machine learning research community may have learned of \texttt{min-p} before these community adoption numbers were retracted, e.g., when the original paper was posted to ArXiV or accepted at ICLR 2025.
+Thus, we felt a proactive clarification would better rectify the scientific record.
+Third, as we detail below, we believe the new community adoption statement remains misleading.
+
+\subsection{The Revised Community Adoption Statement Inflates \texttt{Min-p}’s Adoption}
+
+The ICLR 2025 Camera Ready now has a different statement of community adoption:
+%
+\begin{quote}
+    ``[\texttt{Min-p}] is now integrated in widely used frameworks such as Hugging Face Transformers, vLLM, and SGLang, which collectively have accrued over 350,000 GitHub stars. This integration, coupled with extensive downstream usage (e.g., over 290,000 dependent repositories for Transformers alone), underscores the method’s practical impact."
+\end{quote}
+
+While being integrated into such frameworks is indeed a contribution, this statement misleadingly represents these frameworks’ usage as \texttt{min-p}’s usage, rather than specifically measuring \texttt{min-p}’s usage.
+This new statement is akin to publishing a book and then claiming credit for the library.

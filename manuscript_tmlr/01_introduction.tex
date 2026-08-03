@@ -1,0 +1,13 @@
+\section{Introduction}
+
+Large language model (LLM) capabilities have transformed numerous domains, from creative writing to scientific research. A critical detail of LLM deployment is the \emph{sampling method}: the algorithm that determines how tokens are sampled during generation.
+Sampling strategies directly impact the quality and diversity of generated outputs, making them important to both research and deployment.
+
+Commonly used samplers include \texttt{basic} (temperature-only) \texttt{sampling} \citep{ackley1985learning}, which samples tokens based on their temperature-scaled softmax-normalized logits; \texttt{top-k sampling} \citep{fan2018topk}, which samples the $k$ most probable tokens; and \texttt{top-p sampling} \citep{holtzman2020topp}, which samples tokens comprising the top $p$ probability mass. Other samplers include \texttt{$\eta$-sampling}, $\texttt{$\epsilon$-sampling}$ \citep{hewitt2022truncation} and \texttt{mirostat sampling} \citep{basu2020mirostat}.
+
+Recently, the paper ``Turning Up the Heat: Min-P Sampling for Creative and Coherent LLM Outputs" \citep{nguyen2024minp} introduced a new sampling method called \texttt{min-p sampling}, claiming it produces higher quality and higher diversity outputs than other samplers.
+Given the potential impact of an improved sampling method and the paper's exposure as the 18th highest-scoring submission at ICLR 2025\footnote{\url{https://papercopilot.com/statistics/iclr-statistics/iclr-2025-statistics/}}, we carefully scrutinized the methodologies, data, analyses, code and conclusions presented in support of \texttt{min-p} across the authors' four lines of evidence: (1) human evaluations, (2) natural language processing (NLP) benchmark evaluations, (3) LLM-As-A-Judge evaluations and (4) community adoption metrics.
+Our re-analyses of the evidence lead us to conclude that \textbf{relative to commonly used samplers, \texttt{min-p} does not improve quality or diversity or the trade-off between quality and diversity}.
+Our code and W\&B sweeps of NLP benchmark evaluations will be publicly released and archived (e.g., via the Software Heritage Archive) upon acceptance and de-anonymization; we omit direct links here to preserve anonymity for the double-blind review process.
+% De-anonymized version for camera-ready / preprint use:
+% Our code is \href{https://github.com/RylanSchaeffer/KoyejoLab-Min-p-Sampling}{publicly available on GitHub}, as are \href{https://wandb.ai/rylan/min-p-evals/sweeps}{our W\&B sweeps} of NLP benchmark evaluations.
