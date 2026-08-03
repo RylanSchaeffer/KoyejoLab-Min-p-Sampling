@@ -14,7 +14,7 @@ The revision restructures the paper so the blueprint comes first, with case stud
 
 ## Responses to Specific Points
 
-**Q1: Code availability.** Yes. All code, sweep configs, W&B data, and analysis notebooks will be made publicly available upon acceptance. The p-less vLLM patch will be included.
+**Q1: Code availability.** Yes. All code, sweep configs, W&B data, and analysis notebooks are already publicly available on GitHub; we withhold the direct link here to preserve anonymity and will share it upon acceptance. We used Nguyen et al.'s public GitHub code for our re-analysis, and the original authors have scrutinized it for correctness. The p-less vLLM patch will be included.
 
 **Q2: Why equal-effort fairness?** The Best-of-N curve does not commit to one fairness philosophy. It shows performance as a function of tuning budget, which is informative under several views. The right end of the curve (large N) shows best achievable performance. The left end (small N) shows how easy a method is to tune. Any fixed N gives an equal-effort comparison. A single reported number collapses this into one cherry-pickable point. The curve makes the full picture visible. We now note as a limitation that effort is measured by configuration count, not compute.
 
