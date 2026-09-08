@@ -16,40 +16,40 @@
 
 ## Synthesizing Reviewer Objections
 
-### 1. Why does min-p warrant re-examination? (WbvC) — CRITICAL
+### 1. Why does min-p warrant re-examination? (WbvC): CRITICAL
 
 WbvC is the only reviewer answering "No" on a TMLR acceptance criterion. Argument: no frontier lab has adopted min-p; most users never touch samplers; GitHub stars do not establish influence. WbvC explicitly says: "My assessment on this could change if there's evidence of broader adoption that I have overlooked."
 
 wjeg and fy93 independently argue the opposite: "samplers affect every LLM use" and "papers the community has platformed, promoted and set apart as exemplary should hold under scrutiny."
 
-### 2. Adversarial tone (WbvC, wjeg, fy93) — CRITICAL
+### 2. Adversarial tone (WbvC, wjeg, fy93): CRITICAL
 
 Raised by all three reviewers, and by three of four ICML reviewers before them.
 - WbvC: "too strong and unnecessarily adversarial throughout"; "very uncomfortable to read this paper at times"; objects to "challenging the original authors' claims of community adoption."
 - wjeg: "For those unfamiliar with AlpacaEval" (Sec. 4.1) reads as condescending; the library analogy closing Sec. 5.2 "reads as condescending"; the non-transitivity point should "not add negligence" to the indirect-design evidence.
 - fy93: "I personally find the title a bit aggressive" (but says it does not change their rating).
 
-### 3. Human-eval conclusion is internally inconsistent (wjeg, Critical) — HIGH
+### 3. Human-eval conclusion is internally inconsistent (wjeg, Critical): HIGH
 
 Sec. 2.4 and the abstract say "no apparent advantage." Sec. 6 says the data "weakly suggest" a benefit at higher temperatures. Table 1 has one Bonferroni-surviving result (quality, min-p vs. basic, high temperature).
 
-### 4. LLM-as-a-judge argument conflates two critiques and has a chronology problem (wjeg, Critical) — HIGH
+### 4. LLM-as-a-judge argument conflates two critiques and has a chronology problem (wjeg, Critical): HIGH
 
 The indirect-design critique (every sampler compared against basic at fixed temperature, not head-to-head) stands alone. The non-transitivity critique depends on Xu et al. (2025), which was posted February 2025 and accepted to ICML 2025, after the ICLR 2025 review cycle. wjeg wants the two separated and the chronology acknowledged.
 
-### 5. Benchmark evidence is only GSM8K CoT (wjeg, fy93) — MEDIUM
+### 5. Benchmark evidence is only GSM8K CoT (wjeg, fy93): MEDIUM
 
 Original paper claimed superiority "across benchmarks"; GPQA is untested in the TMLR manuscript. wjeg wants Sec. 3's conclusion and headline scoped accordingly. fy93 asks about newer models, other benchmarks, and open-ended or MBR-style tasks where diversity could matter (Freitag et al. 2023).
 
-### 6. "Lightly edited" hyperparameters unexplained (wjeg) — MEDIUM
+### 6. "Lightly edited" hyperparameters unexplained (wjeg): MEDIUM
 
 Sec. 3.1 says hyperparameters were taken from the original paper but "lightly edited." Which values changed, and why?
 
-### 7. Dominated-region Pareto critique framed as min-p specific (wjeg, also Broader Impact) — MEDIUM
+### 7. Dominated-region Pareto critique framed as min-p specific (wjeg, also Broader Impact): MEDIUM
 
 Reporting wins in a practically suboptimal region of the quality-diversity trade-off is a community-wide practice. wjeg asks us to distinguish community-wide oversights from issues specific to min-p, "operating in good faith throughout."
 
-### 8. Minor presentation (wjeg, fy93) — LOW
+### 8. Minor presentation (wjeg, fy93): LOW
 
 - Ackley 1985 citation for standard sampling: justify or replace (fy93).
 - Tab. 1: "Bonferroni correcting" -> "Bonferroni correction" (fy93).
@@ -61,7 +61,7 @@ Reporting wins in a practically suboptimal region of the quality-diversity trade
 
 ## Prioritized Rebuttal Plan
 
-### 1. Make the Case That Min-p Matters — LOW EFFORT, CRITICAL IMPACT
+### 1. Make the Case That Min-p Matters: LOW EFFORT, CRITICAL IMPACT
 
 **Targets:** Objection 1 | **Moves:** WbvC (the only "No")
 
@@ -73,7 +73,7 @@ Do not rely on GitHub stars; WbvC has already discounted them. Build the case on
 
 Add this framing to the introduction, not just the rebuttal. **TODO: verify current inference-library integration list and cite the p-less and Hivemind papers.**
 
-### 2. Tone Pass — MEDIUM EFFORT, CRITICAL IMPACT
+### 2. Tone Pass: MEDIUM EFFORT, CRITICAL IMPACT
 
 **Targets:** Objection 2 | **Moves:** WbvC, wjeg, fy93
 
@@ -86,19 +86,19 @@ Concrete edits:
 
 Rebuttal language: acknowledge directly, do not argue that the tone was justified.
 
-### 3. Reconcile the Human-Eval Conclusion — LOW EFFORT, HIGH IMPACT
+### 3. Reconcile the Human-Eval Conclusion: LOW EFFORT, HIGH IMPACT
 
 **Targets:** Objection 3 | **Moves:** wjeg (Critical #1)
 
 Adopt one phrasing everywhere: min-p shows no *consistent* advantage; one of twelve comparisons (quality, min-p vs. basic, at the highest temperature) survives Bonferroni correction; the IUT fails to reject. Update abstract, Sec. 2.4, and Sec. 6 to match. The single surviving result should be stated in the abstract, not only in the limitations.
 
-### 4. Separate Indirect-Design from Non-Transitivity; Acknowledge Chronology — LOW EFFORT, HIGH IMPACT
+### 4. Separate Indirect-Design from Non-Transitivity; Acknowledge Chronology: LOW EFFORT, HIGH IMPACT
 
 **Targets:** Objection 4 | **Moves:** wjeg (Critical #2)
 
 Restructure Sec. 4.1 into two labeled arguments. State explicitly that Xu et al. (2025) postdates the ICLR 2025 review cycle, so the original authors could not have been expected to account for it; the point is about what the evidence supports today, not about negligence.
 
-### 5. Scope Sec. 3 to GSM8K CoT, or Add GPQA — LOW/MEDIUM EFFORT, MEDIUM IMPACT
+### 5. Scope Sec. 3 to GSM8K CoT, or Add GPQA: LOW/MEDIUM EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 5 | **Moves:** wjeg, fy93
 
@@ -106,19 +106,19 @@ Minimum: change the Sec. 3 headline and abstract to "on GSM8K CoT." Better: add 
 
 For fy93's newer-models and MBR/open-ended asks: acknowledge in limitations. fy93 says it would not change their rating.
 
-### 6. Document the "Lightly Edited" Hyperparameters — LOW EFFORT, MEDIUM IMPACT
+### 6. Document the "Lightly Edited" Hyperparameters: LOW EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 6 | **Moves:** wjeg
 
 Add a table or footnote: original value, our value, reason. **TODO: diff sweep YAMLs against the original paper's Table/Appendix to enumerate exactly what changed.**
 
-### 7. Reframe the Pareto Critique as Community-Wide — LOW EFFORT, MEDIUM IMPACT
+### 7. Reframe the Pareto Critique as Community-Wide: LOW EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 7 | **Moves:** wjeg
 
 One paragraph: reporting wins in a dominated region is common practice; we note it because the original paper's trade-off claim rests on it. Separate "common oversight" from "specific to this paper" (omitted data, mismatched Table 3(b) reporting, unsubstantiated adoption numbers).
 
-### 8. Presentation Fixes — LOW EFFORT, LOW IMPACT
+### 8. Presentation Fixes: LOW EFFORT, LOW IMPACT
 
 **Targets:** Objection 8
 
@@ -141,7 +141,7 @@ One paragraph: reporting wins in a dominated region is common practice; we note 
 
 ## Rylan's Judgements (per issue)
 
-### 1. Min-p significance case — DECIDED
+### 1. Min-p significance case: DECIDED
 
 Adopt the visibility-and-consequences framing. Add it to the introduction and the rebuttal. Evidence, in order of strength:
 
@@ -153,13 +153,13 @@ Adopt the visibility-and-consequences framing. Add it to the introduction and th
   - *p-less sampling* (Tan et al., ICLR 2026 Oral) adopts min-p as its primary baseline and repeats the same evaluation failures: default-only baselines, no significance tests on accuracy, human eval at mismatched temperatures with author annotators, "consistently outperforms" contradicted by its own Table 1. Context: `reviews/2026_icml/p_less_sampling.md`.
 - **Reframe the criterion:** a re-examination's value tracks the prominence of the claim, not the market share of the method. TMLR asks whether *some* of its audience would be interested; wjeg and fy93 say yes for reasons independent of adoption ("samplers affect every LLM use").
 
-### 2. Tone / title — DECIDED
+### 2. Tone / title: DECIDED
 
 - Cut the two flagged sentences ("For those unfamiliar, AlpacaEval reports win rates..." in `04_llm_as_judge_evals.tex:20`; "akin to publishing a book and then claiming credit for the library" in `05_community_adoption.tex:46`). Tell reviewers explicitly that both are removed.
 - Send a background agent through all TMLR `.tex` files to sand down the harshest edges: editorializing adjectives, rhetorical flourishes, sentences about the authors rather than the evidence. Report the edits as a diff for Rylan to approve.
 - Title: unchanged for now (fy93 says it does not affect their rating; WbvC did not raise it).
 
-### 3. Human-eval conclusion phrasing — DECIDED
+### 3. Human-eval conclusion phrasing: DECIDED
 
 Keep the practitioner-oriented statement. For anyone seeking higher quality or diversity, min-p does the same or worse. The fix is on the Sec. 6 side, not the abstract.
 
@@ -170,7 +170,7 @@ Keep the practitioner-oriented statement. For anyone seeking higher quality or d
 
 Rebuttal line: we agree the passages read as inconsistent; the fix is to stop calling the surviving comparison a "benefit." A win in a regime where every method is worse is not a benefit anyone would choose.
 
-### 4. LLM-judge split + chronology — DECIDED (see explanation in chat)
+### 4. LLM-judge split + chronology: DECIDED (see explanation in chat)
 
 Sec. 4.1 currently makes two arguments in one breath:
 
@@ -181,7 +181,7 @@ The manuscript writes "The authors' design choice is additionally concerning bec
 
 Fix: two short labeled paragraphs. State (a) first as the design critique. Then state (b) as an independent inferential point: "Separately, subsequent work posted after the ICLR 2025 review cycle (Xu et al., 2025) shows LLM-judge preferences are not transitive, so indirect comparisons of this kind cannot in general be chained into head-to-head conclusions." Drop "additionally concerning."
 
-### 5. GSM8K scoping vs. adding GPQA — RESOLVED (GPQA added)
+### 5. GSM8K scoping vs. adding GPQA: RESOLVED (GPQA added)
 
 W&B check: GPQA was fully swept with the identical grid for 16 of 18 TMLR models (Gemma 2 2B/9B Instruct runs finished but logged no scores; consistent with the lm_eval 0.4.7 Gemma 2 chat-template bug). GSM8K CoT is also complete on ten larger models (Qwen 2.5 14B/32B/72B, Gemma 2 27B, Llama 3.1 70B, base+instruct), unused by either manuscript. MATH is partial (Qwen+Mistral, 4 of 7 subtasks), MMLU Pro too sparse (min-p and top-p on biology only, no top-k), BBH never launched.
 
@@ -189,15 +189,15 @@ GPQA result (flexible-extract exact match, 4 samplers, no p-less): best-min-p mi
 
 Actions: GPQA diff-of-Best-of-N figure and paragraph added to Sec. 3; Best-of-N figure in appendix; large-model GSM8K figure in appendix (answers fy93's newer/larger models ask). Abstract and limitations updated accordingly. Scripts: `notebooks/02_gpqa/02_gpqa_tmlr.py`, `notebooks/01_gsm8k_cot/01_gsm8k_cot_tmlr_large_models.py` (both exclude p-less). Local env with the notebook dependencies: `elusive` (the `min_p_env` in CLAUDE.md does not exist on this machine).
 
-### 6. "Lightly edited" hyperparameters unexplained (wjeg) — MEDIUM
+### 6. "Lightly edited" hyperparameters unexplained (wjeg): MEDIUM
 
 Sec. 3.1 says hyperparameters were taken from the original paper but "lightly edited." Which values changed, and why?
 
-### 7. Dominated-region Pareto critique framed as min-p specific (wjeg, also Broader Impact) — MEDIUM
+### 7. Dominated-region Pareto critique framed as min-p specific (wjeg, also Broader Impact): MEDIUM
 
 Reporting wins in a practically suboptimal region of the quality-diversity trade-off is a community-wide practice. wjeg asks us to distinguish community-wide oversights from issues specific to min-p, "operating in good faith throughout."
 
-### 8. Minor presentation (wjeg, fy93) — LOW
+### 8. Minor presentation (wjeg, fy93): LOW
 
 - Ackley 1985 citation for standard sampling: justify or replace (fy93).
 - Tab. 1: "Bonferroni correcting" -> "Bonferroni correction" (fy93).
@@ -209,7 +209,7 @@ Reporting wins in a practically suboptimal region of the quality-diversity trade
 
 ## Prioritized Rebuttal Plan
 
-### 1. Make the Case That Min-p Matters — LOW EFFORT, CRITICAL IMPACT
+### 1. Make the Case That Min-p Matters: LOW EFFORT, CRITICAL IMPACT
 
 **Targets:** Objection 1 | **Moves:** WbvC (the only "No")
 
@@ -221,7 +221,7 @@ Do not rely on GitHub stars; WbvC has already discounted them. Build the case on
 
 Add this framing to the introduction, not just the rebuttal. **TODO: verify current inference-library integration list and cite the p-less and Hivemind papers.**
 
-### 2. Tone Pass — MEDIUM EFFORT, CRITICAL IMPACT
+### 2. Tone Pass: MEDIUM EFFORT, CRITICAL IMPACT
 
 **Targets:** Objection 2 | **Moves:** WbvC, wjeg, fy93
 
@@ -234,19 +234,19 @@ Concrete edits:
 
 Rebuttal language: acknowledge directly, do not argue that the tone was justified.
 
-### 3. Reconcile the Human-Eval Conclusion — LOW EFFORT, HIGH IMPACT
+### 3. Reconcile the Human-Eval Conclusion: LOW EFFORT, HIGH IMPACT
 
 **Targets:** Objection 3 | **Moves:** wjeg (Critical #1)
 
 Adopt one phrasing everywhere: min-p shows no *consistent* advantage; one of twelve comparisons (quality, min-p vs. basic, at the highest temperature) survives Bonferroni correction; the IUT fails to reject. Update abstract, Sec. 2.4, and Sec. 6 to match. The single surviving result should be stated in the abstract, not only in the limitations.
 
-### 4. Separate Indirect-Design from Non-Transitivity; Acknowledge Chronology — LOW EFFORT, HIGH IMPACT
+### 4. Separate Indirect-Design from Non-Transitivity; Acknowledge Chronology: LOW EFFORT, HIGH IMPACT
 
 **Targets:** Objection 4 | **Moves:** wjeg (Critical #2)
 
 Restructure Sec. 4.1 into two labeled arguments. State explicitly that Xu et al. (2025) postdates the ICLR 2025 review cycle, so the original authors could not have been expected to account for it; the point is about what the evidence supports today, not about negligence.
 
-### 5. Scope Sec. 3 to GSM8K CoT, or Add GPQA — LOW/MEDIUM EFFORT, MEDIUM IMPACT
+### 5. Scope Sec. 3 to GSM8K CoT, or Add GPQA: LOW/MEDIUM EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 5 | **Moves:** wjeg, fy93
 
@@ -254,19 +254,19 @@ Minimum: change the Sec. 3 headline and abstract to "on GSM8K CoT." Better: add 
 
 For fy93's newer-models and MBR/open-ended asks: acknowledge in limitations. fy93 says it would not change their rating.
 
-### 6. Document the "Lightly Edited" Hyperparameters — LOW EFFORT, MEDIUM IMPACT
+### 6. Document the "Lightly Edited" Hyperparameters: LOW EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 6 | **Moves:** wjeg
 
 Add a table or footnote: original value, our value, reason. **TODO: diff sweep YAMLs against the original paper's Table/Appendix to enumerate exactly what changed.**
 
-### 7. Reframe the Pareto Critique as Community-Wide — LOW EFFORT, MEDIUM IMPACT
+### 7. Reframe the Pareto Critique as Community-Wide: LOW EFFORT, MEDIUM IMPACT
 
 **Targets:** Objection 7 | **Moves:** wjeg
 
 One paragraph: reporting wins in a dominated region is common practice; we note it because the original paper's trade-off claim rests on it. Separate "common oversight" from "specific to this paper" (omitted data, mismatched Table 3(b) reporting, unsubstantiated adoption numbers).
 
-### 8. Presentation Fixes — LOW EFFORT, LOW IMPACT
+### 8. Presentation Fixes: LOW EFFORT, LOW IMPACT
 
 **Targets:** Objection 8
 
@@ -289,7 +289,7 @@ One paragraph: reporting wins in a dominated region is common practice; we note 
 
 ## Rylan's Judgements (per issue)
 
-### 1. Min-p significance case — DECIDED
+### 1. Min-p significance case: DECIDED
 
 Adopt the visibility-and-consequences framing. Add it to the introduction and the rebuttal. Evidence, in order of strength:
 
@@ -301,13 +301,13 @@ Adopt the visibility-and-consequences framing. Add it to the introduction and th
   - *p-less sampling* (Tan et al., ICLR 2026 Oral) adopts min-p as its primary baseline and repeats the same evaluation failures: default-only baselines, no significance tests on accuracy, human eval at mismatched temperatures with author annotators, "consistently outperforms" contradicted by its own Table 1. Context: `reviews/2026_icml/p_less_sampling.md`.
 - **Reframe the criterion:** a re-examination's value tracks the prominence of the claim, not the market share of the method. TMLR asks whether *some* of its audience would be interested; wjeg and fy93 say yes for reasons independent of adoption ("samplers affect every LLM use").
 
-### 2. Tone / title — DECIDED
+### 2. Tone / title: DECIDED
 
 - Cut the two flagged sentences ("For those unfamiliar, AlpacaEval reports win rates..." in `04_llm_as_judge_evals.tex:20`; "akin to publishing a book and then claiming credit for the library" in `05_community_adoption.tex:46`). Tell reviewers explicitly that both are removed.
 - Send a background agent through all TMLR `.tex` files to sand down the harshest edges: editorializing adjectives, rhetorical flourishes, sentences about the authors rather than the evidence. Report the edits as a diff for Rylan to approve.
 - Title: unchanged for now (fy93 says it does not affect their rating; WbvC did not raise it).
 
-### 3. Human-eval conclusion phrasing — DECIDED
+### 3. Human-eval conclusion phrasing: DECIDED
 
 Keep the practitioner-oriented statement. For anyone seeking higher quality or diversity, min-p does the same or worse. The fix is on the Sec. 6 side, not the abstract.
 
@@ -318,7 +318,7 @@ Keep the practitioner-oriented statement. For anyone seeking higher quality or d
 
 Rebuttal line: we agree the passages read as inconsistent; the fix is to stop calling the surviving comparison a "benefit." A win in a regime where every method is worse is not a benefit anyone would choose.
 
-### 4. LLM-judge split + chronology — DECIDED (see explanation in chat)
+### 4. LLM-judge split + chronology: DECIDED (see explanation in chat)
 
 Sec. 4.1 currently makes two arguments in one breath:
 
@@ -329,11 +329,11 @@ The manuscript writes "The authors' design choice is additionally concerning bec
 
 Fix: two short labeled paragraphs. State (a) first as the design critique. Then state (b) as an independent inferential point: "Separately, subsequent work posted after the ICLR 2025 review cycle (Xu et al., 2025) shows LLM-judge preferences are not transitive, so indirect comparisons of this kind cannot in general be chained into head-to-head conclusions." Drop "additionally concerning."
 
-### 5. GSM8K scoping vs. adding GPQA — DECIDED (scope now; add benchmarks if available)
+### 5. GSM8K scoping vs. adding GPQA: DECIDED (scope now; add benchmarks if available)
 
 Scope the abstract, Sec. 3 and limitations to GSM8K CoT (done). Rylan recalls other benchmarks (GPQA, possibly others) were run; a background agent is checking W&B and the sweep configs. Rylan is willing to run additional benchmarks. Decision on adding a GPQA (or other) panel waits on that report.
 
-### 6. "Lightly edited" hyperparameters — RESOLVED
+### 6. "Lightly edited" hyperparameters: RESOLVED
 
 Investigation result (from sweep YAMLs, git history, the original paper's appendix and the original authors' released W&B export):
 - min-p: original {0.05, 0.1, 0.2, 0.3} kept; added 0.01, 0.02 (paper calls small p the sensitive regime).
@@ -344,19 +344,19 @@ Investigation result (from sweep YAMLs, git history, the original paper's append
 - Grid: original ragged; ours full Cartesian product.
 Rylan's recollection (expanded ranges, denser sweep) is correct for min-p, top-p and temperature; top-k was a substitution. Sec. 3.1 now states all of this. The manuscript previously said values were "taken from the original paper"; corrected to "text, appendix tables and released evaluation logs" since the main text names only two values per sampler.
 
-### 7. Pareto critique reframing — DECIDED
+### 7. Pareto critique reframing: DECIDED
 
 Sentence added in Sec. 2.4 (common practice; flagged only because the trade-off claim rests on it). New Sec. 6 paragraph "Which Issues Are Specific to This Paper?" separates community-wide practices from paper-specific issues, answering wjeg's Broader Impact ask.
 
-### 8. Ackley citation / minor fixes — DECIDED
+### 8. Ackley citation / minor fixes: DECIDED
 
 Keep Ackley; footnote in Sec. 1 explains it is the earliest temperature-scaled Boltzmann sampling reference; rebuttal invites additional citations. Table 1 typo fixed. Straight closing quotes replaced with LaTeX quotes throughout.
 
-### 9. fy93's experiment asks — DECIDED
+### 9. fy93's experiment asks: DECIDED
 
 No new experiments for now. Limitations paragraph in Sec. 6 acknowledges GSM8K-only sweeps, models through 2024, MBR decoding (Freitag et al. 2023) and open-ended tasks as open directions. Note in rebuttal that the human and AlpacaEval evaluations already cover open-ended generation.
 
-### 10. Unverifiable public exchanges and double-blind anonymity — ADVICE (see chat)
+### 10. Unverifiable public exchanges and double-blind anonymity: ADVICE (see chat)
 
 The submitted PDF contains three links to GitHub issues on the original authors' repository (issues 4, 5, 6) and one Telegram link. Opening those issues shows Rylan's GitHub handle. No TMLR reviewer flagged anonymity (the ICML reviewer cBMY did). wjeg's remark that the exchanges "cannot be verified from the paper" suggests they treated the links as external rather than following them.
 
@@ -365,8 +365,8 @@ Recommendation:
 - Back every exchange-based claim with a primary artifact that does not depend on the exchange where one exists: the Camera Ready diff (Table 4 addition, retracted adoption numbers), the original authors' commit adding the CSV, the OpenReview thread.
 - Disclose to the Action Editor in a confidential comment that the linked public issues on the original authors' repository could reveal author identity, that they were included because they are the only public record of those exchanges, and ask whether the AE prefers the links moved to a footnote or replaced with descriptions. This puts the decision with the AE rather than leaving it as a surprise.
 
-### 11. Mechanical fixes — DONE
+### 11. Mechanical fixes: DONE
 
-### 12. Response format — DECIDED
+### 12. Response format: DECIDED
 
 General response plus one comment per reviewer, matching the ICML layout: `general_response.md`, `rebuttal_WbvC.md`, `rebuttal_wjeg.md`, `rebuttal_fy93.md`. Manuscript edits made directly in `manuscript_tmlr/`.
