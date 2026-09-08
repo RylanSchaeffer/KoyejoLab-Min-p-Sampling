@@ -1,24 +1,24 @@
 # Response to Reviewer WbvC
 
-We thank the reviewer for reading the paper closely and for stating that they "largely buy the empirical claims." The reviewer's two concerns are whether min-p warrants a critical re-examination, and the tone of the manuscript. We address both, and we have revised the paper on both counts.
+We thank the reviewer and address both concerns below.
 
-**1. Why min-p warrants re-examination.** We agree that GitHub stars do not establish influence, which is one of the points of Sec. 5. The case for re-examination rests on other evidence, which the revised introduction now states:
+**1. Why min-p warrants re-examination.** We agree that GitHub stars do not establish influence. The revised introduction gives other evidence:
 
-- *Citations.* The original paper accrued more than 170 citations within a year of release.
-- *Integration into the inference stack.* Min-p is implemented in Hugging Face Transformers, vLLM, SGLang, llama.cpp and Text Generation Inference. Whether or not most users change their sampler, anyone using these libraries can enable min-p, and several front-ends expose it as a setting. These integrations followed the paper's reported results, and the paper's ICLR 2025 Camera Ready in turn cites the integrations as evidence of adoption.
-- *Downstream research built on the claims.* Artificial Hivemind (Jiang et al., NeurIPS 2025 Best Paper) used min-p as its representative decoding-time intervention against output homogeneity, found that mode collapse persisted, and concluded that decoding-time interventions in general cannot preserve diversity. That generalization is warranted only if min-p is a strong diversity-promoting sampler, which our analysis indicates it is not. p-less sampling (Tan et al., ICLR 2026 Oral) adopted min-p as the primary baseline for a new sampler and evaluated it with the same methodology whose flaws we document.
-- *Peer-review platforming.* The paper was the 18th highest-scoring submission at ICLR 2025 and received an Oral. The venue itself marked these claims as exemplary.
+- *Citations.* More than 170 within a year of release.
+- *Inference libraries.* Min-p is implemented in Hugging Face Transformers, vLLM, SGLang, llama.cpp, and Text Generation Inference. The integrations followed the paper's results; the ICLR 2025 camera-ready cites them as adoption evidence.
+- *Downstream research.* Artificial Hivemind (Jiang et al., NeurIPS 2025 Best Paper) used min-p as its representative decoding-time intervention, found that mode collapse persisted, and concluded that decoding-time interventions in general cannot preserve diversity. That conclusion holds only if min-p is a strong diversity-promoting sampler; our analysis indicates it is not. p-less sampling (Tan et al., ICLR 2026 Oral) used min-p as its primary baseline and evaluated it with the methodology whose flaws we document.
+- *Peer review.* 18th highest-scoring submission at ICLR 2025; ICLR Oral.
 
-We also want to reframe the criterion slightly. The value of re-examining a published claim scales with how visible the claim is and how much work builds on it, not with the method's share of production deployments. The two other reviewers reached "Yes" on audience interest for reasons independent of adoption: samplers affect every LLM use, and papers the community has platformed should hold under scrutiny. We hope the evidence above, together with that framing, addresses the reviewer's concern. If the reviewer has a specific form of adoption evidence in mind that we have not considered, we would be glad to add it.
+Re-examination is warranted by a claim's visibility and the work built on it, not by its share of production deployments. We will add any other adoption evidence the reviewer suggests.
 
-**2. Tone.** We take this seriously and have revised the manuscript accordingly. Concretely:
+**2. Tone.** We revised the manuscript as follows:
 
-- We removed the sentence "For those unfamiliar, AlpacaEval reports win rates..." (Sec. 4.1) and the sentence comparing the revised adoption statement to "publishing a book and then claiming credit for the library" (Sec. 5.2).
-- We cut commentary on the original authors and on the ICLR 2025 review process that did not carry evidential content: the paragraph "What Went Wrong During the ICLR 2025 Review Process?" in Sec. 6 and the passage in Sec. 5 explaining why we chose to include the retracted adoption numbers. The factual parts of the review record (which claims the meta-review cited) now appear, without commentary, in a short appendix.
-- We rewrote editorializing language throughout so that each criticism is a statement of what the data or the public record show.
-- We shortened block quotations and replaced several with short inline quotations.
-- We added a paragraph to Sec. 6 that separates practices common across the field (reporting wins in a dominated region of a trade-off, uncorrected multiple comparisons, indirect LLM-as-a-judge designs) from issues specific to the original paper.
+- Removed the sentence "For those unfamiliar, AlpacaEval reports win rates..." (Sec. 4.1) and the sentence comparing the revised adoption statement to "publishing a book and then claiming credit for the library" (Sec. 5.2).
+- Removed the paragraph "What Went Wrong During the ICLR 2025 Review Process?" (Sec. 6) and the passage in Sec. 5 on why we included the retracted adoption numbers. The factual review record (which claims the meta-review cited) now appears, without commentary, in a short appendix.
+- Rewrote editorializing language; each criticism now states what the data or public record show.
+- Shortened block quotations; replaced several with inline quotations.
+- Added a paragraph to Sec. 6 separating field-wide practices (reporting wins in a dominated region of a trade-off, uncorrected multiple comparisons, indirect LLM-as-a-judge designs) from issues specific to the original paper.
 
-On the specific example the reviewer gives, the community adoption claims: we kept Sec. 5 because the claims were part of the original paper's evidence for min-p, and reviewers of the original paper cited them when recommending acceptance. The section now states the factual record (the numbers could not be substantiated and were retracted; the revised statement attributes library usage to min-p) without commentary on the authors or the review process.
+We kept Sec. 5 because the adoption claims were part of the original paper's evidence and its reviewers cited them when recommending acceptance. It now states only the record: the numbers could not be substantiated and were retracted, and the revised statement attributes library usage to min-p.
 
-We would welcome any further specific passages the reviewer finds uncomfortable, and will revise them.
+If the reviewer identifies further passages, we will revise them.
