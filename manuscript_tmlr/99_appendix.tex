@@ -45,6 +45,48 @@ At the request of \citet{nguyen2024minp}, we reran our GSM8K Chain-of-Thought sw
 
 \clearpage
 
+\section{GPQA Best-of-$N$ Scores}
+\label{app:sec:gpqa_scores}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/nlp_benchmark_evals/gpqa/y=em_flexible_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{Best-of-$N$ GPQA Scores Per Sampler.} Companion to Fig.~\ref{fig:gpqa_diff_of_em}: the best-of-$N$ flexible-extract exact match of each sampler on GPQA (5-shot) for the 16 models with complete sweeps. All four samplers reach similar scores once given the same number of hyperparameter configurations.}
+    \label{fig:gpqa_em}
+\end{figure}
+
+\clearpage
+
+\section{GSM8K Chain-of-Thought Scores on Larger Models}
+\label{app:sec:gsm8k_large_models}
+
+To partially address whether our conclusions hold for larger models, we ran the GSM8K CoT sweep of Sec.~\ref{sec:nlp_evals:subsec:gsm8k} (standard formatting) on ten additional models: Qwen 2.5 14B, 32B and 72B, Gemma 2 27B, and Llama 3.1 70B, each in base and instruct variants.
+Fig.~\ref{fig:gsm8k_large_models_diff_of_em} shows the difference between the best-of-$N$ score of \texttt{min-p} and that of the best other sampler.
+The conclusion is unchanged: \texttt{min-p} does not outperform other samplers when controlling for hyperparameter volume.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/nlp_benchmark_evals/gsm8k_cot_large_models/y=diff_of_em_strict_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{\texttt{Min-P} Does Not Consistently Outperform Other Samplers on GSM8K CoT for Larger Models.} Difference between the best-of-$N$ strict-match exact match of \texttt{min-p} and that of the best other sampler on GSM8K CoT (standard formatting) for ten models from 14B to 72B parameters.}
+    \label{fig:gsm8k_large_models_diff_of_em}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/nlp_benchmark_evals/gsm8k_cot_large_models/y=em_strict_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{Best-of-$N$ GSM8K CoT Scores Per Sampler for Larger Models.} Companion to Fig.~\ref{fig:gsm8k_large_models_diff_of_em}.}
+    \label{fig:gsm8k_large_models_em}
+\end{figure}
+
+\clearpage
+
+\section{The ICLR 2025 Review Record}
+\label{app:sec:review_record}
+
+For completeness, we note how the issues documented in the main text relate to the public ICLR 2025 review record for \citet{nguyen2024minp}.
+The community adoption figures that were later retracted (Sec.~\ref{sec:community_adoption}) were cited as evidence of impact in the meta-review: the \href{https://openreview.net/forum?id=FBkpCyujtS&noteId=WH4Y2gZs6R}{Area Chair wrote} that \texttt{min-p} ``is simple and is already widely adopted by the community (as mentioned by [Reviewer] D38H, `The usage of it in 54,000 Github repositories alone is very impressive')'', and \href{https://openreview.net/forum?id=FBkpCyujtS&noteId=tMSeNlMmSa}{Reviewer fwNb wrote} that \texttt{min-p} ``has good empirical results, both as measured on benchmarks and (more important [sic]) by adoption of the community''.
+The public reviews do not discuss which model(s) were sampled from in the LLM-as-a-judge evaluations or the absence of uncertainty estimates for the reported win rates (Sec.~\ref{sec:llm_as_judge_evals}).
+Separately, the meta-review attributes \texttt{min-p}'s advantage to the low temperature regime (``in the low temperature regime, [\texttt{min-p}] provides a significant advantage''), whereas the paper's claims concern the high temperature regime.
 
 \clearpage
 

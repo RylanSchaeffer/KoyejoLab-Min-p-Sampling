@@ -1,15 +1,12 @@
 \section{Extending \texttt{Min-p's} NLP Benchmark Evaluations}
 \label{sec:nlp_benchmark_evals}
 
-We next turned to the original paper's NLP benchmark evaluations of several models on GSM8K with Chain-of-Thought \citep{cobbe2021gsm8k} and GPQA (5-shot) \citep{rein2023gpqa}, which concluded that:
-%
-\begin{quote}
-``\texttt{Min-p} sampling achieves superior performance across benchmarks and temperatures.''
-\end{quote}
+We next turned to the original paper's NLP benchmark evaluations of several models on GSM8K with Chain-of-Thought \citep{cobbe2021gsm8k} and GPQA (5-shot) \citep{rein2023gpqa}, which concluded that ``\texttt{min-p} sampling achieves superior performance across benchmarks and temperatures.''
 
 % We investigated this claim through rigorous, large-scale experiments on one of these benchmarks, GSM8K, to determine if \texttt{min-p}’s purported superiority holds under thorough hyperparameter exploration.
 
 \subsection{Thorough Hyperparameter Sweep on GSM8K Contradicts Claim of \texttt{Min-p}'s Superiority}
+\label{sec:nlp_evals:subsec:gsm8k}
 
 \begin{figure}[t!]
     \centering
@@ -49,7 +46,7 @@ To test whether \texttt{min-p} indeed achieves superior performance, we conducte
 \end{figure}
 
 
-Due to our compute budget, we only evaluated GSM8K CoT (albeit under two prompt formats, for reasons explained below). This sweep and the sweep below required $\sim6000$ Nvidia A100-hours.
+We evaluated GSM8K CoT under two prompt formats (for reasons explained below) and, in Sec.~\ref{sec:nlp_evals:subsec:gpqa}, GPQA. The GSM8K CoT sweeps required $\sim6000$ Nvidia A100-hours and the GPQA sweep $\sim700$ Nvidia A100-hours (summed run times, one GPU per run).
 % ; if community interest after this manuscript remains high, we can extend our sweep to \texttt{GPQA} \citep{rein2023gpqa}.
 GSM8K contains a subset of samples with ambiguous language or incorrect labels that have since been identified and cleaned \citep{vendrow2025large} and that models may have been trained on GSM8K \citep{zhang2024careful}, but we used GSM8K nonetheless for consistency with the original paper. We similarly used EleutherAI's LM Eval Harness \citep{gao2021framework,biderman2024lessonstrenchesreproducibleevaluation}. 
 
@@ -73,3 +70,19 @@ the authors \href{https://github.com/menhguin/minp_paper/commit/9ca63687df807b42
 We then reran our experiments using \href{https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot.yaml}{standard formatting of GSM8K CoT prompts}.
 The results were nearly identical (Appendix \ref{app:sec:gsm_cot_scores}), with one small difference: \texttt{min-p} does produce higher scores for 2 of 12 language models.
 Again, we conclude \textbf{\texttt{min-p} does not outperform other samplers on either formatting of GSM8K CoT when controlling for hyperparameter volume}.
+
+\subsection{Thorough Hyperparameter Sweep on GPQA Reaches the Same Conclusion}
+\label{sec:nlp_evals:subsec:gpqa}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/nlp_benchmark_evals/gpqa/y=diff_of_em_flexible_x=N_hue=sampler_row=model_col=task.pdf}
+    \caption{\textbf{\texttt{Min-P} Does Not Consistently Outperform Other Samplers on GPQA When Controlling For Hyperparameter Volume.} Difference between the best-of-$N$ score of \texttt{min-p} and the best-of-$N$ score of the best other sampler on GPQA (5-shot, flexible-extract exact match), using the same models, samplers, temperatures, sampler values and seeds as the GSM8K CoT sweep. The difference stays within roughly one percentage point at every $N$ for all 16 models: \texttt{min-p} is slightly below the best other sampler on three models, slightly above on two, and indistinguishable on the rest. Gemma 2 2B Instruct and Gemma 2 9B Instruct are omitted because their GPQA runs produced no scores under the pinned \texttt{lm-eval} version. Best-of-$N$ scores per sampler are shown in Appendix~\ref{app:sec:gpqa_scores}.}
+    \label{fig:gpqa_diff_of_em}
+\end{figure}
+
+The original paper also evaluated GPQA \citep{rein2023gpqa}, and its claim of superiority was stated ``across benchmarks.''
+We therefore repeated the sweep of Sec.~\ref{sec:nlp_evals:subsec:gsm8k} on GPQA (5-shot) with the identical grid of models, samplers, temperatures, sampler values and seeds, and applied the same two best-of-$N$ analyses.
+Two Gemma 2 Instruct models produced no GPQA scores under the pinned \texttt{lm-eval} version and are omitted, leaving 16 models.
+The results (Fig.~\ref{fig:gpqa_diff_of_em}; Appendix~\ref{app:sec:gpqa_scores}) match those on GSM8K CoT: once every sampler is given the same number of hyperparameter configurations, the best \texttt{min-p} configuration is within roughly one percentage point of the best other sampler on every model.
+\textbf{On both of the original paper's NLP benchmarks, \texttt{min-p} does not outperform other samplers when controlling for hyperparameter volume.}

@@ -2,26 +2,17 @@
 \label{sec:discussion}
 
 \paragraph{Scientific Conclusions} This investigation led us to conclude that the four lines of evidence presented by \citet{nguyen2024minp} -- (1) human evaluations, (2) NLP benchmark evaluations, (3) LLM-as-a-Judge evaluations, (4) community adoption -- do not support claims of \texttt{min-p}'s superiority.
-While \texttt{min-p} is useful for providing users another options to try, the original paper's data and our extensions of the original paper's data suggest that all samplers perform roughly the same once given the same amount of hyperparameter tuning; however, in our view, more research would be needed to assess the veracity of this conclusion.
+While \texttt{min-p} is useful for providing users another option to try, the original paper's data and our extensions of the original paper's data suggest that all samplers perform roughly the same once given the same amount of hyperparameter tuning; however, in our view, more research would be needed to assess the veracity of this conclusion.
 One of the twelve human evaluation comparisons survives Bonferroni correction: quality, \texttt{min-p} versus \texttt{basic}, at $\tau=3.0$ (Table~\ref{tab:human_evals_paired_ttests}). At that temperature every sampler, including \texttt{min-p}, receives lower quality and diversity scores than at standard temperatures, so this is not an advantage a practitioner could use. We therefore do not read it as evidence that \texttt{min-p} improves quality or diversity.
 
 \paragraph{Which Issues Are Specific to This Paper?} Several of the practices we criticize are widespread rather than unique to \citet{nguyen2024minp}: reporting wins in a dominated region of a quality-diversity trade-off, testing many comparisons without correcting for multiplicity, and using indirect LLM-as-a-judge designs against a fixed reference. We flag them because the original paper's conclusions depend on them, and we hope the community will treat them as reasons to raise its standards rather than as faults of any one group. Other issues are specific to this paper: omitting collected \texttt{basic} sampler data from the human evaluation, reporting the higher of two scores for \texttt{min-p} but the lower of two for \texttt{top-p} in Table 3(b), and stating community adoption figures that could not be substantiated and were later retracted.
 
 \paragraph{Key Limitation} Our manuscript re-analyzes the evidence presented by the original paper \citep{nguyen2024minp} and additional evidence created using the original paper's code. \textit{Conclusions here are based on that evidence}. We emphasize that new evidence might lead to different conclusions.
-Our own benchmark sweeps cover GSM8K CoT, one of the two NLP benchmarks in the original paper, and models released through 2024; the original paper's claim of superiority ``across benchmarks'' is tested here only on GSM8K CoT.
+Our own benchmark sweeps cover the two NLP benchmarks in the original paper, GSM8K CoT and GPQA, on models released through 2024 (up to 72B parameters for GSM8K CoT; Appendix~\ref{app:sec:gsm8k_large_models}).
 GSM8K rewards accuracy rather than diversity, so it cannot reveal a benefit that \texttt{min-p} might provide where diversity is instrumentally useful, such as Minimum Bayes Risk decoding \citep{freitag2023epsilon}, or in open-ended tasks beyond the creative writing evaluated by the human and LLM-as-a-judge studies. Newer models, additional benchmarks and such downstream uses remain open directions.
 
 
-\paragraph{What Went Wrong During the ICLR 2025 Review Process?}
-
-\citet{nguyen2024minp}'s outstanding success in the ICLR 2025 review process---achieving Oral presentation status and ranking as the 18th highest-scoring submission\footnote{\url{https://papercopilot.com/statistics/iclr-statistics/iclr-2025-statistics/}}---is difficult to reconcile with the flaws our investigation uncovered.
-
-The reviewers overlooked methodological issues such as which model(s) are being sampled from
-for the LLM-as-judge evals and missing/inadequate/improper consideration of uncertainty in presented results.
-Reviewers uncritically accepted the authors' claim that ``over 54,000 GitHub repositories'' were using \texttt{min-p} sampling, 
-when intuition or a quick GitHub search reveals cause for pause.
-
-The Area Chair's comment also contains a clear misstatement: it highlights \texttt{min-p}'s success in the low temperature regime (``in the low temperature regime, [\texttt{min-p}] provides a significant advantage''), when the paper specifically claims benefits in the \emph{high} temperature regime.
+\paragraph{Relation to the ICLR 2025 Review Record} Several of the issues documented here, in particular the retracted adoption figures and the unreported uncertainty in the LLM-as-a-judge win rates, bear on claims that were cited in the public ICLR 2025 reviews and meta-review of \citet{nguyen2024minp}. We summarize the relevant parts of that record in Appendix~\ref{app:sec:review_record}.
 % \section{Discussion and Limitations}
 % \label{sec:discussion}
 

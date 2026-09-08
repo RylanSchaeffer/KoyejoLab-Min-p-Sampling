@@ -9,8 +9,8 @@ We identified four key issues.
 
 Section 6 of \citet{nguyen2024minp} states human participants evaluated \texttt{min-p} against a single sampler: \texttt{top-p}.
 Both the \href{https://arxiv.org/abs/2407.01082v2}{Oct 2024 Arxiv manuscript} and \href{https://openreview.net/notes/edits/attachment?id=SR6ORZeBAn&name=pdf}{ICLR OpenReview manuscript} repeatedly state that \texttt{min-p} and \texttt{top-p} were considered, and their Table 4 presents results only for these.
-However, when examining the \href{https://github.com/menhguin/minp_paper/blob/main/min_p%20user%20preference%20study%20v2.0%20(Responses)%20-%20Form%20responses%201%20(1)%20(2).csv}{paper's data}, we discovered that \textbf{scores for a second baseline sampler (\texttt{basic} sampling) were excluded from the methodology, the analysis and the results without mention or explanation}. 
-We \href{https://github.com/menhguin/minp_paper/issues/4}{publicly confirmed with the authors}.
+However, when examining the \href{https://github.com/menhguin/minp_paper/blob/main/min_p%20user%20preference%20study%20v2.0%20(Responses)%20-%20Form%20responses%201%20(1)%20(2).csv}{paper's data}, we found that \textbf{scores for a second baseline sampler (\texttt{basic} sampling) were not included in the methodology, the analysis or the results, and the omission was not mentioned}. 
+The authors \href{https://github.com/menhguin/minp_paper/issues/4}{publicly confirmed this}.
 These omitted scores comprised $1/3^{\text{rd}}$ of the total collected scores.
 After we raised the issue, the omitted data were added to the \href{https://openreview.net/notes/edits/attachment?id=oQLYV9wuaa&name=pdf}{Camera Ready's Table 4}, but the methodology, the results and the conclusions have not been correspondingly updated.
 
@@ -28,12 +28,7 @@ After we raised the issue, the omitted data were added to the \href{https://open
 \subsection{Visualizations and Statistical Tests Fail to Support Claim That \texttt{Min-p} Outperforms Other Samplers}
 \label{sec:human_evals:subsec:human_scores}
 
-Based on the human evaluators' scores, Section 6 of \citet{nguyen2024minp} concluded that \texttt{min-p} ``consistently'' outperformed \texttt{top-p} ``across all settings'':
-%
-\begin{quote}
-    ``Overall, \texttt{min-p} sampling consistently scored higher than \texttt{top-p} sampling across all settings [...] A paired t-test confirmed that the differences in scores between min-p and top-p sampling were statistically significant ($p < 0.05$).''
-\end{quote}
-%
+Based on the human evaluators' scores, Section 6 of \citet{nguyen2024minp} concluded that ``\texttt{min-p} sampling consistently scored higher than \texttt{top-p} sampling across all settings'' and that ``[a] paired t-test confirmed that the differences in scores between min-p and top-p sampling were statistically significant ($p < 0.05$).''
 However, \textbf{both visualizations and statistical hypothesis tests of the original human evaluation data suggest \texttt{min-p} is indistinguishable from the baselines in almost all settings.}
 
 To briefly explain the human evaluation methodology, three samplers (\texttt{basic}, \texttt{top-p} and \texttt{min-p}) were compared in six conditions: three temperatures ($1.0, 2.0, 3.0$) and two diversity settings (``high'' and ``low'') corresponding to different $p$ hyperparameters.
@@ -67,7 +62,7 @@ For more information, please see the original manuscript.
 \end{table}
 
 We focused on the ``high'' diversity setting for three reasons: 
-First, the claimed advantage of \texttt{min-p} sampling is that it provides both high quality and high diversity, whereas other samplers typically trade one off against the other. Second, \href{https://github.com/menhguin/minp_paper/issues/4}{the authors publicly told us to focus on the high diversity setting}, writing that ``the low [diversity] settings were quite experimental''. Third, we believe that \texttt{top-p}'s $p$ value in the low diversity setting was poorly chosen; indeed, after we raised these concerns, the authors ran a new human evaluation that changed the low diversity \texttt{top-p} $p$ from $0.1$ to $0.9$. We return to this second new human evaluation in Sec.~\ref{sec:human_evals:subset:new_exp}.
+First, the claimed advantage of \texttt{min-p} sampling is that it provides both high quality and high diversity, whereas other samplers typically trade one off against the other. Second, \href{https://github.com/menhguin/minp_paper/issues/4}{the authors publicly recommended focusing on the high diversity setting}, writing that ``the low [diversity] settings were quite experimental''. Third, \texttt{top-p}'s $p$ value in the low diversity setting was atypically small ($p=0.1$); after we raised this, the authors ran a new human evaluation that changed the low diversity \texttt{top-p} $p$ from $0.1$ to $0.9$. We return to this second new human evaluation in Sec.~\ref{sec:human_evals:subset:new_exp}.
 
 We began by visualizing the human evaluations' scores from \citet{nguyen2024minp}. \textbf{Using the original paper's data, Fig.~\ref{fig:human_evals} reveals that the three samplers provide similar quality and similar diversity, with 95\% confidence intervals frequently overlapping}.
 
@@ -78,8 +73,8 @@ Without correcting for multiple comparisons, we found evidence to reject the nul
 
 Furthermore, given that the original paper claims that \texttt{min-p} ``consistently'' scores higher, an Intersection-Union Test (IUT) may be the appropriate statistical test, where the alternative hypothesis is that \texttt{min-p} is better in all 12 comparisons and the null hypothesis is the set complement. Since the largest p-value of the 12 comparisons is $0.378$, under the IUT, we again find insufficient evidence to reject the null hypothesis at both $\alpha=0.05$ and $\alpha=0.01$.
 
-The original paper's statistical analysis reached a different conclusion for two reasons. First, despite claiming that \texttt{min-p} ``consistently scored higher'' ``across all settings''  (metric, temperature, and diversity), the paper pooled data across all settings and performed a single t-test, which tests whether \texttt{min-p} scored higher on average. Second, pooling over all settings is misleading in that in the ``low'' diversity condition, \texttt{top-p}'s hyperparameter $p$ was poorly chosen in a way that pulled \texttt{top-p} down significantly; the authors said publicly to ignore this particular low diversity condition and subsequently changed $p$ in their new human experiment (Sec.~\ref{sec:human_evals:subset:new_exp}).
-Thus, we believe the original paper's statistical inferences are misleading or incorrect.
+The original paper's statistical analysis reached a different conclusion for two reasons. First, despite claiming that \texttt{min-p} ``consistently scored higher'' ``across all settings''  (metric, temperature, and diversity), the paper pooled data across all settings and performed a single t-test, which tests whether \texttt{min-p} scored higher on average. Second, pooling over all settings folds in the ``low'' diversity condition, in which \texttt{top-p}'s atypically small $p=0.1$ substantially lowered \texttt{top-p}'s scores; the authors themselves publicly described the low diversity settings as ``quite experimental'' and subsequently changed $p$ in their new human experiment (Sec.~\ref{sec:human_evals:subset:new_exp}).
+The pooled test therefore does not support the per-setting claim made in the text.
 
 \subsection{Human Evaluators' Qualitative Responses Fail to Support Claim That \texttt{Min-p} Is Preferred Over Other Samplers}
 \label{sec:human_evals:subsec:human_feedback}
@@ -92,12 +87,7 @@ Thus, we believe the original paper's statistical inferences are misleading or i
 \end{figure}
 
 
-At the end of the human evaluation study, the original paper asked human participants to qualitatively describe which sampler(s) they preferred. The paper claimed that human evaluators' qualitative responses support \texttt{min-p} over \texttt{top-p}:
-%
-\begin{quote}
-    ``Participants frequently noted that outputs generated with min-p sampling were more coherent and creative, especially at higher temperatures.''
-\end{quote}
-%
+At the end of the human evaluation study, the original paper asked human participants to qualitatively describe which sampler(s) they preferred. The paper stated that ``[p]articipants frequently noted that outputs generated with min-p sampling were more coherent and creative, especially at higher temperatures.''
 However, when reading through the  \href{https://github.com/menhguin/minp_paper/blob/main/min_p%20user%20preference%20study%20v2.0%20(Responses)%20-%20Form%20responses%201%20(1)%20(2).csv}{paper's data}, we believe that \textbf{the qualitative responses suggest a different preference pattern}.
 We manually annotated the qualitative responses and visualized our annotations of the humans' expressed preferences (Fig.~\ref{fig:attentive_human_annotators_preferred_samplers}), and \href{https://docs.google.com/spreadsheets/d/1-KNh4-dbrXBafb9iUQINqFBjDrZvkScPNbGH6IENecQ/edit?gid=1288914057#gid=1288914057}{publicly posted our annotations} in the same format as the original paper.
 We found two results: (1) more human evaluators explicitly preferred \texttt{basic} sampling than preferred \texttt{min-p} sampling, and (2) \texttt{min-p} was only slightly preferred over \texttt{top-p}.

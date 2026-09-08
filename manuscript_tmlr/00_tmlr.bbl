@@ -1,4 +1,4 @@
-\begin{thebibliography}{31}
+\begin{thebibliography}{34}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -74,6 +74,14 @@ Yann Dubois, Chen~Xuechen Li, Rohan Taori, Tianyi Zhang, Ishaan Gulrajani,
 Angela Fan, Mike Lewis, and Yann Dauphin.
 \newblock Hierarchical neural story generation.
 \newblock \emph{arXiv preprint arXiv:1805.04833}, 2018.
+
+\bibitem[Freitag et~al.(2023)Freitag, Ghorbani, and
+  Fernandes]{freitag2023epsilon}
+Markus Freitag, Behrooz Ghorbani, and Patrick Fernandes.
+\newblock Epsilon sampling rocks: Investigating sampling strategies for minimum
+  bayes risk decoding for machine translation.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}, 2023.
 
 \bibitem[Gao et~al.(2021)Gao, Tow, Biderman, Black, DiPofi, Foster, Golding,
   Hsu, McDonell, Muennighoff, et~al.]{gao2021framework}
@@ -299,6 +307,16 @@ Albert~Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford,
 \newblock Mistral 7b, 2023.
 \newblock URL \url{https://arxiv.org/abs/2310.06825}.
 
+\bibitem[Jiang et~al.(2025)Jiang, Chai, Li, Liu, Fok, Dziri, Tsvetkov, Sap,
+  Albalak, and Choi]{jiang2025artificialhivemind}
+Liwei Jiang, Yuanjun Chai, Margaret Li, Mickel Liu, Raymond Fok, Nouha Dziri,
+  Yulia Tsvetkov, Maarten Sap, Alon Albalak, and Yejin Choi.
+\newblock Artificial hivemind: The open-ended homogeneity of language models
+  (and beyond).
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)
+  Datasets and Benchmarks Track}, 2025.
+\newblock arXiv:2510.22954.
+
 \bibitem[Khashabi et~al.(2022)Khashabi, Stanovsky, Bragg, Lourie, Kasai, Choi,
   Smith, and Weld]{khashabi2022geniereproduciblestandardizedhuman}
 Daniel Khashabi, Gabriel Stanovsky, Jonathan Bragg, Nicholas Lourie, Jungo
@@ -391,6 +409,14 @@ Nisan Stiennon, Long Ouyang, Jeffrey Wu, Daniel Ziegler, Ryan Lowe, Chelsea
 \newblock Learning to summarize with human feedback.
 \newblock \emph{Advances in neural information processing systems},
   33:\penalty0 3008--3021, 2020.
+
+\bibitem[Tan et~al.(2026)Tan, Wu, and Howard]{tan2025pless}
+Runyan Tan, Shuang Wu, and Phillip Howard.
+\newblock p-less sampling: A robust hyperparameter-free approach for llm
+  decoding.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2026.
+\newblock arXiv:2509.23234.
 
 \bibitem[Team et~al.(2024)Team, Riviere, Pathak, Sessa, Hardin, Bhupatiraju,
   Hussenot, Mesnard, Shahriari, Ramé, Ferret, Liu, Tafti, Friesen, Casbon,
