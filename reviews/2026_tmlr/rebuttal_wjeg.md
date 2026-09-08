@@ -1,0 +1,23 @@
+# Response to Reviewer wjeg
+
+We thank the reviewer for the detailed and constructive review. We have addressed every requested change; details below.
+
+**Critical 1: Reconcile Sec. 2.4 and the abstract with Sec. 6.** We agree the three passages read as inconsistent. The inconsistency was in Sec. 6, which called the single Bonferroni-surviving comparison a "benefit." A win in a regime where every method scores worse is not a benefit anyone would choose, and the abstract and Sec. 2.4 were right not to describe it as one. Sec. 6 now names the surviving comparison (quality, min-p vs. basic, at T=3.0), notes that at that temperature every sampler, including min-p, receives lower quality and diversity scores than at standard temperatures, and states that we do not read it as evidence min-p improves quality or diversity. The Table 1 caption now names the same comparison so a reader can connect the three passages.
+
+**Critical 2: Separate the indirect-design argument from non-transitivity; acknowledge chronology.** Done. Sec. 4.1 now states the indirect-design argument on its own (every sampler was compared against basic at T=1.0, so min-p was never tested head-to-head against top-p), then presents non-transitivity as a separate point about what the reported comparisons can support today. We state explicitly that Xu et al. (2025) was posted after the ICLR 2025 review cycle concluded and that the original authors could not have been expected to account for it. We removed the phrase "the authors' design choice is additionally concerning."
+
+**"Lightly edited" hyperparameters.** We now document this precisely in Sec. 3.1. Min-p and top-p values are strict supersets of the original paper's: we kept all four original values for each and added two toward the extremes (0.01 and 0.02 for min-p, since the original paper describes small p as the sensitive regime; 0.98 and 0.99 for top-p toward the no-truncation end). The one substantive edit was top-k: the original paper tested k in {10, 15, 20, 40, 50, 180}, which clusters four values between 10 and 50; we kept 10 and 50 and spread the rest more evenly up to 200. Temperatures were densified from the original {0.7, 1.0, 1.5, 2.0, 3.0} to 0.1 spacing, and every sampler value was run at every temperature with three seeds, whereas the original paper's released logs cover a ragged subset of the grid with one run per configuration. We also corrected the text to say the values came from the original paper's text, appendix tables and released evaluation logs, since the main text names only two values per sampler.
+
+**Scope Sec. 3 to GSM8K CoT.** Done. The abstract now says "comprehensively sweeping GSM8K CoT, one of the original paper's NLP benchmarks," and the limitations paragraph in Sec. 6 states that the original paper's claim of superiority "across benchmarks" is tested here only on GSM8K CoT. [GPQA: TO BE FILLED AFTER SWEEP CHECK]
+
+**Dominated-region critique is not specific to min-p.** We agree. Sec. 2.4 now says that reporting wins in a dominated region of the quality-diversity trade-off is common practice in the sampling literature and that we highlight it only because the original paper's trade-off claim rests on such a region. In response to the Broader Impact comment, we added a paragraph to Sec. 6, "Which Issues Are Specific to This Paper?", that separates community-wide practices (dominated-region reporting, uncorrected multiple comparisons, indirect LLM-as-a-judge designs) from issues specific to the original paper (omitted basic-sampler data, the mismatched reporting in Table 3(b), the retracted adoption figures).
+
+**"For those unfamiliar with AlpacaEval."** Removed.
+
+**Block quotations.** Shortened; several are now inline quotations of the key phrase. We kept the quotations that are primary evidence for a claim, such as the original and revised adoption statements.
+
+**Quotation marks.** Fixed throughout; the closing marks were straight quotes in the source.
+
+**Library analogy in Sec. 5.2.** Removed.
+
+**Claims resting on public exchanges (Weaknesses).** Where a claim rests on an exchange with the original authors, the manuscript links to the public record of that exchange or to the resulting artifact (the released data file, the Camera Ready revision). We have kept these descriptions brief and factual. If the reviewer would prefer any specific claim to be supported differently, we will revise it.

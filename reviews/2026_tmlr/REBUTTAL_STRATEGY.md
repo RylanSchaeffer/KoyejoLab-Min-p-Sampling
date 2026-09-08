@@ -181,7 +181,44 @@ The manuscript writes "The authors' design choice is additionally concerning bec
 
 Fix: two short labeled paragraphs. State (a) first as the design critique. Then state (b) as an independent inferential point: "Separately, subsequent work posted after the ICLR 2025 review cycle (Xu et al., 2025) shows LLM-judge preferences are not transitive, so indirect comparisons of this kind cannot in general be chained into head-to-head conclusions." Drop "additionally concerning."
 
-### 5. GSM8K scoping vs. adding GPQA — PENDING
-### 6. "Lightly edited" hyperparameters — PENDING
-### 7. Pareto critique reframing — PENDING
-### 8. Ackley citation / minor fixes — PENDING
+### 5. GSM8K scoping vs. adding GPQA — DECIDED (scope now; add benchmarks if available)
+
+Scope the abstract, Sec. 3 and limitations to GSM8K CoT (done). Rylan recalls other benchmarks (GPQA, possibly others) were run; a background agent is checking W&B and the sweep configs. Rylan is willing to run additional benchmarks. Decision on adding a GPQA (or other) panel waits on that report.
+
+### 6. "Lightly edited" hyperparameters — RESOLVED
+
+Investigation result (from sweep YAMLs, git history, the original paper's appendix and the original authors' released W&B export):
+- min-p: original {0.05, 0.1, 0.2, 0.3} kept; added 0.01, 0.02 (paper calls small p the sensitive regime).
+- top-p: original {0.7, 0.8, 0.9, 0.95} kept; added 0.98, 0.99.
+- top-k: original {10, 15, 20, 40, 50, 180}; ours {10, 30, 50, 100, 150, 200}. This is the only real substitution and the one "lightly edited" referred to. Rationale: original values cluster at 10-50 with one outlier at 180; spread evenly to 200.
+- Temperature: original reported {0.7, 1.0, 1.5, 2.0, 3.0} (ran a ragged set up to 5.0); ours 0.0 to 3.0 at 0.1 spacing.
+- Seeds: original 1 run per config; ours 3.
+- Grid: original ragged; ours full Cartesian product.
+Rylan's recollection (expanded ranges, denser sweep) is correct for min-p, top-p and temperature; top-k was a substitution. Sec. 3.1 now states all of this. The manuscript previously said values were "taken from the original paper"; corrected to "text, appendix tables and released evaluation logs" since the main text names only two values per sampler.
+
+### 7. Pareto critique reframing — DECIDED
+
+Sentence added in Sec. 2.4 (common practice; flagged only because the trade-off claim rests on it). New Sec. 6 paragraph "Which Issues Are Specific to This Paper?" separates community-wide practices from paper-specific issues, answering wjeg's Broader Impact ask.
+
+### 8. Ackley citation / minor fixes — DECIDED
+
+Keep Ackley; footnote in Sec. 1 explains it is the earliest temperature-scaled Boltzmann sampling reference; rebuttal invites additional citations. Table 1 typo fixed. Straight closing quotes replaced with LaTeX quotes throughout.
+
+### 9. fy93's experiment asks — DECIDED
+
+No new experiments for now. Limitations paragraph in Sec. 6 acknowledges GSM8K-only sweeps, models through 2024, MBR decoding (Freitag et al. 2023) and open-ended tasks as open directions. Note in rebuttal that the human and AlpacaEval evaluations already cover open-ended generation.
+
+### 10. Unverifiable public exchanges and double-blind anonymity — ADVICE (see chat)
+
+The submitted PDF contains three links to GitHub issues on the original authors' repository (issues 4, 5, 6) and one Telegram link. Opening those issues shows Rylan's GitHub handle. No TMLR reviewer flagged anonymity (the ICML reviewer cBMY did). wjeg's remark that the exchanges "cannot be verified from the paper" suggests they treated the links as external rather than following them.
+
+Recommendation:
+- Keep the links. They are already in the submitted version, they are the primary record, and removing them would make the claims less verifiable, which is wjeg's complaint.
+- Back every exchange-based claim with a primary artifact that does not depend on the exchange where one exists: the Camera Ready diff (Table 4 addition, retracted adoption numbers), the original authors' commit adding the CSV, the OpenReview thread.
+- Disclose to the Action Editor in a confidential comment that the linked public issues on the original authors' repository could reveal author identity, that they were included because they are the only public record of those exchanges, and ask whether the AE prefers the links moved to a footnote or replaced with descriptions. This puts the decision with the AE rather than leaving it as a surprise.
+
+### 11. Mechanical fixes — DONE
+
+### 12. Response format — DECIDED
+
+General response plus one comment per reviewer, matching the ICML layout: `general_response.md`, `rebuttal_WbvC.md`, `rebuttal_wjeg.md`, `rebuttal_fy93.md`. Manuscript edits made directly in `manuscript_tmlr/`.
