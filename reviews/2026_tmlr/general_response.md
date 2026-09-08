@@ -10,7 +10,7 @@ We thank all three reviewers for their careful reading. All three reviewers find
 
 4. **LLM-as-a-judge critique (wjeg).** Sec. 4.1 now presents the indirect-design argument and the non-transitivity argument as separate points, and states that Xu et al. (2025) postdates the ICLR 2025 review cycle, so the original authors could not have been expected to account for it.
 
-5. **Scope of the benchmark evidence (wjeg, fy93).** The abstract, Sec. 3 and the limitations now scope our sweeps to GSM8K CoT. [GPQA: TO BE FILLED AFTER SWEEP CHECK]
+5. **Scope of the benchmark evidence (wjeg, fy93).** The abstract, Sec. 3 and the limitations now scope our sweeps to GSM8K CoT. We also added GPQA, the original paper's other NLP benchmark, using the identical grid (four samplers, 31 temperatures, six values per sampler, three seeds) on 16 of the 18 models. The result matches GSM8K CoT: under equal hyperparameter budgets, the best min-p configuration is within about one percentage point of the best other sampler on every model, above on two, below on three, and indistinguishable on the rest. An appendix figure additionally reports GSM8K CoT on ten larger models (Qwen 2.5 14B, 32B and 72B, Gemma 2 27B, Llama 3.1 70B, base and instruct).
 
 6. **"Lightly edited" hyperparameters (wjeg).** Sec. 3.1 now lists, per sampler, the original paper's values, ours, and the reason for each change.
 
