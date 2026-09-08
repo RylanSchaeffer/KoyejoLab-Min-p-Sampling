@@ -9,7 +9,7 @@ We thank the reviewer and address both concerns below.
 - *Downstream research.* Artificial Hivemind (Jiang et al., NeurIPS 2025 Best Paper) used min-p as its representative decoding-time intervention, found that mode collapse persisted, and concluded that decoding-time interventions in general cannot preserve diversity. That conclusion holds only if min-p is a strong diversity-promoting sampler; our analysis indicates it is not. p-less sampling (Tan et al., ICLR 2026 Oral) used min-p as its primary baseline and evaluated it with the methodology whose flaws we document.
 - *Peer review.* 18th highest-scoring submission at ICLR 2025; ICLR Oral.
 
-Re-examination is warranted by a claim's visibility and the work built on it, not by its share of production deployments. We will add any other adoption evidence the reviewer suggests.
+Re-examination is warranted by a claim's visibility and the work built on it, not by its share of production deployments. The other two reviewers answered "Yes" on audience interest for reasons independent of adoption: samplers affect every LLM use, and platformed papers should hold under scrutiny. We will add any other adoption evidence the reviewer suggests.
 
 **2. Tone.** We revised the manuscript as follows:
 
