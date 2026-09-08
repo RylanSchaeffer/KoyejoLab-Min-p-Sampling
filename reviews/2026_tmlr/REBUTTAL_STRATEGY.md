@@ -159,18 +159,16 @@ Adopt the visibility-and-consequences framing. Add it to the introduction and th
 - Send a background agent through all TMLR `.tex` files to sand down the harshest edges: editorializing adjectives, rhetorical flourishes, sentences about the authors rather than the evidence. Report the edits as a diff for Rylan to approve.
 - Title: unchanged for now (fy93 says it does not affect their rating; WbvC did not raise it).
 
-### 3. Human-eval conclusion phrasing — NEEDS A COMPACT FORMULATION
+### 3. Human-eval conclusion phrasing — DECIDED
 
-The finding: min-p's only statistically detectable advantage occurs in a regime (high temperature) where every sampler, including min-p, scores worse in absolute terms than at lower temperatures. In the regimes that achieve the best quality and diversity, min-p is indistinguishable from baselines. The problem is that this is too long to state everywhere.
+Keep the practitioner-oriented statement. For anyone seeking higher quality or diversity, min-p does the same or worse. The fix is on the Sec. 6 side, not the abstract.
 
-Proposed compact phrasing, using "Pareto-dominated regime" as the carrier concept (Sec. 2.4 already introduces the trade-off framing, so the term is earned):
+- **Abstract:** unchanged.
+- **Sec. 2.4 bold line:** unchanged ("For anyone seeking higher quality or diversity, min-p offers no apparent advantage").
+- **Sec. 6:** replace the "weakly suggest ... benefit" sentence. It reads as a concession the rest of the paper does not make. New text, roughly: "One of twelve comparisons survives Bonferroni correction: quality, min-p versus basic, at the highest temperature. At that temperature every sampler, including min-p, scores lower than at standard temperatures, so this is not an advantage a practitioner could use. We do not read it as evidence that min-p improves quality or diversity."
+- **Table 1 caption:** name the surviving comparison so the reader can see the three passages agree.
 
-- **Abstract (one clause):** "our reanalysis demonstrates min-p did not outperform baselines in quality, diversity, or a trade-off between quality and diversity, except in a high-temperature regime where all samplers, including min-p, perform worse."
-- **Sec. 2.4 bold conclusion:** "Min-p's only advantage appears in a Pareto-dominated regime; at the temperatures that achieve the best quality and diversity, min-p is indistinguishable from basic and top-p."
-- **Sec. 6:** keep the current "weakly suggest" sentence, but make it echo the same phrase: "The data weakly suggest min-p can help at higher temperatures, but that regime is Pareto-dominated: every sampler, including min-p, achieves higher quality and diversity at lower temperatures."
-- **Table 1 caption / text:** state explicitly which comparison survives Bonferroni (quality, min-p vs. basic, at the highest temperature) so the reader can connect it to the regime argument.
-
-The three statements then say the same thing at three lengths, which is what wjeg asked for.
+Rebuttal line: we agree the passages read as inconsistent; the fix is to stop calling the surviving comparison a "benefit." A win in a regime where every method is worse is not a benefit anyone would choose.
 
 ### 4. LLM-judge split + chronology — DECIDED (see explanation in chat)
 
