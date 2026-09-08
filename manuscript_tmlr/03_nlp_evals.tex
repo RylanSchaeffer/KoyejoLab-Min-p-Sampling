@@ -24,16 +24,17 @@ To test whether \texttt{min-p} indeed achieves superior performance, we conducte
 %
 \begin{itemize}
     \item \textbf{9 Models:} Qwen 2.5 \citep{qwen2025qwen25technicalreport} 0.5B, 1.5B, 3B and 7B; Mistral 7Bv0.1 \citep{jiang2023mistral7b}; Llama \citep{grattafiori2024llama3herdmodels} 3.1 8B and 3.2 3B; Gemma 2 \citep{gemmateam2024gemma2improvingopen} 2B and 9B.
-    \item \textbf{2 Model Stages:} Pre-trained (``Base") and Post-Trained (``Instruct").
+    \item \textbf{2 Model Stages:} Pre-trained (``Base'') and Post-Trained (``Instruct'').
     \item \textbf{4 Samplers:} \texttt{basic}, \texttt{top-p}, \texttt{top-k}, \texttt{min-p}.
-    \item \textbf{31 Temperatures:} $0.0$ (``greedy") to $3.0$ in increments of $0.1$.
-    \item \textbf{6 Hyperparameters Per Sampler:} We chose $6$ hyperparameters per sampler, except for \texttt{basic} which has no hyperparameter beyond temperature. The values were taken from the original paper; some were lightly edited to make them more evenly distributed:
+    \item \textbf{31 Temperatures:} $0.0$ (``greedy'') to $3.0$ in increments of $0.1$.
+    \item \textbf{6 Hyperparameters Per Sampler:} We chose $6$ hyperparameters per sampler, except for \texttt{basic} which has no hyperparameter beyond temperature. The values were taken from the original paper's text, appendix tables and released evaluation logs, then extended to $6$ values per sampler:
     \begin{itemize}
         \item \texttt{basic}: No hyperparameters other than temperature.
-        \item \texttt{top-k}:  $k \in \{10, 30, 50, 100, 150, 200 \}$.
-        \item \texttt{top-p}: $p \in \{0.99, 0.98, 0.95, 0.9, 0.8, 0.7 \}$.
-        \item \texttt{min-p}: $p \in \{0.01, 0.02, 0.05, 0.1, 0.2, 0.3 \}$.
+        \item \texttt{top-k}:  $k \in \{10, 30, 50, 100, 150, 200 \}$. The original paper tested $k \in \{10, 15, 20, 40, 50, 180\}$, which clusters four values between $10$ and $50$; we kept $10$ and $50$ and spread the remaining values more evenly up to $200$.
+        \item \texttt{top-p}: $p \in \{0.99, 0.98, 0.95, 0.9, 0.8, 0.7 \}$. The original paper's four values $\{0.7, 0.8, 0.9, 0.95\}$ were retained and $0.98$ and $0.99$ were added toward the no-truncation end.
+        \item \texttt{min-p}: $p \in \{0.01, 0.02, 0.05, 0.1, 0.2, 0.3 \}$. The original paper's four values $\{0.05, 0.1, 0.2, 0.3\}$ were retained and $0.01$ and $0.02$ were added, since the original paper describes small $p$ as the sensitive regime.
     \end{itemize}
+    Temperatures were densified from the original paper's $\{0.7, 1.0, 1.5, 2.0, 3.0\}$ to $0.1$ spacing, and every sampler value was run at every temperature, whereas the original paper's released logs cover a ragged subset of the grid with one run per configuration.
     \item \textbf{3 Random Seeds for Sampling:} $\{0, 1, 2\}$
 \end{itemize}
 
@@ -54,7 +55,7 @@ GSM8K contains a subset of samples with ambiguous language or incorrect labels t
 
 To evaluate how performant each sampler is, we first averaged over the three sampling seeds and then conducted two complementary analyses:
 \begin{enumerate}
-    \item For each sampler, we subsampled an equal number of hyperparameters ranging from $N=1$ to $N=100$ and computed the maximum Exact Match (Strict) score achieved by the sampled subset of size $N$. We repeated this process $150$ times, averaging over the subsampled subsets' scores. This ``Best-of-N" analysis \citep{nakano2021webgpt,stiennon2020learning,hughes2024bestofnjailbreaking,schaeffer2025largelanguagemonkeyspower} tells us the best possible performance each sampler will likely obtain as its hyperparameter space increases.
+    \item For each sampler, we subsampled an equal number of hyperparameters ranging from $N=1$ to $N=100$ and computed the maximum Exact Match (Strict) score achieved by the sampled subset of size $N$. We repeated this process $150$ times, averaging over the subsampled subsets' scores. This ``Best-of-N'' analysis \citep{nakano2021webgpt,stiennon2020learning,hughes2024bestofnjailbreaking,schaeffer2025largelanguagemonkeyspower} tells us the best possible performance each sampler will likely obtain as its hyperparameter space increases.
     
     \item For $N=1$ to $N=100$, we subsampled $N$ hyperparameters per sampler and computed the difference of the maximum Exact Match (Strict) score achieved by \texttt{min-p} minus the maximum score achieved by any other sampler. We repeated this process $150$ times, averaging over the subsampled subsets. This tells us by how much \texttt{min-p} outperforms all other samplers, controlling for the size of hyperparameter space of each sampler.
 \end{enumerate}
@@ -65,10 +66,10 @@ Fig.~\ref{fig:gsm8k_em_strict} and Fig.~\ref{fig:gsm8k_diff_of_em_strict} respec
 % We also note that the experimental design in the original paper has a methodological limitation: because different samplers respond differently to temperature adjustments, comparing samplers at fixed temperature values may not provide a complete picture of their performance.
 % Our analysis specifically seeks to correct for this bias by considering how the samplers perform when controlling for the volume of hyperparameter space.
 
-After we showed these results to the authors, they informed us that we had run our experiments using the \href{https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot-llama.yaml}{``Llama"
+After we showed these results to the authors, they informed us that we had run our experiments using the \href{https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot-llama.yaml}{``Llama''
 formatting of GSM8K CoT prompts} as we used the command from the authors'
 \href{https://github.com/menhguin/minp_paper/blob/main/%5BPUBLIC%5D_Min_P_Evals_Replication_for_GPQA_and_GSM8K_COT.ipynb}{public Colab notebook};
-the authors \href{https://github.com/menhguin/minp_paper/commit/9ca63687df807b4276c527b9b47e65379c1b0bd6}{clarified} that "Llama" formatting should be used only for Llama models.
+the authors \href{https://github.com/menhguin/minp_paper/commit/9ca63687df807b4276c527b9b47e65379c1b0bd6}{clarified} that ``Llama'' formatting should be used only for Llama models.
 We then reran our experiments using \href{https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot.yaml}{standard formatting of GSM8K CoT prompts}.
 The results were nearly identical (Appendix \ref{app:sec:gsm_cot_scores}), with one small difference: \texttt{min-p} does produce higher scores for 2 of 12 language models.
 Again, we conclude \textbf{\texttt{min-p} does not outperform other samplers on either formatting of GSM8K CoT when controlling for hyperparameter volume}.

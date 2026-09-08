@@ -17,11 +17,13 @@ We then turned to the original paper's LLM-as-a-Judge evaluations \citep{zheng20
 
 In the \href{https://arxiv.org/abs/2407.01082v2}{Oct 2024 Arxiv manuscript} and \href{https://openreview.net/notes/edits/attachment?id=SR6ORZeBAn&name=pdf}{ICLR OpenReview manuscript}, the methodology is under-specified in several ways: There is no mention which model(s) were sampled from, which model(s) served as the judge(s), or how hyperparameters were chosen or swept. Additionally, there is no description of uncertainty for the reported win rates, meaning readers are unable to decide whether win rates are statistically different from chance (50.00\%).
 
-Furthermore, the experiment seems designed in a manner that introduces a confounder. For those unfamiliar, AlpacaEval reports win rates between paired comparisons.
+Furthermore, the experimental design is indirect. AlpacaEval reports win rates between paired comparisons.
 Instead of directly comparing \texttt{min-p} against other samplers, the authors compared each sampler against a common fixed sampler: \texttt{basic}$(\tau=1.0)$.
-This comparison strategy is indirect since comparing directly against \texttt{min-p} would offer a clearer test of its superiority while using the same number of comparisons.
-The authors’ design choice is additionally concerning because LLM-judge preferences are probably not transitive, as shown by recent research \citep{xu2025investigatingnontransitivityllmasajudge}; that is, if sampler A beats sampler B, and sampler B beats sampler C, it does not necessarily follow that sampler A beats sampler C.
-Therefore, comparing all methods to \texttt{basic}$(\tau=1.0)$ provides no reliable inference about \texttt{min-p}’s performance relative to \texttt{top-p} or \texttt{basic} at other temperatures. \textbf{These under-specified aspects of the methodology, combined with its indirect experimental design, make drawing conclusions difficult.}
+Consequently, \texttt{min-p} was never tested head-to-head against \texttt{top-p}, or against \texttt{basic} at any other temperature, even though direct comparisons would have offered a clearer test of its superiority using the same number of comparisons.
+
+Separately, subsequent work has shown that LLM-judge preferences are often not transitive \citep{xu2025investigatingnontransitivityllmasajudge}: if sampler A beats sampler C and sampler B beats sampler C, it does not follow that A beats B.
+We note that \citet{xu2025investigatingnontransitivityllmasajudge} was posted after the ICLR 2025 review cycle concluded, so the original authors could not have been expected to account for it; the point concerns what the reported comparisons can support today, not the original design choice.
+Under non-transitivity, comparing every sampler to \texttt{basic}$(\tau=1.0)$ cannot in general be chained into conclusions about \texttt{min-p} relative to \texttt{top-p} or \texttt{basic} at other temperatures. \textbf{The under-specified methodology and the indirect experimental design together make drawing conclusions difficult.}
 
 \subsection{\texttt{Min-p} Received More Hyperparameter Tuning and Frequently Fails to Win}
 
