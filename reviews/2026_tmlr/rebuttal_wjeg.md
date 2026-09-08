@@ -14,7 +14,7 @@ We thank the reviewer for the detailed and constructive review. We have addresse
 
 **"For those unfamiliar with AlpacaEval."** Removed.
 
-**Block quotations.** Shortened; several are now inline quotations of the key phrase. We kept the quotations that are primary evidence for a claim, such as the original and revised adoption statements.
+**Block quotations.** Reduced from seven to two. Five are now inline quotations of the key phrase, and the two Area Chair and reviewer quotes moved from Sec. 5 to an appendix. We kept as block quotes only the original and revised adoption statements, which are the primary evidence for Sec. 5.
 
 **Quotation marks.** Fixed throughout; the closing marks were straight quotes in the source.
 

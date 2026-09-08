@@ -14,7 +14,7 @@ We also want to reframe the criterion slightly. The value of re-examining a publ
 **2. Tone.** We take this seriously and have revised the manuscript accordingly. Concretely:
 
 - We removed the sentence "For those unfamiliar, AlpacaEval reports win rates..." (Sec. 4.1) and the sentence comparing the revised adoption statement to "publishing a book and then claiming credit for the library" (Sec. 5.2).
-- We cut commentary on the original authors and on the ICLR 2025 review process that did not carry evidential content, including most of the paragraph "What Went Wrong During the ICLR 2025 Review Process?" and the passage in Sec. 5 explaining why we chose to include the retracted adoption numbers.
+- We cut commentary on the original authors and on the ICLR 2025 review process that did not carry evidential content: the paragraph "What Went Wrong During the ICLR 2025 Review Process?" in Sec. 6 and the passage in Sec. 5 explaining why we chose to include the retracted adoption numbers. The factual parts of the review record (which claims the meta-review cited) now appear, without commentary, in a short appendix.
 - We rewrote editorializing language throughout so that each criticism is a statement of what the data or the public record show.
 - We shortened block quotations and replaced several with short inline quotations.
 - We added a paragraph to Sec. 6 that separates practices common across the field (reporting wins in a dominated region of a trade-off, uncorrected multiple comparisons, indirect LLM-as-a-judge designs) from issues specific to the original paper.
