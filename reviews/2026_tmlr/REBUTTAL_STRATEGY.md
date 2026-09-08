@@ -141,13 +141,49 @@ One paragraph: reporting wins in a dominated region is common practice; we note 
 
 ## Rylan's Judgements (per issue)
 
-To be filled in issue by issue before drafting responses.
+### 1. Min-p significance case — DECIDED
 
-1. Min-p significance case:
-2. Tone / title:
-3. Human-eval conclusion phrasing:
-4. LLM-judge split + chronology:
-5. GSM8K scoping vs. adding GPQA:
-6. "Lightly edited" hyperparameters:
-7. Pareto critique reframing:
-8. Ackley citation / minor fixes:
+Adopt the visibility-and-consequences framing. Add it to the introduction and the rebuttal. Evidence, in order of strength:
+
+- **Citations:** ~171 citations within a year of publication (Google Scholar, Sept 2026; **TODO: verify exact count and date before submitting**).
+- **Peer-review platforming:** ICLR 2025 Oral, 18th highest-scoring submission.
+- **Inference-stack integration:** Hugging Face Transformers, vLLM, llama.cpp, SGLang, TGI. The integrations were in part obtained on the strength of the paper's claims, and the integrations were then cited back as evidence of adoption (the Camera Ready's revised adoption statement). Say this carefully: the point is that the paper's credibility and the library integrations reinforced each other, not that anyone acted in bad faith.
+- **Downstream research contaminated by the claims:**
+  - *Artificial Hivemind* (Jiang et al., NeurIPS 2025 Best Paper) tested min-p as its representative decoding-time intervention (p=0.1, T=2.0), found mode collapse persisted (61% of response pairs above 0.8 similarity), and concluded that "more generalizable solutions are needed at the model training level." That generalization from one sampler to all decoding-time interventions rests on min-p being a strong diversity method, which it is not. Context: `reviews/2026_icml/artificial_hivemind.md`. **Caution:** Hivemind also writes "min-p is not widely adopted." Do not quote that section; WbvC could cite it back.
+  - *p-less sampling* (Tan et al., ICLR 2026 Oral) adopts min-p as its primary baseline and repeats the same evaluation failures: default-only baselines, no significance tests on accuracy, human eval at mismatched temperatures with author annotators, "consistently outperforms" contradicted by its own Table 1. Context: `reviews/2026_icml/p_less_sampling.md`.
+- **Reframe the criterion:** a re-examination's value tracks the prominence of the claim, not the market share of the method. TMLR asks whether *some* of its audience would be interested; wjeg and fy93 say yes for reasons independent of adoption ("samplers affect every LLM use").
+
+### 2. Tone / title — DECIDED
+
+- Cut the two flagged sentences ("For those unfamiliar, AlpacaEval reports win rates..." in `04_llm_as_judge_evals.tex:20`; "akin to publishing a book and then claiming credit for the library" in `05_community_adoption.tex:46`). Tell reviewers explicitly that both are removed.
+- Send a background agent through all TMLR `.tex` files to sand down the harshest edges: editorializing adjectives, rhetorical flourishes, sentences about the authors rather than the evidence. Report the edits as a diff for Rylan to approve.
+- Title: unchanged for now (fy93 says it does not affect their rating; WbvC did not raise it).
+
+### 3. Human-eval conclusion phrasing — NEEDS A COMPACT FORMULATION
+
+The finding: min-p's only statistically detectable advantage occurs in a regime (high temperature) where every sampler, including min-p, scores worse in absolute terms than at lower temperatures. In the regimes that achieve the best quality and diversity, min-p is indistinguishable from baselines. The problem is that this is too long to state everywhere.
+
+Proposed compact phrasing, using "Pareto-dominated regime" as the carrier concept (Sec. 2.4 already introduces the trade-off framing, so the term is earned):
+
+- **Abstract (one clause):** "our reanalysis demonstrates min-p did not outperform baselines in quality, diversity, or a trade-off between quality and diversity, except in a high-temperature regime where all samplers, including min-p, perform worse."
+- **Sec. 2.4 bold conclusion:** "Min-p's only advantage appears in a Pareto-dominated regime; at the temperatures that achieve the best quality and diversity, min-p is indistinguishable from basic and top-p."
+- **Sec. 6:** keep the current "weakly suggest" sentence, but make it echo the same phrase: "The data weakly suggest min-p can help at higher temperatures, but that regime is Pareto-dominated: every sampler, including min-p, achieves higher quality and diversity at lower temperatures."
+- **Table 1 caption / text:** state explicitly which comparison survives Bonferroni (quality, min-p vs. basic, at the highest temperature) so the reader can connect it to the regime argument.
+
+The three statements then say the same thing at three lengths, which is what wjeg asked for.
+
+### 4. LLM-judge split + chronology — DECIDED (see explanation in chat)
+
+Sec. 4.1 currently makes two arguments in one breath:
+
+- **(a) Indirect design.** Every sampler was compared against basic at T=1.0, so min-p was never tested head-to-head against top-p. This argument stands on its own and does not depend on any citation.
+- **(b) Non-transitivity.** Even if A beats C and B beats C, one cannot infer A beats B, because LLM-judge preferences are not transitive (Xu et al. 2025).
+
+The manuscript writes "The authors' design choice is additionally concerning because LLM-judge preferences are probably not transitive, as shown by recent research." wjeg's objection: Xu et al. was posted Feb 2025 and accepted at ICML 2025, after the ICLR 2025 review cycle closed, so phrasing (b) as a further fault of the authors' *choice* implies they should have known something that did not yet exist. wjeg agrees the critique is valid; they want it stated as "what the evidence supports today" rather than as negligence.
+
+Fix: two short labeled paragraphs. State (a) first as the design critique. Then state (b) as an independent inferential point: "Separately, subsequent work posted after the ICLR 2025 review cycle (Xu et al., 2025) shows LLM-judge preferences are not transitive, so indirect comparisons of this kind cannot in general be chained into head-to-head conclusions." Drop "additionally concerning."
+
+### 5. GSM8K scoping vs. adding GPQA — PENDING
+### 6. "Lightly edited" hyperparameters — PENDING
+### 7. Pareto critique reframing — PENDING
+### 8. Ackley citation / minor fixes — PENDING
