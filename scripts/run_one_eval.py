@@ -27,6 +27,14 @@ def run_one_eval():
     else:
         gen_kwargs = f"{config['sampler']}={config['sampler_value']},temperature={config['temperature']},do_sample={do_sample}"
 
+    # The seed must also reach the model backend. lm_eval's --seed only seeds Python/NumPy/torch and
+    # few-shot sampling; the vLLM backend takes its sampling seed from --model_args and otherwise
+    # defaults to seed=1234. Without this, every "seed" in the sweeps sampled identically (on GSM8K,
+    # 97-99% of configs scored identically across seeds 0/1/2; GPQA varied only via few-shot draws).
+    model_args = f"pretrained={config['model_hf_path']},dtype=auto"
+    if config["model"] == "vllm":
+        model_args += f",seed={config['seed']}"
+
     if (
         config["task"] == "gsm8k_cot"
         or config["task"] == "gsm8k_cot_llama"
@@ -36,7 +44,7 @@ def run_one_eval():
     ):
         command = f"""lm_eval \
         --model {config['model']} \
-        --model_args pretrained={config['model_hf_path']},dtype=auto \
+        --model_args {model_args} \
         --batch_size auto \
         --tasks {config['task']} \
         --num_fewshot {config['num_fewshot']} \
